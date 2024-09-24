@@ -1,0 +1,14 @@
+[
+    {
+        "name": "register",
+        "path": "/auth/register"
+    },
+    {
+        "name": "login",
+        "path": "/auth/login"
+    },
+    {
+        "name": "forget password",
+        "path": "/auth/forget-password"
+    }
+]

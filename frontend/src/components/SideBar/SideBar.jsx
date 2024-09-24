@@ -1,12 +1,13 @@
 import SideBarButton from "./SideBarButton";
+
 import "./SideBarStyles.css";
 
 const SideBar = () => {
     return(
-        <div class="sidebar">
-            <SideBarButton name="attractions" path="/attractions" />
+        <div className="sidebar">
+            <SideBarButton name="search" path="/sort-filter" />
             <SideBarButton name="favourites" path="/favourites" />
-            <SideBarButton name="carparks" path="/carparks" />
+            <SideBarButton name="logout" path="/" />
         </div>
     );
 }
