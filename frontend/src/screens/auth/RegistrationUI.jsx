@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import validator from 'validator';
 
 const RegistrationUI = () => {
     const [formData, setFormData] = useState({
@@ -22,6 +23,8 @@ const RegistrationUI = () => {
         }else if(formData.password != formData.confirmPassword){
             setError("Passwords do not match");
             return false;
+        }else if(validator.isEmail(formData.email)){
+            setError("Invalid email")
         }
         return true;
     }
@@ -30,10 +33,9 @@ const RegistrationUI = () => {
         if(!validateForm(formData)){
             return;
         }
-        console.log(formData.email);
-        console.log(formData.password);
-        console.log(formData.confirmPassword);
-        
+        //TODO: check account already exists in backend java
+
+        //TODO: create new account in backend java
     }
     return(
         <div>
