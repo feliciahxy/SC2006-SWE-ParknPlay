@@ -1,7 +1,6 @@
 import { useState } from 'react';
 //import validator from 'validator';
 import styles from './RegistrationUI.module.css';
-import Header from '../../../components/common/Header/Header.jsx';
 
 const RegistrationUI = () => {
     const [formData, setFormData] = useState({
@@ -41,7 +40,7 @@ const RegistrationUI = () => {
     }
     return(
         <div>
-            <Header />
+            <img className = {styles.logo} src="/ParkNPlayLogo-removebg-preview.png" alt="profile picture"></img>
                 < div className={styles.UIContainer}>
                     <input 
                         className={styles.textContainer}
@@ -63,8 +62,8 @@ const RegistrationUI = () => {
                         value={formData.confirmPassword} 
                         onChange = {(e) => {setFormData({ ...formData, confirmPassword: e.target.value});}} 
                         placeholder='Confirm your password'
-                        /><br/><br/>
-                    <button onClick={handleSubmit}>Create account</button>
+                        /><br/><br/><br/>
+                    <button className = {styles.imageButton} onClick={handleSubmit}></button>
                     {error && <div>{error}</div>}
                 </div> 
          </div>

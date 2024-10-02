@@ -1,6 +1,8 @@
-.header {
-    z-index: 1000;
-    text-align: center;
-    padding: 10px;
-    background-color: rgb(0, 0, 0); /* Example background color */
+.header{
+    display: flex;                /* Enable flexbox */
+    justify-content: center;      /* Center horizontally */
+    align-items: center;          /* Center vertically (if needed) */
+    height: 100px;                /* Set a height if you want spacing from the top */
+    width: 100%;                  /* Full width */
+    background-color: #ffffff;
 }

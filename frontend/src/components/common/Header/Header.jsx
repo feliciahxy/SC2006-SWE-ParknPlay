@@ -3,7 +3,7 @@ import styles from './Header.module.css';
 function Header(){
 
     return(
-        <div>
+        <div className={styles.Header}>
             <h1>ParkNPlay</h1>
         </div>
     );

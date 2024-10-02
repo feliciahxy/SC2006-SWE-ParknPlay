@@ -36,26 +36,27 @@ function LoginUI(){
         }
 
     return(
-        <div className={styles.LoginUIContainer}>
-            <p>Email:</p>
+        <div>
+            <img className = {styles.logo} src="/ParkNPlayLogo-removebg-preview.png" alt="profile picture"></img>
+        <div className={styles.UIContainer}>
             <input 
                 className={styles.textContainer}
                 type = "email"
                 value={formData.email} 
                 onChange = {(e) => {setFormData({ ...formData, email: e.target.value});}}
-                placeholder='example@gmail.com'
-                /> <br/>
-            <p>Password:</p>
+                placeholder='Email'
+                /> <br/><br/>
             <input 
                 className={styles.textContainer}
                 type = "password"
                 value={formData.password} 
                 onChange = {(e) => {setFormData({ ...formData, password: e.target.value});}}
                 placeholder='Enter your password'
-                /><br/><br/>
-            <button onClick={handleSubmit}>Login</button>
+                /><br/><br/><br/>
+            <button className = {styles.imageButton} onClick={handleSubmit}></button>
             {error && <div>{error}</div>}
             </div>
+        </div>
     );
 }
 
