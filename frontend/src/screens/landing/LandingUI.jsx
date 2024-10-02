@@ -7,6 +7,7 @@ const LandingUI = () => {
 
     return(
         <div>
+            <div>ParknPlay</div>
             {LandingButtonsContent.map((landingButton) => (
                 <button onClick={
                     () => navigate(landingButton.path)
