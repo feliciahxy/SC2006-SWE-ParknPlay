@@ -1,12 +1,19 @@
 import "../screens.css";
 
-import SideBar from "../../components/SideBar/SideBar";
+import Map from "../../components/specific/Map/Map";
+import PlacesList from "../../components/specific/PlacesList/PlacesList";
+import SideBar from "../../components/specific/SideBar/SideBar";
+import SortFilterUI from "../SortFilter/SortFilterUI";
 
 const SearchResultsUI = () => {
     return(
         <div class="page">
             <SideBar />
-           <div>SearchResultsUI</div>
+            <div>
+                <SortFilterUI />
+                <PlacesList />
+            </div>
+            <Map />
         </div>
     );
 }

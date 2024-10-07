@@ -1,11 +1,13 @@
-const SortFilterOptions = ({filter, options}) => {
+const SortFilterOptions = ({filter, options, selectedOption, onSelectOption}) => {
     return(
         <div>
             <label>{filter}</label>
-            <select>
+            <select
+                value = {selectedOption}
+                onChange = {(e) => onSelectOption(e)}>
                 {options.map(
                     (option) => (
-                        <option value={option}>{option}</option>
+                        <option key={option} value={option}>{option}</option>
                     )
                 )}
             </select>

@@ -1,14 +1,14 @@
 import "../screens.css";
 
-import SideBar from "../../components/SideBar/SideBar";
+import SideBar from "../../components/specific/SideBar/SideBar";
 
 const FavouritesUI = () => {
     const favourites = [{
-        attractionName: "attraction1",
-        rating: 5,
-        attractionType: "cinema",
-        region: "North",
-        openingHours: "8am-8pm"
+        "attractionName": "attraction1",
+        "rating": 5,
+        "attractionType": "cinema",
+        "region": "North",
+        "openingHours": "8am-8pm"
     }]
     return(
         <div class="page">
