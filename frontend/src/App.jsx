@@ -5,7 +5,7 @@ import LandingUI from "./screens/landing/LandingUI";
 
 import ForgetPasswordUI from "./screens/auth/ForgetPasswordUI";
 import LoginUI from "./screens/auth/LoginUI";
-import RegistrationUI from "./screens/auth/RegistrationUI";
+import RegistrationUI from "./screens/auth/RegistrationUI/RegistrationUI";
 
 import CarparkUI from "./screens/Carpark/CarparkUI";
 import FavouritesUI from "./screens/Favourites/FavouritesUI";
