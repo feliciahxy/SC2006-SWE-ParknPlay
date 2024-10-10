@@ -1,44 +1,15 @@
 import requests
-def get_place_info(address, api_key):
-# Base URL
-  base_url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
-# Parameters in a dictionary
-  params = {
-   "input": address,
-   "inputtype": "textquery",
-   "fields": "formatted_address,name,business_status,place_id",
-   "key": api_key,
-  }
-# Send request and capture response
-  response = requests.get(base_url, params=params)
-# Check if the request was successful
-  if response.status_code == 200:
-    return response.json()
-  else:
-    return None
-  
-
-# api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
-# address = "76 Nanyang Drive, N2.1, #02-03, Nanyang Technological University, 637331"
-# place_info = get_place_info(address, api_key)
-# if place_info is not None:
-#   print(place_info)
-# else:
-#   print("Failed to get a response from Google Places API")
-
-
-import requests
 
 def get_place_details(place_id, api_key):
-    # Define the endpoint and parameters
+    # Endpoint and parameters for the Place Details API
     endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
     params = {
         'place_id': place_id,
-        'fields': 'rating,opening_hours,formatted_address',  # Specify required fields
+        'fields': 'name,geometry,formatted_address,rating,price_level,opening_hours,photos',
         'key': api_key
     }
     
-    # Make the request to the Google Places API
+    # Make the request to the Google Place Details API
     response = requests.get(endpoint, params=params)
     
     # Parse the response JSON
@@ -51,30 +22,21 @@ def get_place_details(place_id, api_key):
     else:
         return f"HTTP Error: {response.status_code}"
 
-# Example usage:
-# api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
-# place_id = "ChIJ-c0P3AoP2jERmgAasZYsPdM"  # Replace with your Place ID
-# details = get_place_details(place_id, api_key)
-
-# print(details)
-
-
-import requests
-
-def nearby_search(location, radius, api_key, keyword=None, place_type=None):
-    # Define the endpoint and parameters
+def nearby_search(location, radius, api_key, place_type=None, max_price=None, rankby="prominence"):
+    # Define the endpoint and parameters for the Nearby Search API
     endpoint = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
     params = {
         'location': location,  # Latitude and Longitude (comma-separated)
         'radius': radius,      # Search radius in meters
-        'key': api_key
+        'key': api_key,
+        'rankby': rankby       # Rank results by prominence
     }
     
     # Optional filters
-    if keyword:
-        params['keyword'] = keyword  # Keyword search filter
     if place_type:
         params['type'] = place_type  # Type of place (e.g., restaurant, cafe, etc.)
+    if max_price is not None:
+        params['maxprice'] = max_price  # Max price level (0 to 4)
     
     # Make the request to the Google Places API
     response = requests.get(endpoint, params=params)
@@ -91,13 +53,38 @@ def nearby_search(location, radius, api_key, keyword=None, place_type=None):
 
 # Example usage:
 api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
-location = "37.7749,-122.4194"  # Latitude and longitude: user input?
+location = "37.7749,-122.4194"  # Latitude and longitude of San Francisco
 radius = 1500  # Search radius in meters
-keyword = input("restaurant")  # Optional keyword search (remove or replace as needed) user input
-place_type = "restaurant"  # Optional type of place (remove or replace as needed) user input
+place_type = "restaurant"  # Type of place (optional)
+max_price = 2  # Max price level (0 to 4)
+rankby = "prominence"  # Rank results by prominence (default)
 
-nearby_places = nearby_search(location, radius, api_key, keyword, place_type)
+# Step 1: Get nearby places
+nearby_places = nearby_search(location, radius, api_key, place_type, max_price, rankby)
 
-# Print the result
+# Step 2: Fetch detailed information for each place
 for place in nearby_places:
-    print(f"Name: {place['name']}, Address: {place.get('vicinity', 'N/A')}, Rating: {place.get('rating', 'N/A')}")
+    place_id = place['place_id']  # Get the place_id for detailed lookup
+    details = get_place_details(place_id, api_key)
+    
+    # Step 3: Print required details
+    if details:
+        name = details.get('name', 'N/A')
+        location = details.get('geometry', {}).get('location', {})
+        lat = location.get('lat', 'N/A')
+        lng = location.get('lng', 'N/A')
+        address = details.get('formatted_address', 'N/A')
+        rating = details.get('rating', 'N/A')
+        price_level = details.get('price_level', 'N/A')
+        opening_hours = details.get('opening_hours', {}).get('weekday_text', 'N/A')
+        photos = details.get('photos', [])
+        photo_reference = photos[0]['photo_reference'] if photos else 'N/A'
+        
+        print(f"Name: {name}")
+        print(f"Location (lat, lng): ({lat}, {lng})")
+        print(f"Address: {address}")
+        print(f"Rating: {rating}")
+        print(f"Price Level: {price_level}")
+        print(f"Opening Hours: {opening_hours}")
+        print(f"Photo Reference: {photo_reference}")
+        print("-" * 40)
