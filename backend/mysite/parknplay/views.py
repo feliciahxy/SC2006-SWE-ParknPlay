@@ -24,7 +24,7 @@ def SearchMgr(request):
         try:
             filters = json.loads(request.body)
             places = search(filters.region, filters.placetype, filters.price)
-            response = requests.post(url, json = places, headers = {
+            response = requests.post('http://127.0.0.1:8000/parknplay/search', json = places, headers = {
                 'Content-Type': 'application/json'
             })
             print(response.json())
