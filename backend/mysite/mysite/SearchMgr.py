@@ -88,4 +88,5 @@ for place in nearby_places:
         print(f"Opening Hours: {opening_hours}")
         print(f"Photo Reference: {photo_reference}")
         print("-" * 40)
-        
+
+
