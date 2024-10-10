@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("users", views.getUsers, name="getUsers")
-    path("api/sortmgr/", views.SortMgr, name="SortMgr")
+    path("users", views.getUsers, name="getUsers"),
+    path("search", views.SearchMgr, name="SearchMgr")
 ]

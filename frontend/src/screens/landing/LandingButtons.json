@@ -6,9 +6,5 @@
     {
         "name": "Login",
         "path": "/auth/login"
-    },
-    {
-        "name": "Forget password",
-        "path": "/auth/forget-password"
     }
 ]
