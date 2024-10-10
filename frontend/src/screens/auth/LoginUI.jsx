@@ -27,7 +27,7 @@ function LoginUI(){
                 return false;
             }
             return true;
-        }
+        };
 
     const handleSubmit = () => {
         setError(""); //reset to no error
@@ -36,13 +36,20 @@ function LoginUI(){
         }
         console.log(formData.email);
         console.log(formData.password);      
-        }
+        };
 
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate('/auth/forget-password');
-    }
+    const handleClick = (e) => {
+        const buttonText = e.target.textContent
+
+        if(buttonText === "Forget Password"){
+            navigate('/auth/forget-password');
+        }
+        else if (buttonText === "Sign up" ){
+            navigate('/auth/register')
+        }
+    };
 
     return(
         <div>
@@ -66,6 +73,9 @@ function LoginUI(){
                 <br/><br/>
             <button className = {styles.imageButton} onClick={handleSubmit}></button>
             {error && <div>{error}</div>}
+            </div>
+            <div className={styles.signUpContainer}>
+            <p>Do not have an account? <button className= {styles.SignUp} onClick={handleClick}><u>Sign up</u></button> here!</p>
             </div>
         </div>
     );

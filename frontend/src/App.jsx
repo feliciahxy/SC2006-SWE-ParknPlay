@@ -16,10 +16,9 @@ function App() {
   return(
     <BrowserRouter>
       <Routes>
-        <Route path="/" Component={LandingUI} />
+        <Route path="/" Component={LoginUI} />
         <Route path="/auth/">
           <Route path="register" Component={RegistrationUI} />
-          <Route path="login" Component={LoginUI} />
           <Route path="forget-password" Component={ForgetPasswordUI} />
         </Route>
         <Route path="/">

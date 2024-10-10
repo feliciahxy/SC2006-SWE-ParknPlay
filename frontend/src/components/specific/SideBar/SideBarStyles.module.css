@@ -1,0 +1,53 @@
+.sidebar {
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color:rgb(0, 191, 255);
+    transition: width 0.5s;
+    overflow-x: hidden;
+    z-index: 1000;
+  }
+  
+  .open {
+    width: 200px;
+  }
+  
+  .hamburger {
+    position: fixed;
+    top: 0;
+    left: 0.3cm;
+    font-size: 30px;
+    cursor: pointer;
+  }
+  
+
+  .closeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 15px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+
+.sidebarButtons{
+    background-color: rgb(0, 191, 255);
+    color: rgb(0, 0, 0);
+    display: block;
+    margin: 5px 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    border-color: none;
+    width: 150px;
+}
+
+.sidebarButtons:hover {
+    background-color: hsl(195, 100%, 60%);
+}
