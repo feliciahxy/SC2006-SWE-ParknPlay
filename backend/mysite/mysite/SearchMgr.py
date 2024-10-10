@@ -52,42 +52,57 @@ def nearby_search(location, radius, api_key, place_type=None, max_price=None, ra
         return f"HTTP Error: {response.status_code}"
 
 # Example usage:
-api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
-location = "37.7749,-122.4194"  # Latitude and longitude of San Francisco
-radius = 1500  # Search radius in meters
-place_type = "restaurant"  # Type of place (optional)
-max_price = 2  # Max price level (0 to 4)
-rankby = "prominence"  # Rank results by prominence (default)
+# Latitude and longitude of San Francisco allow them to pick on the map
+ # Search radius in meters
+def search(region, placetype, price):
+    region = "North" #to link region parameter to this 
+    if region == "North":
+        location = "1.445, 103.825"
+        radius = 10000
+    elif region == "South":
+        location = "1.270, 103.819"
+        radius = 8000
+    elif region == "East":
+        location = "1.335, 103.940"
+        radius = 12000
+    elif region == "West":
+        location = "1.355, 103.690"
+        radius = 15000
 
-# Step 1: Get nearby places
-nearby_places = nearby_search(location, radius, api_key, place_type, max_price, rankby)
+    api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
+    place_type = placetype  # Type of place (optional) # to link place type to this
+    max_price = price  # Max price level (0 to 4) # to link max price to this
+    rankby = "prominence"  # Rank results by prominence (default)
 
-# Step 2: Fetch detailed information for each place
-for place in nearby_places:
-    place_id = place['place_id']  # Get the place_id for detailed lookup
-    details = get_place_details(place_id, api_key)
-    
-    # Step 3: Print required details
-    if details:
-        name = details.get('name', 'N/A')
-        location = details.get('geometry', {}).get('location', {})
-        lat = location.get('lat', 'N/A')
-        lng = location.get('lng', 'N/A')
-        address = details.get('formatted_address', 'N/A')
-        rating = details.get('rating', 'N/A')
-        price_level = details.get('price_level', 'N/A')
-        opening_hours = details.get('opening_hours', {}).get('weekday_text', 'N/A')
-        photos = details.get('photos', [])
-        photo_reference = photos[0]['photo_reference'] if photos else 'N/A'
+    # Step 1: Get nearby places
+    nearby_places = nearby_search(location, radius, api_key, place_type, max_price, rankby)
+
+    # Step 2: Fetch detailed information for each place
+    for place in nearby_places:
+        place_id = place['place_id']  # Get the place_id for detailed lookup
+        details = get_place_details(place_id, api_key)
         
-        print(f"Name: {name}")
-        print(f"Location (lat, lng): ({lat}, {lng})")
-        print(f"Address: {address}")
-        print(f"Rating: {rating}")
-        print(f"Price Level: {price_level}")
-        print(f"Opening Hours: {opening_hours}")
-        print(f"Photo Reference: {photo_reference}")
-        print("-" * 40)
+        # Step 3: Print required details
+        if details:
+            name = details.get('name', 'N/A')
+            location = details.get('geometry', {}).get('location', {})
+            lat = location.get('lat', 'N/A')
+            lng = location.get('lng', 'N/A')
+            address = details.get('formatted_address', 'N/A')
+            rating = details.get('rating', 'N/A')
+            price_level = details.get('price_level', 'N/A')
+            opening_hours = details.get('opening_hours', {}).get('weekday_text', 'N/A')
+            photos = details.get('photos', [])
+            photo_reference = photos[0]['photo_reference'] if photos else 'N/A'
+            
+            print(f"Name: {name}")
+            print(f"Location (lat, lng): ({lat}, {lng})")
+            print(f"Address: {address}")
+            print(f"Rating: {rating}")
+            print(f"Price Level: {price_level}")
+            print(f"Opening Hours: {opening_hours}")
+            print(f"Photo Reference: {photo_reference}")
+            print("-" * 40)
 
 
 
