@@ -1,32 +1,20 @@
-import { useEffect, useState } from 'react';
-
-//import { getPlacesData } from "../../../api/api";
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
-import tempRestaurantsArray from "./temporaryRestaurants.json";
 
-const PlacesList = () => {
-    const [places, setPlaces] = useState([]);
-    
-    useEffect(() => {
-        /* 
-        getPlacesData()
-            .then((data) => {
-                console.log(data);
-                setPlaces(data);
-            })
-         */
-
-        //temporary array to reduce api calls
-        //replace this temporary array with commented code to use real api
-        setPlaces(tempRestaurantsArray);
-
-    }, []);
-
+const PlacesList = ({ places, placeClicked }) => {
     return(
         <div>
-            {places.map((place) => (
+            {places?.map((place) => (
                 <PlaceDetails place = {place} />
             ))}
+
+            {placeClicked ? (
+                <div>
+                <h2>Selected Place</h2>
+                <p>{placeClicked.popup}</p>
+                </div>
+            ) : (
+                <p>No place selected</p>
+            )}
         </div>
     );
 }
