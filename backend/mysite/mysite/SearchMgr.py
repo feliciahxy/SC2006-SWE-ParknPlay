@@ -93,10 +93,10 @@ def nearby_search(location, radius, api_key, keyword=None, place_type=None):
 api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
 location = "37.7749,-122.4194"  # Latitude and longitude: user input?
 radius = 1500  # Search radius in meters
-keyword = input("restaurant")  # Optional keyword search (remove or replace as needed) user input
+# keyword = input("restaurant")  # Optional keyword search (remove or replace as needed) user input
 place_type = "restaurant"  # Optional type of place (remove or replace as needed) user input
 
-nearby_places = nearby_search(location, radius, api_key, keyword, place_type)
+nearby_places = nearby_search(location, radius, api_key, place_type)
 
 # Print the result
 for place in nearby_places:
