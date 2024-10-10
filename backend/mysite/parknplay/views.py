@@ -4,6 +4,7 @@ from .models import User
 from django.forms.models import model_to_dict
 import requests
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 def index(request):
@@ -22,7 +23,25 @@ def SearchMgr(request):
     if request.method == "POST":
         try:
             filters = json.loads(request.body)
-            search(filters.region, filters.placetype, filters.price)
+            places = search(filters.region, filters.placetype, filters.price)
+            response = requests.post('http://127.0.0.1:8000/parknplay/search', json = places, headers = {
+                'Content-Type': 'application/json'
+            })
+            print(response.json())
+
+            return JsonResponse({
+                "message": "Filters received successfully"
+            }, safe=False)
+        except json.JSONDecodeError:
+            return JsonResponse({
+                "error": "Invalid JSON"
+            }, status=400)
+    else:
+        return JsonResponse({
+            "error": "Invalid request method"
+        }, status=400)
+
+
 
 
 def get_place_details(place_id, api_key):
