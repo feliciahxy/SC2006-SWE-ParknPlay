@@ -1,19 +1,23 @@
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 
-const PlacesList = ({ places, placeClicked }) => {
+const PlacesList = ({ places, placeClicked, showAddFavouritesButton, showRemoveFavouritesButton }) => {
     return(
         <div>
-            {places?.map((place) => (
-                <PlaceDetails place = {place} />
-            ))}
-
             {placeClicked ? (
                 <div>
-                <h2>Selected Place</h2>
-                <p>{placeClicked.popup}</p>
+                    <h2>Selected Place</h2>
+                    <div>
+                        <PlaceDetails place = {placeClicked} showAddFavouritesButton = {showAddFavouritesButton} showRemoveFavouritesButton = {showRemoveFavouritesButton} />
+                    </div>
                 </div>
             ) : (
-                <p>No place selected</p>
+                <div>
+                    {places?.map((place) => (
+                        <div>
+                            <PlaceDetails place = {place} showAddFavouritesButton = {showAddFavouritesButton} showRemoveFavouritesButton = {showRemoveFavouritesButton}/>
+                        </div>
+                    ))}
+                </div>
             )}
         </div>
     );

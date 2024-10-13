@@ -23,7 +23,7 @@ def SearchMgr(request):
     if request.method == "POST":
         try:
             filters = json.loads(request.body)
-            places = search(filters.region, filters.placetype, filters.price)
+            places = search(filters["region"], filters["placetype"], filters["price"])
             response = requests.post('http://127.0.0.1:8000/parknplay/search', json = places, headers = {
                 'Content-Type': 'application/json'
             })
@@ -113,9 +113,18 @@ def search(region, placetype, price):
         location = "1.355, 103.690"
         radius = 15000
 
+    max_price = 0 # Max price level (0 to 4) # to link max price to this
+    if price == "$":
+        max_price = 1
+    elif price == "$$":
+        max_price = 2
+    elif price == "$$$":
+        max_price = 3
+    elif price == "$$$$":
+        max_price = 4
+
     api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
     place_type = placetype  # Type of place (optional) # to link place type to this
-    max_price = price  # Max price level (0 to 4) # to link max price to this
     rankby = "prominence"  # Rank results by prominence (default)
 
     # Step 1: Get nearby places

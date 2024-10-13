@@ -1,27 +1,30 @@
+import { useEffect, useState } from 'react';
+
+import { getFavouritesData } from '../../api/api';
+
 import "../screens.css";
 
+import MapComponent from '../../components/specific/Map/Map';
+import PlacesList from '../../components/specific/PlacesList/PlacesList';
 import SideBar from "../../components/specific/SideBar/SideBar";
 
 const FavouritesUI = () => {
-    const favourites = [{
-        "attractionName": "attraction1",
-        "rating": 5,
-        "attractionType": "cinema",
-        "region": "North",
-        "openingHours": "8am-8pm"
-    }]
+    const [favourites, setFavourites] = useState([]);
+    const [placeClicked, setPlaceClicked] = useState(null);
+    
+    useEffect(() => {
+        getFavouritesData()
+            .then((data) => {
+                console.log(data);
+                setFavourites(data);
+            });
+    }, []);
+
     return(
         <div class="page">
             <SideBar />
-           {favourites.map((favourite) => (
-            <div>
-                <div>{favourite.attractionName}</div>
-                <div>{favourite.rating}</div>
-                <div>{favourite.attractionType}</div>
-                <div>{favourite.region}</div>
-                <div>{favourite.openingHours}</div>
-            </div>
-           ))}
+            <PlacesList places = {favourites} placeClicked = {placeClicked} showAddFavouritesButton={false} showRemoveFavouritesButton={true} />
+            <MapComponent placesList = {favourites} setPlaceClicked = {setPlaceClicked} />
         </div>
     );
 }

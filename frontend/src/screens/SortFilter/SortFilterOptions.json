@@ -1,6 +1,6 @@
 [
     {
-        "filter": "attraction type",
+        "filter": "placetype",
         "options": [
             "accounting",
             "airport",
@@ -105,7 +105,7 @@
         "options": ["North", "South", "East", "West"]
     },
     {
-        "filter": "price range",
+        "filter": "price",
         "options": ["$", "$$", "$$$", "$$$$"]
     }
 ]

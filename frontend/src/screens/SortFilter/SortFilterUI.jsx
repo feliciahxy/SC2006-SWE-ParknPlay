@@ -7,6 +7,8 @@ import "../screens.css";
 
 import filterOptions from "./SortFilterOptions.json";
 
+import { sendFilters } from '../../api/api';
+
 const SortFilterUI = () => {
     const navigate = useNavigate();
 
@@ -22,17 +24,15 @@ const SortFilterUI = () => {
         //post filter data to backend
         //backend will get attractions from google places api based on filters
         //backend will post attractions to search-results ui
-        /* try {
-            const response = await axios.post('search/', filters, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            console.log(response.data);
+        try {
+            sendFilters(filters)
+                .then((data) => {
+                    console.log(data);
+                });
             navigate("/search-results");
         } catch (error) {
             console.error('Error posting filter data: ', error);
-        } */
+        }
        console.log(filters);
     };
     const handleSelectOption = (e, filterKey) => {

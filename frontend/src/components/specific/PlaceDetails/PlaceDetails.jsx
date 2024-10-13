@@ -1,4 +1,6 @@
-const PlaceDetails = ({ place }) => {
+import AddFavouritesButton from "./AddFavouritesButton";
+
+const PlaceDetails = ({ place, showAddFavouritesButton, showRemoveFavouritesButton }) => {
     
     const convertToReadableTime = (timeStr) => {
         // Function to convert the time portion to readable format
@@ -51,6 +53,8 @@ const PlaceDetails = ({ place }) => {
             )}
             <div>rating: {place.rating}</div>
             <div>price level: {place.price_level}</div>
+            {showAddFavouritesButton && <AddFavouritesButton place = {place} />}
+            {showRemoveFavouritesButton && <RemoveFavouritesButton place = {place} />}
         </div>
     );
 }

@@ -1,32 +1,52 @@
 import axios from 'axios';
 
-const restaurants_URL = 'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary';
+const places_URL = 'http://127.0.0.1:8000/parknplay/search';
 
-const restaurants_options = {
-  params: {
-    bl_latitude: '11.847676',
-    tr_latitude: '12.838442',
-    bl_longitude: '109.095887',
-    tr_longitude: '109.149359',
-    restaurant_tagcategory_standalone: '10591',
-    restaurant_tagcategory: '10591',
-    limit: '30',
-    currency: 'USD',
-    open_now: 'false',
-    lunit: 'km',
-    lang: 'en_US'
-  },
-  headers: {
-    'x-rapidapi-key': '47804b6dc0msh83469174cf7d62ep1ec204jsnbf5d120fa014',
-    'x-rapidapi-host': 'travel-advisor.p.rapidapi.com'
-  }
-};
+export const sendFilters = async (data) => {
+    try {
+        const response = await axios.post(places_URL, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        console.log(response);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 export const getPlacesData = async () => {
     try {
-        const { data: { data } } = await axios.get(restaurants_URL, restaurants_options);
-        console.log(data);
-        return data;
+        const response = await axios.get(places_URL);
+        console.log(response);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+const favourites_URL = 'http://127.0.0.1:8000/parknplay/favourites'
+
+export const sendPlaceToFavourites = async (place, action) => {
+    try {
+        const response = await axios.post(favourites_URL, { place, action }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const getFavouritesData = async () => {
+    try {
+        const response = await axios.get(favourites_URL);
+        console.log(response);
+        return response.data;
     } catch (error) {
         console.error(error);
     }
