@@ -1,10 +1,13 @@
 import { useState } from 'react';
 //import validator from 'validator';
 import styles from './RegistrationUI.module.css';
+import { useNavigate, Link } from "react-router-dom";
+import axios from 'axios';
 
 const RegistrationUI = () => {
+    let navigate = useNavigate();
     const [formData, setFormData] = useState({
-        email: "",
+        username: "",
         password: "",
         confirmPassword: ""
     });
@@ -12,8 +15,8 @@ const RegistrationUI = () => {
     const [error, setError] = useState("");
 
     const validateForm = (formData) => {
-        if(!formData.email){
-            setError("Email required");
+        if(!formData.username){
+            setError("Username required");
             return false;
         }else if(!formData.password){
             setError("Password required");
@@ -24,9 +27,10 @@ const RegistrationUI = () => {
         }else if(formData.password != formData.confirmPassword){
             setError("Passwords do not match");
             return false;
-        }else if(validator.isEmail(formData.email)){
-            setError("Invalid email")
         }
+        // else if(validator.isEmail(formData.email)){
+        //     setError("Invalid email")
+        // }
         return true;
     }
     const handleSubmit = () => {
@@ -34,20 +38,32 @@ const RegistrationUI = () => {
         if(!validateForm(formData)){
             return;
         }
-        //TODO: check account already exists in backend java
+        
+        axios.post('http://127.0.0.1:8000/parknplay/users', {
+            username: formData.username,
+            password: formData.password
+        })
+            .then(response => {
+                console.log('User saved successfully:', response.data);
+            })
+            .catch(error => {
+                console.error('Error saving user:', error);
+            });
 
-        //TODO: create new account in backend java
-    }
+            let path = `/search-results`;
+            navigate(path);
+    };
+        
     return(
         <div>
             <img className = {styles.logo} src="/ParkNPlayLogo-removebg-preview.png" alt="profile picture"></img>
                 < div className={styles.UIContainer}>
                     <input 
                         className={styles.textContainer}
-                        type= "email"
-                        value={formData.email} 
-                        onChange = {(e) => {setFormData({ ...formData, email: e.target.value});}} 
-                        placeholder='Email'
+                        type= "username"
+                        value={formData.username} 
+                        onChange = {(e) => {setFormData({ ...formData, username: e.target.value});}} 
+                        placeholder='Username'
                         /> <br/> <br/>
                     <input 
                         className={styles.textContainer}
@@ -68,6 +84,6 @@ const RegistrationUI = () => {
                 </div> 
          </div>
     );
-}
+};
 
-export default RegistrationUI
+export default RegistrationUI;
