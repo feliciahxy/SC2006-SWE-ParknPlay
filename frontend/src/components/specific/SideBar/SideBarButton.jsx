@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import styles from './SideBarStyles.module.css';
 
 const SideBarButton = ({name, path}) => {
     const navigate = useNavigate();
@@ -8,7 +9,7 @@ const SideBarButton = ({name, path}) => {
     }
     return(
         <div>
-            <button onClick={handleClick}>{name}</button>
+            <button className={styles.sidebarButtons} onClick={handleClick}>{name}</button>
         </div>
     );
 }
