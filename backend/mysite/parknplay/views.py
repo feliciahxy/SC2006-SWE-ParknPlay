@@ -28,11 +28,13 @@ def loginView(request):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data.get('username')
+        print(username)
         password = data.get('password')
-        
+        print(password)
         user = User.objects.get(username=username)
+        print(user.password)
         if user.password == password:
-            return JsonResponse({"message": "Login successful", "status": "success"}, status=200)
+            return JsonResponse({"message": "Login successful", "status": "success"}, status=201)
         else:
             return JsonResponse({"message": "Invalid password", "status": "fail"}, status=401)
     else:

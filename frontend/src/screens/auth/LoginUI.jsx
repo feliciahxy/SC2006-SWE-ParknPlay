@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
 import styles from './RegistrationUI/RegistrationUI.module.css'
-<<<<<<< HEAD
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
-=======
-import { Route } from 'react-router-dom';
 import ForgetPasswordUI from "./ForgetPasswordUI";
-import { useNavigate } from 'react-router-dom';
 
->>>>>>> 11f9d186f34d77dd7e49c44045e3dff65b2e1a69
 
 function LoginUI(){
     let navigate = useNavigate();
@@ -37,26 +32,19 @@ function LoginUI(){
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post('http://127.0.0.1:8000/parknplay/login', {
+        await axios.post('http://127.0.0.1:8000/parknplay/login', {
             username: formData.username,
             password: formData.password,
-        });
-    
-        if (response.data.status === 200) {
+        })
+            .then(response => {
+                console.log('Logged in successfully:', response.data);
+            })
+            .catch(error => {
+                console.error('Error logging in user:', error);
+            });
             let path = `/search-results`;
             navigate(path);
-        } else {
-            console.error('Error logging in:', error);
-        }
       };
-    // const handleSubmit = () => {
-    //     setError(""); //reset to no error
-    //     if(!validateForm(formData)){
-    //         return;
-    //     }
-    //     console.log(formData.email);
-    //     console.log(formData.password);      
-    //     };
 
     const handleClick = (e) => {
         const buttonText = e.target.textContent

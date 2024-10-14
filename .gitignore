@@ -3,6 +3,7 @@ package-lock.json
 package.json
 frontend/package-lock.json
 backend/mysite/parknplay/migrations/
+backend/mysite/__pycache__/
 backend/mysite/parknplay/__pycache__/
 backend/mysite/mysite/__pycache__/
 backend/mysite/mysite/.env
