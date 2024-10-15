@@ -121,3 +121,21 @@ def find_carpark_details(place_location):
 
 # Example usage
 find_carpark_details(place_location) #to input attraction location after selected attraction
+
+
+
+
+@csrf_exempt
+def CarparkMgr(request):
+    if request.method == "GET":
+        # Get latitude and longitude from the query parameters
+        place_latitude = request.GET.get('lat')
+        place_longitude = request.GET.get('lon')
+
+        if place_latitude and place_longitude:
+            place_location = (place_latitude, place_longitude) # convert latitude and longitude to tuple
+            carparks_data = find_carpark_details(place_location) # call find_carpark_details to get carparks
+            return JsonResponse({'carparks': carparks_data})
+    else:
+        return JsonResponse({'error': 'missing coordinates'}, status=400)
+

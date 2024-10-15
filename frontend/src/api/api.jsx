@@ -54,16 +54,20 @@ export const getFavouritesData = async () => {
 
 
 
-const carparks_URL = 'https://api.data.gov.sg/v1/transport/carpark-availability';
-const carparks_options = {};
+const carparks_URL = 'http://127.0.0.1:8000/parknplay/carparks';
 
-export const getCarparksData = async () => {
+export const getCarparksData = async (lat, lng) => {
+
     try {
-      const response = await axios.get(carparks_URL, carparks_options);
-      const { data: { items } } = response;
-      const { carpark_data } = items[0];
-      console.log(carpark_data);
-      return carpark_data;
+      const response = await axios.get(carparks_URL, {
+        params: {
+            lat: lat,
+            lon: lng
+        }
+      });
+      const { data: { carparks } } = response;
+      console.log(carparks);
+      return carparks;
     } catch (error) {
       console.error(error);
     }

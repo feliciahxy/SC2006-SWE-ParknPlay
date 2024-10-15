@@ -25,10 +25,12 @@ export default Map;
 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
-const MapComponent = ({placesList, setPlaceClicked }) => {
+import { getCarparksData } from '../../../api/api';
+
+const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
 
   const carparkIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -41,10 +43,17 @@ const MapComponent = ({placesList, setPlaceClicked }) => {
 
   const singaporeCenter = [1.3521, 103.8198]; // Singapore lat-lng
 
+  const [carparksList, setCarparksList] = useState([]);
+
   useEffect(() => {
     // OneMap example for adding markers or other custom functionalities
     // You can use OneMap's API here to fetch data, markers, etc.
-  }, []);
+    getCarparksData(placeClicked?.lat, placeClicked?.lng)
+      .then((data) => {
+        console.log(data);
+        setCarparksList(data);
+      })
+  }, [placeClicked]);
 
   return (
     <MapContainer center={singaporeCenter} zoom={15} style={{ height: '450px', width: '450px' }}>
@@ -74,7 +83,7 @@ const MapComponent = ({placesList, setPlaceClicked }) => {
         coordinates[0] = place?.lat;
         coordinates[1] = place?.lng;
         return(
-        <Marker position={coordinates} icon={carparkIcon}
+        <Marker position={coordinates}
           eventHandlers={{
             click: (e) => {
               console.log('marker clicked', e);
@@ -92,6 +101,28 @@ const MapComponent = ({placesList, setPlaceClicked }) => {
           </Popup>
         </Marker>
       )})}
+      {carparksList?.map((carpark) => {
+        return(
+          <Marker position={carpark?.coordinates} icon={carparkIcon}>
+            <Popup>
+              carpark_number: {carpark.carpark_number} <br />
+              address: {carpark.address} <br />
+              available_lots: {carpark.available_lots} <br />
+              total_lots: {carpark.total_lots}
+            </Popup>
+          </Marker>
+        );
+      })}
+
+      {/* 
+      details = {
+                    "carpark_number": carpark_number,
+                    "address": carpark['address'],
+                    "available_lots": available_lots,
+                    "total_lots": total_lots,
+                    "coordinates": carpark['location']  
+                }
+      */}
     </MapContainer>
   );
 };

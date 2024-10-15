@@ -32,7 +32,7 @@ const SearchResultsUI = () => {
                 <SortFilterUI />
                 <PlacesList places = {places} placeClicked = {placeClicked} showAddFavouritesButton={true} showRemoveFavouritesButton={false} />
             </div>
-            <MapComponent placesList = {places} setPlaceClicked = {setPlaceClicked} />
+            <MapComponent placesList = {places} placeClicked = {placeClicked} setPlaceClicked = {setPlaceClicked} />
         </div>
     );
 }

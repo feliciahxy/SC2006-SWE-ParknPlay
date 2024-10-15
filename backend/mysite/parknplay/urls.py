@@ -8,4 +8,5 @@ urlpatterns = [
     path("login", views.loginView, name="loginView"),
     path("search", views.SearchMgr, name="SearchMgr")
     path("favourites", views.FavouritesMgr, name="FavouritesMgr")
+    path("carparks", views.CarparkMgr, name="CarparkMgr")
 ]
