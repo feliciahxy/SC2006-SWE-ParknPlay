@@ -9,6 +9,10 @@ wgs84 = Proj("epsg:4326")  # WGS84 (EPSG:4326)
 # Create a transformer object for the conversion
 transformer = Transformer.from_proj(svy21, wgs84)
 
+# Define the user's location (replace with actual coordinates)
+# place_location = (1.3525, 103.8198)  # Example coordinates for Singapore
+TOPXCARPARKS = 10 #number of top carparks wanted
+
 # Function to convert SVY21 coordinates to WGS84 using Transformer
 def svy21_to_wgs84(x, y):
     # Transform coordinates
@@ -16,10 +20,6 @@ def svy21_to_wgs84(x, y):
     
     # Return in (latitude, longitude) order
     return lat, lon
-
-
-# Define the user's location (replace with actual coordinates)
-place_location = (1.3525, 103.8198)  # Example coordinates for Singapore
 
 # Function to fetch carpark availability
 def get_carpark_availability():
@@ -84,7 +84,7 @@ def find_nearest_carparks(place_location):
                 break
     
     # Step 4: Sort the carparks by distance and get the nearest 5
-    nearest_carparks = sorted(combined_carparks, key=lambda x: x["distance"])[:5]
+    nearest_carparks = sorted(combined_carparks, key=lambda x: x["distance"])[:TOPXCARPARKS] 
     return nearest_carparks
 
 # Function to find carpark availability details for nearest carparks
@@ -114,9 +114,10 @@ def find_carpark_details(place_location):
 
                 # Add the details to the list
                 carpark_details.append(details)
+                print(f"{details['address']} - {details['available_lots']} out of {details['total_lots']} lots available, coordinates: {details['coordinates']}")
                 break
 
     return carpark_details  # we only need address, # of lots out of total # and coordinates to map location
 
 # Example usage
-find_carpark_details(place_location)
+find_carpark_details(place_location) #to input attraction location after selected attraction
