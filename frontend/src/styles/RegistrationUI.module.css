@@ -36,7 +36,7 @@
     position: absolute;
     left: 80%;
     transform: translate(-50%, -50%);
-    background-image: url("/GreenArrow.png");
+    background-image: url("../images/GreenArrow.png");
     background-size: cover; /* Adjusts the background image to cover the button */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     width: 50px; /* Set the desired width */
@@ -57,8 +57,6 @@
     cursor: cursor;
     opacity: 1;
     outline: none;
-<<<<<<< Updated upstream
-=======
 }
 
 .ForgetPassword{
@@ -113,5 +111,4 @@
 
 .space {
     height: 30px
->>>>>>> Stashed changes
 }

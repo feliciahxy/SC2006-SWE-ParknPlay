@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
-import api from '../../../api'; // Import your custom api instance
-import styles from './RegistrationUI.module.css';
-<<<<<<< Updated upstream
-
-const RegistrationUI = () => {
-=======
+import api from '../api'; // Import your custom api instance
+import styles from '../styles/RegistrationUI.module.css';
 import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../constants"; // Import tokens
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; // Import tokens
+import logo from "../images/ParkNPlayLogo.png";
 
 const RegistrationUI = () => {
     const navigate = useNavigate();
@@ -15,9 +12,8 @@ const RegistrationUI = () => {
         localStorage.clear();
     }, []);
 
->>>>>>> Stashed changes
     const [formData, setFormData] = useState({
-        email: "",
+        username: "",
         password: "",
         confirmPassword: ""
     });
@@ -26,13 +22,8 @@ const RegistrationUI = () => {
     const [error, setError] = useState("");
 
     const validateForm = (formData) => {
-<<<<<<< Updated upstream
-        if(!formData.email){
-            setError("Email required");
-=======
         if (!formData.username) {
             setError("Username required");
->>>>>>> Stashed changes
             return false;
         } else if (!formData.password) {
             setError("Password required");
@@ -43,8 +34,6 @@ const RegistrationUI = () => {
         } else if (formData.password !== formData.confirmPassword) {
             setError("Passwords do not match");
             return false;
-        }else if(validator.isEmail(formData.email)){
-            setError("Invalid email")
         }
         return true;
     };
@@ -58,13 +47,6 @@ const RegistrationUI = () => {
             setLoading(false);
             return;
         }
-<<<<<<< Updated upstream
-        //TODO: check account already exists in backend java
-
-        //TODO: create new account in backend java
-    }
-    return(
-=======
 
         try {
             // Use your custom api instance to send the registration request
@@ -87,23 +69,15 @@ const RegistrationUI = () => {
     };
 
     return (
->>>>>>> Stashed changes
         <div>
-            <img className = {styles.logo} src="/ParkNPlayLogo-removebg-preview.png" alt="profile picture"></img>
+            <img className = {styles.logo} src={logo} alt="profile picture"></img>
                 < div className={styles.UIContainer}>
                     <input 
                         className={styles.textContainer}
-<<<<<<< Updated upstream
-                        type= "email"
-                        value={formData.email} 
-                        onChange = {(e) => {setFormData({ ...formData, email: e.target.value});}} 
-                        placeholder='Email'
-=======
                         type= "text"
                         value={formData.username} 
                         onChange = {(e) => {setFormData({ ...formData, username: e.target.value});}} 
                         placeholder='Username'
->>>>>>> Stashed changes
                         /> <br/> <br/>
                     <input 
                         className={styles.textContainer}
@@ -125,10 +99,6 @@ const RegistrationUI = () => {
                 </div> 
          </div>
     );
-}
+};
 
-<<<<<<< Updated upstream
-export default RegistrationUI
-=======
 export default RegistrationUI;
->>>>>>> Stashed changes
