@@ -1,32 +1,36 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './RegistrationUI/RegistrationUI.module.css'
 
 const ForgetPasswordUI = () => {
-
+    const navigate = useNavigate();
 
     const [formData,setFormData] = useState({
-        email: "",
-    })
+        username: "",
+        password: ""
+    });
 
     const [error, setError] = useState("");
 
     const validateForm = (formData) => {
-        if(!formData.email){
-            setError("Email required");
+        if(!formData.username){
+            setError("Username required");
             return false;
         }
         else{
             return true;
         }
-        }
+    }
 
     const handleSubmit = () => {
         setError(""); //reset to no error
         if(!validateForm(formData)){
             return;
         }
-        console.log(formData.email);   
-        }
+        console.log(formData.username);
+        
+        navigate("/auth/change-password", { state: { formData } });
+    }
 
     return(
         <div>
@@ -34,10 +38,10 @@ const ForgetPasswordUI = () => {
         <div className={styles.UIContainer}>
             <input 
                 className={styles.textContainer}
-                type = "email"
-                value={formData.email} 
-                onChange = {(e) => {setFormData({ ...formData, email: e.target.value});}}
-                placeholder='Email'
+                type = "username"
+                value={formData.username} 
+                onChange = {(e) => {setFormData({ ...formData, username: e.target.value});}}
+                placeholder='Username'
                 /> <br/><br/><br/>
             <button className = {styles.imageButton} onClick={handleSubmit}></button>
             {error && <div>{error}</div>}

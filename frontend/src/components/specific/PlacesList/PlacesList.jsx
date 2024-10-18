@@ -1,6 +1,11 @@
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 
 const PlacesList = ({ places, placeClicked, showAddFavouritesButton, showRemoveFavouritesButton }) => {
+    if (!places) {
+        return(
+            <div>No places available</div>
+        );
+    }
     return(
         <div>
             {placeClicked ? (

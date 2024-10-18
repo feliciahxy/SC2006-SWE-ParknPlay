@@ -61,24 +61,7 @@ const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
         url="https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png"
         attribution='&copy; <img src="https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png" style="height:20px;width:20px;"/>&nbsp;<a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener noreferrer">OneMap</a>&nbsp;&copy;&nbsp;contributors&nbsp;&#124;&nbsp;<a href="https://www.sla.gov.sg/" target="_blank" rel="noopener noreferrer">Singapore Land Authority</a>'
       />
-      {/* {placesList.map((place) => (
-        <Marker
-          position={place.coordinates}
-          eventHandlers={{
-            click: (e) => {
-              console.log('marker clicked', e);
-              setPlaceClicked(place);
-              //get carpark details from backend
-              //setCarparkList([carparks]);
-            },
-          }}
-          >
-          <Popup>
-            name: {place.name} <br /> address: {place.address} <br /> rating: {place.rating} <br /> price level: {place.price_level}
-          </Popup>
-        </Marker>
-      ))} */}
-      {placesList.map((place) => {
+      {placesList?.map((place) => {
         let coordinates = [];
         coordinates[0] = place?.lat;
         coordinates[1] = place?.lng;

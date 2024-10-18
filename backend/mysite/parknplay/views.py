@@ -1,3 +1,6 @@
+from managers.CarparkMgr import find_carpark_details
+from managers.SearchMgr import search
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import User
@@ -5,6 +8,9 @@ from django.forms.models import model_to_dict
 import requests
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+import jwt
+from django.conf import settings
 
 # Create your views here.
 def index(request):
@@ -16,25 +22,66 @@ def handleUsers(request):
         data = User.objects.all()
         serialized_data = [model_to_dict(item) for item in data]
         return JsonResponse(serialized_data, safe=False)
+    elif request.method == 'POST':
+        data = json.loads(request.body)
+        username = data["username"]
+        password = data["password"]
+
+        #create jwt token and send token to frontend
+        user = User.objects.create(username=username, password=password)
+        token = jwt.encode({'user_id': user.id}, settings.SECRET_KEY, algorithm='HS256')
+        return JsonResponse({
+            'token': token,
+            'message': 'User created'
+        }, status=201)
     else:
+        return JsonResponse({
+            "error": "Only GET and POST methods allowed",
+        })
+
+@csrf_exempt
+def changePassword(request):
+    if request.method == "POST":
         data = json.loads(request.body)
         username = data.get('username')
         password = data.get('password')
-        user = User.objects.create(username=username, password=password)
-        return JsonResponse({'message': 'User created', 'id': user.username}, status=201)
-    
+
+        try:
+            user = User.objects.get(username = username)
+            user.password = password
+            user.save()
+            return JsonResponse({
+                "message": "Password Changed"
+            }, safe=False)
+        except User.DoesNotExist:
+            return JsonResponse({
+                "error": "Account with this username does not exist"
+            }, status=404)
+
+
 @csrf_exempt
 def loginView(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        username = data.get('username')
+        username = data["username"]
+        password = data["password"]
+
+        #authenticate user
+        user = authenticate(request, username = username, password = password)
+        if user is not None:
+            token = jwt.encode({'user_id': user.id}, settings.SECRET_KEY, algorithm='HS256')
+            return JsonResponse({'token': token})
+        else:
+            return JsonResponse({'error': 'Invalid username or password'}, status=401)
+        """data = json.loads(request.body)
+         username = data.get('username')
         password = data.get('password')
         
         user = User.objects.get(username=username)
         if user.password == password:
             return JsonResponse({"message": "Login successful", "status": "success"}, status=200)
         else:
-            return JsonResponse({"message": "Invalid password", "status": "fail"}, status=401)
+            return JsonResponse({"message": "Invalid password", "status": "fail"}, status=401) """
     else:
         return JsonResponse({"message": "Only POST method allowed"}, status=405)
 
@@ -61,124 +108,112 @@ def SearchMgr(request):
             "error": "Invalid request method"
         }, status=400)
 
+@csrf_exempt
+def CarparkMgr(request):
+    if request.method == "GET":
+        # Get latitude and longitude from the query parameters
+        place_latitude = request.GET.get('lat')
+        place_longitude = request.GET.get('lon')
 
-
-
-def get_place_details(place_id, api_key):
-    # Endpoint and parameters for the Place Details API
-    endpoint = "https://maps.googleapis.com/maps/api/place/details/json"
-    params = {
-        'place_id': place_id,
-        'fields': 'name,geometry,formatted_address,rating,price_level,opening_hours,photos',
-        'key': api_key
-    }
-    
-    # Make the request to the Google Place Details API
-    response = requests.get(endpoint, params=params)
-    
-    # Parse the response JSON
-    if response.status_code == 200:
-        place_details = response.json()
-        if place_details.get("status") == "OK":
-            return place_details.get("result", {})
-        else:
-            return f"Error: {place_details.get('status')}"
+        if place_latitude and place_longitude:
+            place_location = (place_latitude, place_longitude) # convert latitude and longitude to tuple
+            carparks_data = find_carpark_details(place_location) # call find_carpark_details to get carparks
+            return JsonResponse({'carparks': carparks_data})
     else:
-        return f"HTTP Error: {response.status_code}"
+        return JsonResponse({'error': 'missing coordinates'}, status=400)
 
-def nearby_search(location, radius, api_key, place_type=None, max_price=None, rankby="prominence"):
-    # Define the endpoint and parameters for the Nearby Search API
-    endpoint = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-    params = {
-        'location': location,  # Latitude and Longitude (comma-separated)
-        'radius': radius,      # Search radius in meters
-        'key': api_key,
-        'rankby': rankby       # Rank results by prominence
-    }
-    
-    # Optional filters
-    if place_type:
-        params['type'] = place_type  # Type of place (e.g., restaurant, cafe, etc.)
-    if max_price is not None:
-        params['maxprice'] = max_price  # Max price level (0 to 4)
-    
-    # Make the request to the Google Places API
-    response = requests.get(endpoint, params=params)
-    
-    # Parse the response JSON
-    if response.status_code == 200:
-        places = response.json()
-        if places.get("status") == "OK":
-            return places.get("results", [])
-        else:
-            return f"Error: {places.get('status')}"
-    else:
-        return f"HTTP Error: {response.status_code}"
-
-# Example usage:
-# Latitude and longitude of San Francisco allow them to pick on the map
- # Search radius in meters
-def search(region, placetype, price):
-    region = "North" #to link region parameter to this 
-    if region == "North":
-        location = "1.445, 103.825"
-        radius = 10000
-    elif region == "South":
-        location = "1.270, 103.819"
-        radius = 8000
-    elif region == "East":
-        location = "1.335, 103.940"
-        radius = 12000
-    elif region == "West":
-        location = "1.355, 103.690"
-        radius = 15000
-
-    max_price = 0 # Max price level (0 to 4) # to link max price to this
-    if price == "$":
-        max_price = 1
-    elif price == "$$":
-        max_price = 2
-    elif price == "$$$":
-        max_price = 3
-    elif price == "$$$$":
-        max_price = 4
-
-    api_key = "AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM"
-    place_type = placetype  # Type of place (optional) # to link place type to this
-    rankby = "prominence"  # Rank results by prominence (default)
-
-    # Step 1: Get nearby places
-    nearby_places = nearby_search(location, radius, api_key, place_type, max_price, rankby)
-    placeslist = []
-    # Step 2: Fetch detailed information for each place
-    for place in nearby_places:
-        place_id = place['place_id']  # Get the place_id for detailed lookup
-        details = get_place_details(place_id, api_key)
-        
-        # Step 3: Print required details
-        if details:
-            name = details.get('name', 'N/A')
-            location = details.get('geometry', {}).get('location', {})
-            lat = location.get('lat', 'N/A')
-            lng = location.get('lng', 'N/A')
-            address = details.get('formatted_address', 'N/A')
-            rating = details.get('rating', 'N/A')
-            price_level = details.get('price_level', 'N/A')
-            opening_hours = details.get('opening_hours', {}).get('weekday_text', 'N/A')
-            photos = details.get('photos', [])
-            photo_reference = photos[0]['photo_reference'] if photos else 'N/A'
+@csrf_exempt
+def FavouritesMgr(request):
+    if request.method == "POST":
+        try:
+            auth_header = request.headers.get('Authorization')
+            if not auth_header:
+                return JsonResponse({
+                    "error": "No token provided",
+                }, status=401)
             
-            place = {
-                "name" : name,
-                "location" : location,
-                "lat" : lat,
-                "lng" : lng,
-                "address" : address,
-                "rating" : rating,
-                "price_level" : price_level,
-                "opening_hours" : opening_hours,
-                "photos" : photos,
-                "photo_reference" : photo_reference
-            }
-            placeslist.append(place)
-    return placeslist
+            token = auth_header.split(' ')[1]
+            decoded = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = decoded.get('user_id')
+
+            user = User.objects.get(id=user_id)
+            data = json.loads(request.body)
+            place = data.get("place")
+            action = data.get("action")
+
+            if action == "add":
+                #add to database
+                favourite_place, created = Favourite.objects.get_or_create(
+                    name = place["name"],
+                    location = place["location"],
+                    lat = place["lat"],
+                    lng = place["lng"],
+                    address = place["address"],
+                    rating = place["rating"],
+                    price_level = place["price_level"],
+                    opening_hours = place["opening_hours"],
+                    photos = place["photos"],
+                    photo_reference = place["photo_reference"]
+                )
+                user.favourites.add(favourite_place)
+                return JsonResponse({
+                    "message": "place added to Favourites successfully"
+                }, safe=False)
+            elif action == "remove":
+                #remove from database
+                try:
+                    favourite = Favourite.objects.get(
+                        name=place["name"], 
+                        location=place["location"]
+                    )
+                    user.favourites.remove(favourite)
+                    return JsonResponse({
+                        "message": "Place removed from Favourites successfully"
+                    }, safe=False)
+                except Favourite.DoesNotExist:
+                    return JsonResponse({
+                        "error": "Place not found in Favourites"
+                    }, status=404)
+            else:
+                return JsonResponse({
+                    "error": "Invalid action: Please select add to favourites or remove from favourites"
+                }, status=400)
+        except jwt.ExpiredSignatureError:
+            return JsonResponse({'error': 'Token has expired'}, status=401)
+        except jwt.InvalidTokenError:
+            return JsonResponse({'error': 'Invalid token'}, status=401)
+        except User.DoesNotExist:
+            return JsonResponse({
+                "error": "User with this username not found"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    elif request.method == "GET":
+        try:
+            auth_header = request.headers.get('Authorization')
+            if not auth_header:
+                return JsonResponse({
+                    "error": "no token provided",
+                }, status=401)
+            token = auth_header.split(' ')[1]
+            decoded = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = decoded.get('user_id')
+
+            user = User.objects.get(id = user_id)
+            user_favourites = user.favourites.all()
+            serialized_data = [model_to_dict(item) for item in user_favourites]
+            return JsonResponse({
+                "favourites": serialized_data
+            }, safe=False)
+        except jwt.ExpiredSignatureError:
+            return JsonResponse({'error': 'Token has expired'}, status=401)
+        except jwt.InvalidTokenError:
+            return JsonResponse({'error': 'Invalid token'}, status=401)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({
+            "error": "Invalid request method"
+        }, status=400)

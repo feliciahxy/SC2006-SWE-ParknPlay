@@ -12,19 +12,31 @@ const FavouritesUI = () => {
     const [favourites, setFavourites] = useState([]);
     const [placeClicked, setPlaceClicked] = useState(null);
     
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
+        setLoading(true);
+
         getFavouritesData()
             .then((data) => {
                 console.log(data);
                 setFavourites(data);
             });
+
+        setLoading(false);
     }, []);
 
     return(
         <div class="page">
             <SideBar />
-            <PlacesList places = {favourites} placeClicked = {placeClicked} showAddFavouritesButton={false} showRemoveFavouritesButton={true} />
-            <MapComponent placesList = {favourites} setPlaceClicked = {setPlaceClicked} />
+            {loading ? (
+                <div>
+                    <PlacesList places = {favourites} placeClicked = {placeClicked} showAddFavouritesButton={false} showRemoveFavouritesButton={true} />
+                    <MapComponent placesList = {favourites} setPlaceClicked = {setPlaceClicked} />
+                </div>
+            ) : (
+                <div>Loading...</div>
+            )}
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-//import validator from 'validator';
+import { sendNewlyCreatedUser } from '../../../api/api';
 import styles from './RegistrationUI.module.css';
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
@@ -38,20 +38,17 @@ const RegistrationUI = () => {
         if(!validateForm(formData)){
             return;
         }
-        
-        axios.post('http://127.0.0.1:8000/parknplay/users', {
-            username: formData.username,
-            password: formData.password
-        })
-            .then(response => {
-                console.log('User saved successfully:', response.data);
-            })
-            .catch(error => {
-                console.error('Error saving user:', error);
-            });
 
-            let path = `/search-results`;
-            navigate(path);
+        try {
+            sendNewlyCreatedUser(formData)
+                .then((token) => {
+                    console.log('User saved successfully');
+                    localStorage.setItem('token', token);
+                })
+            navigate("/search-results");
+        } catch (error) {
+            console.error('Error saving user: ', error);
+        }
     };
         
     return(

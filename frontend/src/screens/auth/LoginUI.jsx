@@ -3,8 +3,9 @@ import styles from './RegistrationUI/RegistrationUI.module.css'
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import { Route } from 'react-router-dom';
-import ForgetPasswordUI from "./ForgetPasswordUI";
+import ForgetPasswordUI from "./ForgetPasswordUI/ForgetPasswordUI";
 
+import { sendUserLoginDetails } from '../../api/api';
 
 function LoginUI(){
     let navigate = useNavigate();
@@ -33,26 +34,21 @@ function LoginUI(){
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post('http://127.0.0.1:8000/parknplay/login', {
-            username: formData.username,
-            password: formData.password,
-        });
-    
-        if (response.data.status === 200) {
-            let path = `/search-results`;
-            navigate(path);
-        } else {
-            console.error('Error logging in:', error);
+        setError(""); //reset to no error
+        if (!validateForm(formData)) {
+            return;
+        }
+
+        try {
+            sendUserLoginDetails(formData)
+                .then((token) => {
+                    localStorage.setItem('token', token);
+                });
+            navigate("/search-results");
+        } catch (error) {
+            console.error('Error logging in: ', error);
         }
       };
-    // const handleSubmit = () => {
-    //     setError(""); //reset to no error
-    //     if(!validateForm(formData)){
-    //         return;
-    //     }
-    //     console.log(formData.email);
-    //     console.log(formData.password);      
-    //     };
 
     const handleClick = (e) => {
         const buttonText = e.target.textContent
