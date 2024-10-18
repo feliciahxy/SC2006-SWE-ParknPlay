@@ -1,25 +1,29 @@
 import requests
 from geopy.distance import geodesic
-from pyproj import Proj, Transformer
+from pyproj import Transformer
 
 # Define constants for SVY21 to WGS84 conversion using pyproj
-svy21 = Proj("epsg:3414")  # SVY21 (EPSG:3414)
-wgs84 = Proj("epsg:4326")  # WGS84 (EPSG:4326)
-
-# Create a transformer object for the conversion
-transformer = Transformer.from_proj(svy21, wgs84)
+# Ensure always_xy=True to maintain (Easting, Northing) order
+transformer = Transformer.from_crs("EPSG:3414", "EPSG:4326", always_xy=True)
 
 # Define the user's location (replace with actual coordinates)
-# place_location = (1.3525, 103.8198)  # Example coordinates for Singapore
-TOPXCARPARKS = 10 #number of top carparks wanted
+# place_location = (1.3082405, 103.8858445)  # Example coordinates for Singapore (WGS84)
+TOPXCARPARKS = 5  # Number of top carparks wanted
 
 # Function to convert SVY21 coordinates to WGS84 using Transformer
-def svy21_to_wgs84(x, y):
-    # Transform coordinates
-    lon, lat = transformer.transform(x, y)
-    
-    # Return in (latitude, longitude) order
-    return lat, lon
+def svy21_to_wgs84(easting, northing):
+    try:
+        # Transform from SVY21 (Easting, Northing) to WGS84 (Longitude, Latitude)
+        longitude, latitude = transformer.transform(easting, northing)        
+        # Validate latitude and longitude
+        if not (-90 <= latitude <= 90) or not (-180 <= longitude <= 180):
+            print(f"Invalid WGS84 coordinates: ({latitude}, {longitude}) for SVY21 ({easting}, {northing})")
+            return None, None
+        
+        return latitude, longitude  # WGS84 format is (latitude, longitude)
+    except Exception as e:
+        print(f"Error transforming SVY21 to WGS84: {e}")
+        return None, None
 
 # Function to fetch carpark availability
 def get_carpark_availability():
@@ -44,13 +48,13 @@ def get_carpark_information():
 # Function to calculate distance between two coordinates
 def calculate_distance(coord1, coord2):
     try:
-        # coord1 is in WGS84 (lat, lon) format
-        return geodesic(coord1, coord2).kilometers
+        dist = geodesic(coord1, coord2).kilometers
+        return dist
     except ValueError as e:
         print(f"Error calculating distance between {coord1} and {coord2}: {e}")
         return float('inf')
 
-# Main function to find nearest 5 carparks
+# Main function to find nearest carparks
 def find_nearest_carparks(place_location):
     # Step 1: Get live carpark availability
     carpark_availabilities = get_carpark_availability()
@@ -68,23 +72,32 @@ def find_nearest_carparks(place_location):
             if info.get("car_park_no") == carpark_number:
                 try:
                     # Convert from SVY21 to WGS84 using pyproj
-                    longitude, latitude = svy21_to_wgs84(float(info.get("x_coord")), float(info.get("y_coord")))
-                    # Store the converted coordinates in a location tuple
-                    location = (latitude, longitude)
+                    easting = float(info.get("x_coord"))
+                    northing = float(info.get("y_coord"))
+                    latitude, longitude = svy21_to_wgs84(easting, northing)
+                    
+                    # Ensure conversion is successful before using the coordinates
+                    if latitude is None or longitude is None:
+                        continue
+                    
+                    location = (latitude, longitude)  # Correct WGS84 (lat, lon)
+                    
+                    # Calculate distance and store
+                    distance = calculate_distance(place_location, location)
+                    
+                    combined_carparks.append({
+                        "carpark_number": carpark_number,
+                        "location": location,
+                        "address": info.get("address", "N/A"),
+                        "distance": distance
+                    })
                 except (ValueError, TypeError) as e:
                     print(f"Error parsing coordinates for carpark {carpark_number}: {e}")
                     continue
-                
-                combined_carparks.append({
-                    "carpark_number": carpark_number,
-                    "location": location,  # Use the location variable now
-                    "address": info.get("address", "N/A"),
-                    "distance": calculate_distance(place_location, location)  # Use the location for distance
-                })
-                break
-    
-    # Step 4: Sort the carparks by distance and get the nearest 5
-    nearest_carparks = sorted(combined_carparks, key=lambda x: x["distance"])[:TOPXCARPARKS] 
+                break  # Exit the inner loop once a match is found
+
+    # Step 4: Sort carparks by distance and return nearest ones
+    nearest_carparks = sorted(combined_carparks, key=lambda x: x["distance"])[:TOPXCARPARKS]
     return nearest_carparks
 
 # Function to find carpark availability details for nearest carparks
@@ -96,7 +109,7 @@ def find_carpark_details(place_location):
     carpark_availabilities = get_carpark_availability()
     carpark_details = []
     
-    # Match carpark availability with the nearest carparks and print details
+    # Match carpark availability with the nearest carparks
     for carpark in nearest_carparks:
         carpark_number = carpark['carpark_number']
         for availability in carpark_availabilities:
@@ -114,10 +127,10 @@ def find_carpark_details(place_location):
 
                 # Add the details to the list
                 carpark_details.append(details)
-                print(f"{details['address']} - {details['available_lots']} out of {details['total_lots']} lots available, coordinates: {details['coordinates']}")
+                # print(f"{details['address']} - {details['available_lots']} out of {details['total_lots']} lots available, coordinates: {details['coordinates']}")
                 break
 
     return carpark_details  # we only need address, # of lots out of total # and coordinates to map location
 
 # Example usage
-find_carpark_details(place_location) #to input attraction location after selected attraction
+find_carpark_details(place_location)  # Input attraction location after selecting attraction
