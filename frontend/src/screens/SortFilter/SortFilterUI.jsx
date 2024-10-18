@@ -8,6 +8,7 @@ import "../screens.css";
 import filterOptions from "./SortFilterOptions.json";
 
 const SortFilterUI = () => {
+    console.log("SortFilterUI rendered");
     const navigate = useNavigate();
 
     const [filters, setFilters] = useState(() => {

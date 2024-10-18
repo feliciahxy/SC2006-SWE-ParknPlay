@@ -40,6 +40,7 @@ const ForgetPasswordUI = () => {
                 placeholder='Email'
                 /> <br/><br/><br/>
             <button className = {styles.imageButton} onClick={handleSubmit}></button>
+            <div className = {styles.space}></div>
             {error && <div>{error}</div>}
             </div>
         </div>
