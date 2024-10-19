@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import SortFilterOptions from "./SortFilterOptions";
 
-import "../screens.css";
-
 import filterOptions from "./SortFilterOptions.json";
 
 import { sendFilters } from '../../../api/PlacesServices';

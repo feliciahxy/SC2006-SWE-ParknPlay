@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './RegistrationUI/RegistrationUI.module.css'
+import styles from '../RegistrationUI/RegistrationUI.module.css'
 
 const ForgetPasswordUI = () => {
     const navigate = useNavigate();
