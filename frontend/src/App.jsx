@@ -16,9 +16,10 @@ function Logout() {
 }
 
 function App() {
-  // State to hold search results and selected location
+  // State to hold search results, selected location, and location name
   const [searchResults, setSearchResults] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [locationName, setLocationName] = useState('');
 
   return (
     <BrowserRouter>
@@ -43,7 +44,11 @@ function App() {
           path="/search-results"
           element={
             <ProtectedRoute>
-              <SearchResultsUI results={searchResults} setSelectedLocation={setSelectedLocation} />
+              <SearchResultsUI
+                results={searchResults}
+                setSelectedLocation={setSelectedLocation}
+                setLocationName={setLocationName} // Pass the function to set location name
+              />
             </ProtectedRoute>
           }
         />
@@ -51,7 +56,7 @@ function App() {
           path="/carparks"
           element={
             <ProtectedRoute>
-              <CarparkUI selectedLocation={selectedLocation} />
+              <CarparkUI selectedLocation={selectedLocation} locationName={locationName} />
             </ProtectedRoute>
           }
         />

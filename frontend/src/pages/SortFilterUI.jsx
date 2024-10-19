@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header'; // Import the Header component
 
 const townCoordinates = {
     "Ang Mo Kio": { lat: 1.3691, lng: 103.8454 },
@@ -69,6 +70,7 @@ const SortFilterUI = ({ setSearchResults }) => {
 
     return (
         <div>
+            <Header /> {/* Include the Header component */}
             <h2>Search Places</h2>
 
             <div>

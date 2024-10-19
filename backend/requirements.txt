@@ -1,5 +1,5 @@
 asgiref
-Django
+django
 django-cors-headers
 djangorestframework
 djangorestframework-simplejwt
@@ -8,3 +8,7 @@ pytz
 sqlparse
 psycopg2-binary
 python-dotenv
+geopy
+pyproj
+gunicorn
+leaflet

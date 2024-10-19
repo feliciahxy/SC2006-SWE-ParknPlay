@@ -3,6 +3,7 @@ from django.urls import path, include
 from api.views import CreateUserView, home
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from mysite import views as mysite_views
+from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -11,5 +12,5 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api/auth/", include("rest_framework.urls")),
     path("api/", include("api.urls")),
-    path("", include("mysite.urls")),  # Include 'mysite' URLs directly without a prefix
+    path("", include("mysite.urls")),
 ]
