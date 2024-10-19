@@ -53,10 +53,11 @@ const PlaceDetails = ({ place }) => {
             });
     }, [place]);
     
+    const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
     return(
         <div>
-            {place?.photo_reference? (
-                <img src={place.photo_reference} alt="image cannot be displayed"></img>
+            {place?.photo? (
+                <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photo}&key=${API_KEY}`} alt="image cannot be displayed"></img>
             ) : (
                 <div>image not available</div>
             )}

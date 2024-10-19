@@ -7,15 +7,15 @@ export const getCarparksData = async (lat, lng) => {
     try {
       const response = await axios.get(carparks_URL, {
         params: {
-            lat: lat,
-            lon: lng
+            latitude: lat,
+            longitude: lng
         }
       });
-      const { data: { carparks } } = response;
-      console.log(carparks);
-      return carparks;
+      console.log(response);
+      const { data } = response;
+      return data;
     } catch (error) {
-      console.error(error);
+      console.error('Error details:', error.response || error.message || error);
     }
 }
 /* 

@@ -48,7 +48,7 @@ const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
   useEffect(() => {
     // OneMap example for adding markers or other custom functionalities
     // You can use OneMap's API here to fetch data, markers, etc.
-    getCarparksData(placeClicked?.lat, placeClicked?.lng)
+    getCarparksData(placeClicked?.coordinates?.lat, placeClicked?.coordinates?.lng)
       .then((data) => {
         console.log(data);
         setCarparksList(data);
@@ -66,8 +66,8 @@ const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
       />
       {placesList?.map((place) => {
         let coordinates = [];
-        coordinates[0] = place?.lat;
-        coordinates[1] = place?.lng;
+        coordinates[0] = place?.coordinates?.lat;
+        coordinates[1] = place?.coordinates?.lng;
         return(
         <Marker position={coordinates}
           eventHandlers={{
@@ -88,13 +88,16 @@ const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
         </Marker>
       )})}
       {carparksList?.map((carpark) => {
+        let coordinates = [];
+        coordinates[0] = carpark?.location?.latitude;
+        coordinates[1] = carpark?.location?.longitude;
         return(
-          <Marker position={carpark?.coordinates} icon={carparkIcon}>
+          <Marker position={coordinates} icon={carparkIcon}>
             <Popup>
               carpark_number: {carpark.carpark_number} <br />
-              address: {carpark.address} <br />
-              available_lots: {carpark.available_lots} <br />
-              total_lots: {carpark.total_lots}
+              carpark_name: {carpark.carpark_name} <br />
+              distance: {carpark.distance} meters <br />
+              available_lots: {carpark.available_lots}
             </Popup>
           </Marker>
         );

@@ -1,4 +1,4 @@
-#to be added to views.py
+""" #to be added to views.py
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -65,5 +65,5 @@ def FavouritesMgr(request):
     else:
         return JsonResponse({
             "error": "Invalid request method"
-        }, status=400)
+        }, status=400) """
 

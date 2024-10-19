@@ -7,7 +7,7 @@ import filterOptions from "./SortFilterOptions.json";
 
 import { sendFilters } from '../../../api/PlacesServices';
 
-const SortFilterUI = () => {
+const SortFilterUI = ({ setPlaces }) => {
     const navigate = useNavigate();
 
     const [filters, setFilters] = useState(() => {
@@ -28,7 +28,7 @@ const SortFilterUI = () => {
         sendFilters(filters)
             .then((data) => {
                 console.log(data);
-                navigate("/search-results");
+                setPlaces(data);
             })
             .catch((error) => {
                 console.error('Error posting filter data: ', error);

@@ -12,16 +12,16 @@ export const sendFilters = async (data) => {
         console.log(response);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error('sendFilters Axios error:', error.response || error.message || error);
     }
 }
 
 export const getPlacesData = async () => {
     try {
         const response = await axios.get(places_URL);
-        console.log(response);
+        console.log('Response:', response);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error('Error response: ', error.response);
     }
 }

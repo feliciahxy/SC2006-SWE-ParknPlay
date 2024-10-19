@@ -34,7 +34,7 @@ const SearchResultsUI = () => {
             <SideBar />
             <div class="screen-flex-container">
                 <div class="screen-flex-child">
-                    <SortFilterComponent />
+                    <SortFilterComponent setPlaces = {setPlaces}/>
                     {loading? (
                         <div>Loading places...</div>
                     ) : (

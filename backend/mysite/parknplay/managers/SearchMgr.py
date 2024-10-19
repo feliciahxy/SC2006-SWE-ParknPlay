@@ -1,3 +1,4 @@
+import requests
 
 def get_place_details(place_id, api_key):
     # Endpoint and parameters for the Place Details API
@@ -17,9 +18,13 @@ def get_place_details(place_id, api_key):
         if place_details.get("status") == "OK":
             return place_details.get("result", {})
         else:
-            return f"Error: {place_details.get('status')}"
+            # Handle API error status
+            print(f"Error fetching details for place_id {place_id}: {place_details.get('status')}")
+            return None  # Return None for easier error handling
     else:
-        return f"HTTP Error: {response.status_code}"
+        # Handle HTTP errors
+        print(f"HTTP Error {response.status_code} for place_id {place_id}: {response.text}")
+        return None  # Return None for easier error handling
 
 def nearby_search(location, radius, api_key, place_type=None, max_price=None, rankby="prominence"):
     # Define the endpoint and parameters for the Nearby Search API
@@ -46,14 +51,18 @@ def nearby_search(location, radius, api_key, place_type=None, max_price=None, ra
         if places.get("status") == "OK":
             return places.get("results", [])
         else:
-            return f"Error: {places.get('status')}"
+            return [] # to prevent "string indices must be integers, not 'str'" error
+            #return f"Error: {places.get('status')}"
     else:
-        return f"HTTP Error: {response.status_code}"
+        return [] # to prevent "string indices must be integers, not 'str'" error
+        #return f"HTTP Error: {response.status_code}"
 
 # Example usage:
 # Latitude and longitude of San Francisco allow them to pick on the map
  # Search radius in meters
 def search(region, placetype, price):
+    print(f"region: {region}, placetype: {placetype}, price: {price}")
+
     region = "North" #to link region parameter to this 
     if region == "North":
         location = "1.445, 103.825"
@@ -91,7 +100,10 @@ def search(region, placetype, price):
         details = get_place_details(place_id, api_key)
         
         # Step 3: Print required details
-        if details:
+        if details is None:
+            print(f"Failed to retrieve details for place ID {place_id}.")
+        else:
+            # Process the details as needed
             name = details.get('name', 'N/A')
             location = details.get('geometry', {}).get('location', {})
             lat = location.get('lat', 'N/A')

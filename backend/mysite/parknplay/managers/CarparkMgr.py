@@ -133,4 +133,4 @@ def find_carpark_details(place_location):
     return carpark_details  # we only need address, # of lots out of total # and coordinates to map location
 
 # Example usage
-find_carpark_details(place_location)  # Input attraction location after selecting attraction
+#find_carpark_details(place_location)  # Input attraction location after selecting attraction
