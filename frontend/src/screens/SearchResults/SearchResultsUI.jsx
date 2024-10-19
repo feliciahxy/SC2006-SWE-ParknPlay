@@ -32,19 +32,23 @@ const SearchResultsUI = () => {
     return(
         <div class="page">
             <SideBar />
-            <div>
-                <SortFilterComponent />
-                {loading? (
-                    <PlacesList places = {places} placeClicked = {placeClicked} />
-                ) : (
-                    <div>Loading places...</div>
-                )}
+            <div class="screen-flex-container">
+                <div class="screen-flex-child">
+                    <SortFilterComponent />
+                    {loading? (
+                        <div>Loading places...</div>
+                    ) : (
+                        <PlacesList places = {places} placeClicked = {placeClicked} />
+                    )}
+                </div>
+                <div class="screen-flex-child">
+                    {loading? (
+                        <div>Loading maps...</div>
+                    ) : (
+                        <MapComponent placesList = {places} placeClicked = {placeClicked} setPlaceClicked = {setPlaceClicked} />
+                    )}
+                </div>
             </div>
-            {loading? (
-                <MapComponent placesList = {places} placeClicked = {placeClicked} setPlaceClicked = {setPlaceClicked} />
-            ) : (
-                <div>Loading maps...</div>
-            )}
         </div>
     );
 }

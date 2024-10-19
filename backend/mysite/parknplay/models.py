@@ -7,8 +7,6 @@ class User(models.Model):
     lastName = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     salt = models.CharField(max_length=100)
-    isVerified = models.BooleanField()
-    verificationCode = models.CharField(max_length=100)
     favourites = models.ManyToManyField(Favourite)
 
 class Favourite(models.Model):

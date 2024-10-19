@@ -33,12 +33,16 @@ const FavouritesUI = () => {
         <div class="page">
             <SideBar />
             {loading ? (
-                <div>
-                    <PlacesList places = {favourites} placeClicked = {placeClicked} />
-                    <MapComponent placesList = {favourites} setPlaceClicked = {setPlaceClicked} />
-                </div>
-            ) : (
                 <div>Loading...</div>
+            ) : (
+                <div class="screen-flex-container">
+                    <div class="screen-flex-child">
+                        <PlacesList places = {favourites} placeClicked = {placeClicked} />
+                    </div>
+                    <div class="screen-flex-child">
+                        <MapComponent placesList = {favourites} setPlaceClicked = {setPlaceClicked} />
+                    </div>
+                </div>
             )}
         </div>
     );
