@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sendNewlyCreatedUser } from '../../../api/api';
+import { sendNewlyCreatedUser } from '../../../api/AuthServices';
 import styles from './RegistrationUI.module.css';
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
@@ -39,16 +39,15 @@ const RegistrationUI = () => {
             return;
         }
 
-        try {
-            sendNewlyCreatedUser(formData)
-                .then((token) => {
-                    console.log('User saved successfully');
-                    localStorage.setItem('token', token);
-                })
-            navigate("/search-results");
-        } catch (error) {
-            console.error('Error saving user: ', error);
-        }
+        sendNewlyCreatedUser(formData)
+            .then((token) => {
+                console.log('User saved successfully');
+                localStorage.setItem('token', token);
+                navigate("/search-results");
+            })
+            .catch ((error) => {
+                console.error('Error saving user: ', error);
+            });
     };
         
     return(

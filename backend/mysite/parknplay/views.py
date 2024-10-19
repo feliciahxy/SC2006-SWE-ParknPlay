@@ -174,6 +174,19 @@ def FavouritesMgr(request):
                     return JsonResponse({
                         "error": "Place not found in Favourites"
                     }, status=404)
+            elif action == "find":
+                try:
+                    favourite = user.favourites.get(
+                        name = place["name"],
+                        location = place["location"]
+                    )
+                    return JsonResponse({
+                        "message": "Place found in User's favourites"
+                    }, safe=False)
+                except user.favourites.DoesNotExist:
+                    return JsonResponse({
+                        "error": "Place not found in User's Favourites"
+                    }, status=404)
             else:
                 return JsonResponse({
                     "error": "Invalid action: Please select add to favourites or remove from favourites"

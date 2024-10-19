@@ -1,18 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styles from './RegistrationUI/RegistrationUI.module.css'
-import { useNavigate, Link } from "react-router-dom";
-import axios from 'axios';
-import { Route } from 'react-router-dom';
-import ForgetPasswordUI from "./ForgetPasswordUI/ForgetPasswordUI";
+import { useNavigate } from "react-router-dom";
 
-import { sendUserLoginDetails } from '../../api/api';
+import { sendUserLoginDetails } from '../../api/AuthServices';
 
 function LoginUI(){
     let navigate = useNavigate();
     const [formData,setFormData] = useState({
         username: "",
         password: "",
-    })
+    });
 
     const [error, setError] = useState("");
 
@@ -39,15 +36,14 @@ function LoginUI(){
             return;
         }
 
-        try {
-            sendUserLoginDetails(formData)
-                .then((token) => {
-                    localStorage.setItem('token', token);
-                });
-            navigate("/search-results");
-        } catch (error) {
-            console.error('Error logging in: ', error);
-        }
+        sendUserLoginDetails(formData)
+            .then((token) => {
+                localStorage.setItem('token', token);
+                navigate("/search-results");
+            })
+            .catch((error) => {
+                console.error('Error logging in: ', error);
+            });
       };
 
     const handleClick = (e) => {

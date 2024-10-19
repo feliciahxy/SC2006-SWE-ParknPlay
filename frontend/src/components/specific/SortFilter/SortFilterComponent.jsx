@@ -7,7 +7,7 @@ import "../screens.css";
 
 import filterOptions from "./SortFilterOptions.json";
 
-import { sendFilters } from '../../api/api';
+import { sendFilters } from '../../../api/PlacesServices';
 
 const SortFilterUI = () => {
     const navigate = useNavigate();
@@ -24,16 +24,17 @@ const SortFilterUI = () => {
         //post filter data to backend
         //backend will get attractions from google places api based on filters
         //backend will post attractions to search-results ui
-        try {
-            sendFilters(filters)
-                .then((data) => {
-                    console.log(data);
-                });
-            navigate("/search-results");
-        } catch (error) {
-            console.error('Error posting filter data: ', error);
-        }
-       console.log(filters);
+        
+        console.log(filters);   //check error
+
+        sendFilters(filters)
+            .then((data) => {
+                console.log(data);
+                navigate("/search-results");
+            })
+            .catch((error) => {
+                console.error('Error posting filter data: ', error);
+            });
     };
     const handleSelectOption = (e, filterKey) => {
         setFilters((prevFilters) => ({

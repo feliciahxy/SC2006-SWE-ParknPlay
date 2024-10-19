@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getFavouritesData } from '../../api/api';
+import { getFavouritesData } from '../../api/FavouritesServices';
 
 import "../screens.css";
 
@@ -21,6 +21,9 @@ const FavouritesUI = () => {
             .then((data) => {
                 console.log(data);
                 setFavourites(data);
+            })
+            .catch((error) => {
+                console.error("Unable to load favourites from backend: ", error);
             });
 
         setLoading(false);
@@ -31,7 +34,7 @@ const FavouritesUI = () => {
             <SideBar />
             {loading ? (
                 <div>
-                    <PlacesList places = {favourites} placeClicked = {placeClicked} showAddFavouritesButton={false} showRemoveFavouritesButton={true} />
+                    <PlacesList places = {favourites} placeClicked = {placeClicked} />
                     <MapComponent placesList = {favourites} setPlaceClicked = {setPlaceClicked} />
                 </div>
             ) : (

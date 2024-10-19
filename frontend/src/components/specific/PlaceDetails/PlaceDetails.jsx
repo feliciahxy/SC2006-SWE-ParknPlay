@@ -1,6 +1,11 @@
-import AddFavouritesButton from "./AddFavouritesButton";
+import { useState, useEffect } from 'react';
 
-const PlaceDetails = ({ place, showAddFavouritesButton, showRemoveFavouritesButton }) => {
+import AddFavouritesButton from "./AddFavouritesButton";
+import RemoveFavouritesButton from "./RemoveFavouritesButton";
+
+import { sendPlaceToFavourites } from '../../../api/FavouritesServices';
+
+const PlaceDetails = ({ place }) => {
     
     const convertToReadableTime = (timeStr) => {
         // Function to convert the time portion to readable format
@@ -33,6 +38,20 @@ const PlaceDetails = ({ place, showAddFavouritesButton, showRemoveFavouritesButt
     
     console.log(readableTimes); //check error
 
+    //search for place in favourites to determine if addFavouritesButton or removeFavouritesButton
+    const [showAddFavouritesButton, setShowAddFavouritesButton] = useState(false);
+    const [showRemoveFavouritesButton, setShowRemoveFavouritesButton] = useState(false);
+    useEffect(() => {
+        sendPlaceToFavourites(place, "find")
+            .then((data) => {
+                setShowAddFavouritesButton(false);
+                setShowRemoveFavouritesButton(true);
+            })
+            .catch((error) => {
+                setShowAddFavouritesButton(true);
+                setShowRemoveFavouritesButton(false);
+            });
+    }, [place]);
     
     return(
         <div>

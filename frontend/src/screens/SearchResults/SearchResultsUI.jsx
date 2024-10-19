@@ -4,8 +4,8 @@ import "../screens.css";
 import MapComponent from "../../components/specific/Map/Map";
 import PlacesList from "../../components/specific/PlacesList/PlacesList";
 import SideBar from "../../components/specific/SideBar/SideBar";
-import SortFilterUI from "../SortFilter/SortFilterUI";
-import { getPlacesData } from "../../../api/api";
+import SortFilterComponent from "../../components/specific/SortFilter/SortFilterComponent";
+import { getPlacesData } from '../../api/PlacesServices';
 
 
 const SearchResultsUI = () => {
@@ -33,17 +33,17 @@ const SearchResultsUI = () => {
         <div class="page">
             <SideBar />
             <div>
-                <SortFilterUI />
+                <SortFilterComponent />
                 {loading? (
-                    <PlacesList places = {places} placeClicked = {placeClicked} showAddFavouritesButton={true} showRemoveFavouritesButton={false} />
+                    <PlacesList places = {places} placeClicked = {placeClicked} />
                 ) : (
-                    <div>Loading...</div>
+                    <div>Loading places...</div>
                 )}
             </div>
             {loading? (
                 <MapComponent placesList = {places} placeClicked = {placeClicked} setPlaceClicked = {setPlaceClicked} />
             ) : (
-                <div>Loading...</div>
+                <div>Loading maps...</div>
             )}
         </div>
     );

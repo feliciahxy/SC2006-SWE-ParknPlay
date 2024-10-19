@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { sendPlaceToFavourites } from "../../../api/api";
+import { sendPlaceToFavourites } from "../../../api/FavouritesServices";
 
 const AddFavouritesButton = ({ place }) => {
 
@@ -17,17 +17,15 @@ const AddFavouritesButton = ({ place }) => {
     }, [isVisible]);
 
     const handleAddFavourites = () => {
-        try {
-            sendPlaceToFavourites(place, "add")
-                .then((data) => {
-                    console.log(data);
-                });
-
-            //if successfully added to favourites, display the "successfully added to favourites"
-            setIsVisible(true);
-        } catch (error) {
-            console.error('Error posting place to FavouritesMgr: ', error);
-        }
+        sendPlaceToFavourites(place, "add")
+            .then((data) => {
+                console.log(data);
+                //if successfully added to favourites, display the "successfully added to favourites"
+                setIsVisible(true);
+            })
+            .catch((error) => {
+                console.error('Error posting place to FavouritesMgr: ', error);
+            });
     }
     return(
         <div>

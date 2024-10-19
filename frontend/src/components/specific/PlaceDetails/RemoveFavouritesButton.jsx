@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { sendPlaceToFavourites } from "../../../api/api";
+import { sendPlaceToFavourites } from "../../../api/FavouritesServices";
 
 const RemoveFavouritesButton = ({ place }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -16,15 +16,14 @@ const RemoveFavouritesButton = ({ place }) => {
     }, [isVisible]);
 
     const handleRemoveFavourites = () => {
-        try {
-            sendPlaceToFavourites(place, "remove")
-                .then((data) => {
-                    console.log(data);
-                });
-            setIsVisible(true);
-        } catch (error) {
-            console.error("Error posting place to FavouritesMgr: ", error);
-        }
+        sendPlaceToFavourites(place, "remove")
+            .then((data) => {
+                console.log(data);
+                setIsVisible(true);
+            })
+            .catch((error) => {
+                console.error("Error posting place to FavouritesMgr: ", error);
+            });
     };
     return(
         <div>

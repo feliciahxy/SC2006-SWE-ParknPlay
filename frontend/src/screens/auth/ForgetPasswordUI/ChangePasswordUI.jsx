@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { sendChangedPassword } from '../../../api/api';
+import { sendChangedPassword } from '../../../api/AuthServices';
 
 const ChangePasswordUI = () => {
     const location = useLocation();
@@ -15,16 +15,15 @@ const ChangePasswordUI = () => {
     const handleSubmit = () => {
         setError("");
 
-        try {
-            sendChangedPassword(formData)
-                .then((data) => {
-                    console.log(data);
-                    navigate("/auth/login");
-                });
-        } catch (error) {
-            console.error("Error: account with this username does not exist: ", error);
-            setError("Unable to change password: Account with this username does not exist")
-        }
+        sendChangedPassword(formData)
+            .then((data) => {
+                console.log(data);
+                navigate("/auth/login"); //navigate to login page
+            })
+            .catch((error) => {
+                console.error("Error: account with this username does not exist: ", error);
+                setError("Unable to change password: Account with this username does not exist");
+            });
     };
 
     return(

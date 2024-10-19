@@ -28,7 +28,7 @@ import 'leaflet/dist/leaflet.css';
 import React, { useState, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
-import { getCarparksData } from '../../../api/api';
+import { getCarparksData } from '../../../api/CarparksServices';
 
 const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
 
@@ -53,6 +53,9 @@ const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
         console.log(data);
         setCarparksList(data);
       })
+      .catch((error) => {
+        console.error("Error fetching carpark data from backend: ", error);
+      });
   }, [placeClicked]);
 
   return (

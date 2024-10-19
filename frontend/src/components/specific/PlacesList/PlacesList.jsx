@@ -1,6 +1,6 @@
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 
-const PlacesList = ({ places, placeClicked, showAddFavouritesButton, showRemoveFavouritesButton }) => {
+const PlacesList = ({ places, placeClicked }) => {
     if (!places) {
         return(
             <div>No places available</div>
@@ -12,14 +12,14 @@ const PlacesList = ({ places, placeClicked, showAddFavouritesButton, showRemoveF
                 <div>
                     <h2>Selected Place</h2>
                     <div>
-                        <PlaceDetails place = {placeClicked} showAddFavouritesButton = {showAddFavouritesButton} showRemoveFavouritesButton = {showRemoveFavouritesButton} />
+                        <PlaceDetails place = {placeClicked} />
                     </div>
                 </div>
             ) : (
                 <div>
                     {places?.map((place) => (
                         <div>
-                            <PlaceDetails place = {place} showAddFavouritesButton = {showAddFavouritesButton} showRemoveFavouritesButton = {showRemoveFavouritesButton}/>
+                            <PlaceDetails place = {place} />
                         </div>
                     ))}
                 </div>
