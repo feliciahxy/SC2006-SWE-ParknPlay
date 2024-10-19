@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header'; // Import the Header component
+import Header from '../components/Sidebar';
 
 const townCoordinates = {
     "Ang Mo Kio": { lat: 1.3691, lng: 103.8454 },
@@ -37,27 +37,21 @@ const SortFilterUI = ({ setSearchResults }) => {
     const navigate = useNavigate();
 
     const onSearch = async () => {
-        // Get the coordinates of the selected town
         const coordinates = townCoordinates[selectedTown];
-
-        // Construct the query string based on user inputs
         const nearbyParams = new URLSearchParams();
+        
         if (coordinates) {
             nearbyParams.append('location', `${coordinates.lat},${coordinates.lng}`);
         }
-        nearbyParams.append('radius', '2000'); // Example radius in meters
+        nearbyParams.append('radius', '2000');
         if (placeType) nearbyParams.append('type', placeType);
         if (price) nearbyParams.append('keyword', price);
         if (rating) nearbyParams.append('min_rating', rating);
 
         try {
-            // API call to the Django backend to get nearby places
             const nearbyResponse = await fetch(`http://127.0.0.1:8000/nearby_search/?${nearbyParams.toString()}`);
             if (nearbyResponse.ok) {
                 const nearbyData = await nearbyResponse.json();
-                console.log('Nearby Places:', nearbyData);
-
-                // Save data and navigate to the results page
                 setSearchResults(nearbyData);
                 navigate('/search-results');
             } else {
@@ -69,11 +63,11 @@ const SortFilterUI = ({ setSearchResults }) => {
     };
 
     return (
-        <div>
+        <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <Header /> {/* Include the Header component */}
-            <h2>Search Places</h2>
+            <h2 style={{ textAlign: 'center' }}>Search Places</h2>
 
-            <div>
+            <div style={{ marginBottom: '15px' }}>
                 <label>Town: </label>
                 <select onChange={(e) => setSelectedTown(e.target.value)} value={selectedTown}>
                     <option value="">Select Town</option>
@@ -83,7 +77,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div>
+            <div style={{ marginBottom: '15px' }}>
                 <label>Place Type: </label>
                 <select onChange={(e) => setPlacetype(e.target.value)} value={placeType}>
                     <option value="">Select Place Type</option>
@@ -94,7 +88,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div>
+            <div style={{ marginBottom: '15px' }}>
                 <label>Price: </label>
                 <select onChange={(e) => setPrice(e.target.value)} value={price}>
                     <option value="">Select Price Range</option>
@@ -104,7 +98,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div>
+            <div style={{ marginBottom: '15px' }}>
                 <label>Minimum Rating: </label>
                 <select onChange={(e) => setRating(e.target.value)} value={rating}>
                     <option value="">Select Minimum Rating</option>
@@ -116,7 +110,21 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <button onClick={onSearch}>Search</button>
+            <button 
+                onClick={onSearch}
+                style={{
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 15px',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    width: '100%',
+                    fontSize: '16px'
+                }}
+            >
+                Search
+            </button>
         </div>
     );
 };

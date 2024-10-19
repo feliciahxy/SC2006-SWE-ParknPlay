@@ -1,21 +1,10 @@
-import axios from "axios"
-import { ACCESS_TOKEN } from "./constants"
+import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL
-})
-
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`
-        }
-        return config
+    baseURL: 'http://localhost:8000', // Make sure this matches your backend URL
+    headers: {
+        'Content-Type': 'application/json',
     },
-    (error) => {
-        return Promise.reject(error)
-    }
-)
+});
 
-export default api
+export default api;

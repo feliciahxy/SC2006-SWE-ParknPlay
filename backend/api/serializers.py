@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import Favourite  # Make sure the model is imported here correctly
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
     # User.objects.create_user is a method provided by Django's User model to create a new user. It handles the process of hashing the password and saving the user to the database
     # The use of ** splits up the dictionary – validated_data into keyword arguments.
 
+
+class FavouriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = ['id', 'name', 'latitude', 'longitude', 'type', 'created_at']

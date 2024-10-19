@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import styles from '../styles/RegistrationUI.module.css';
 import { useNavigate } from 'react-router-dom';
-import api from '../api'; // Import your custom API instance
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; // Import tokens
+import api from '../api'; // Your Axios instance or fetch wrapper
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; // Token constants
+import styles from '../styles/RegistrationUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
+import greenArrowIcon from '../images/GreenArrow.png'; // Update the import to GreenArrow.png
 
 function LoginUI() {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        username: "",
-        password: "",
-    });
-
+    const [formData, setFormData] = useState({ username: "", password: "" });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const validateForm = (formData) => {
+    // Validate form fields
+    const validateForm = () => {
         if (!formData.username) {
             setError("Username required");
             return false;
@@ -26,44 +24,49 @@ function LoginUI() {
         return true;
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
 
-        if (!validateForm(formData)) {
+        if (!validateForm()) {
             setLoading(false);
             return;
         }
 
         try {
-            const response = await api.post('http://localhost:8000/api/token/', { // Use the correct API endpoint
+            const response = await api.post('/api/token/', {
                 username: formData.username,
                 password: formData.password,
             });
 
             if (response.status === 200) {
-                localStorage.setItem(ACCESS_TOKEN, response.data.access);
-                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-
-                console.log("Navigating to sort-filter");
-                navigate("/sort-filter");
-                console.log("Navigated to sort-filter");
+                const { access, refresh } = response.data;
+                // Save tokens to local storage
+                localStorage.setItem(ACCESS_TOKEN, access);
+                localStorage.setItem(REFRESH_TOKEN, refresh);
                 
+                // Navigate to the protected route after successful login
+                navigate("/sort-filter");
             } else {
                 setError("Invalid login credentials");
             }
         } catch (error) {
             console.error('Error logging in:', error);
-            setError("Invalid login credentials. Please try again."); // Changed error message for clarity
+            if (error.response && error.response.status === 401) {
+                setError("Invalid login credentials. Please try again.");
+            } else {
+                setError("An error occurred. Please try again later.");
+            }
         } finally {
             setLoading(false);
         }
-    }
+    };
 
+    // Handle button clicks for navigation
     const handleClick = (e) => {
         const buttonText = e.target.textContent;
-
         if (buttonText === "Forget Password") {
             navigate('/auth/forget-password');
         } else if (buttonText === "Sign up") {
@@ -73,7 +76,7 @@ function LoginUI() {
 
     return (
         <div>
-            <img className={styles.logo} src={logo} alt="profile" />
+            <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <div className={styles.UIContainer}>
                 <input
                     className={styles.textContainer}
@@ -91,10 +94,21 @@ function LoginUI() {
                 /><br /><br />
                 <button className={styles.ForgetPassword} onClick={handleClick}><u>Forget Password</u></button>
                 <br /><br />
-                <button className={styles.imageButton} onClick={handleSubmit} aria-label="Login" /> {/* Removed text and added aria-label for accessibility */}
-                {loading && <p>Loading...</p>}
-                <div className={styles.space}></div>
-                {error && <div>{error}</div>}
+                <button 
+                    className={styles.imageButton} 
+                    onClick={handleSubmit} 
+                    aria-label="Login"
+                    style={{
+                        backgroundImage: `url(${greenArrowIcon})`, // Change to use GreenArrow.png
+                        backgroundSize: '20px 20px',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'left center',
+                        paddingLeft: '30px', // Adjust padding to avoid overlap with text
+                    }}
+                >
+                    {loading ? "Logging in..." : "Login"}
+                </button>
+                {error && <div>{error}</div>} {/* Display error message */}
             </div>
             <div className={styles.signUpContainer}>
                 <p>Do not have an account? <button className={styles.SignUp} onClick={handleClick}><u>Sign up</u></button> here!</p>

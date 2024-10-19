@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
-
-import LoginUI from "./pages/LoginUI"; 
+import LoginUI from "./pages/LoginUI";
 import RegistrationUI from "./pages/RegistrationUI";
 import SortFilterUI from "./pages/SortFilterUI";
 import CarparkUI from "./pages/CarparkUI";
 import FavouritesUI from "./pages/FavouritesUI";
 import ForgetPasswordUI from "./pages/ForgetPasswordUI";
 import SearchResultsUI from "./pages/SearchResultsUI";
+import api from './api';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
 
 function Logout() {
   localStorage.clear();
@@ -16,26 +17,76 @@ function Logout() {
 }
 
 function App() {
-  // State to hold search results, selected location, and location name
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [locationName, setLocationName] = useState('');
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      const accessToken = localStorage.getItem(ACCESS_TOKEN);
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+
+      if (!accessToken && !refreshToken) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await api.get('/api/verify-token', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (response.status === 200) {
+          setIsAuthenticated(true);
+        } else {
+          throw new Error('Access token expired or invalid');
+        }
+      } catch (error) {
+        console.error('Access token invalid or expired, attempting refresh:', error);
+
+        try {
+          const refreshResponse = await api.post('/api/token/refresh/', { refresh: refreshToken });
+
+          if (refreshResponse.status === 200) {
+            const { access } = refreshResponse.data;
+            localStorage.setItem(ACCESS_TOKEN, access);
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+            localStorage.clear();
+          }
+        } catch (refreshError) {
+          console.error('Error refreshing token:', refreshError);
+          setIsAuthenticated(false);
+          localStorage.clear();
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home Page */}
         <Route path="/" element={<LoginUI />} />
-
-        {/* Auth Routes */}
         <Route path="/auth/register" element={<RegistrationUI />} />
         <Route path="/auth/forget-password" element={<ForgetPasswordUI />} />
-
-        {/* Protected Routes */}
         <Route
           path="/sort-filter"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <SortFilterUI setSearchResults={setSearchResults} />
             </ProtectedRoute>
           }
@@ -43,11 +94,11 @@ function App() {
         <Route
           path="/search-results"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <SearchResultsUI
                 results={searchResults}
                 setSelectedLocation={setSelectedLocation}
-                setLocationName={setLocationName} // Pass the function to set location name
+                setLocationName={setLocationName}
               />
             </ProtectedRoute>
           }
@@ -55,7 +106,7 @@ function App() {
         <Route
           path="/carparks"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <CarparkUI selectedLocation={selectedLocation} locationName={locationName} />
             </ProtectedRoute>
           }
@@ -63,13 +114,11 @@ function App() {
         <Route
           path="/favourites"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <FavouritesUI />
             </ProtectedRoute>
           }
         />
-
-        {/* Logout Route */}
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </BrowserRouter>
