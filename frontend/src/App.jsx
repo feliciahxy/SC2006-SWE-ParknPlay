@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -16,6 +16,10 @@ function Logout() {
 }
 
 function App() {
+  // State to hold search results and selected location
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -31,7 +35,7 @@ function App() {
           path="/sort-filter"
           element={
             <ProtectedRoute>
-              <SortFilterUI />
+              <SortFilterUI setSearchResults={setSearchResults} />
             </ProtectedRoute>
           }
         />
@@ -39,7 +43,15 @@ function App() {
           path="/search-results"
           element={
             <ProtectedRoute>
-              <SearchResultsUI />
+              <SearchResultsUI results={searchResults} setSelectedLocation={setSelectedLocation} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/carparks"
+          element={
+            <ProtectedRoute>
+              <CarparkUI selectedLocation={selectedLocation} />
             </ProtectedRoute>
           }
         />
@@ -48,14 +60,6 @@ function App() {
           element={
             <ProtectedRoute>
               <FavouritesUI />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/carparks"
-          element={
-            <ProtectedRoute>
-              <CarparkUI />
             </ProtectedRoute>
           }
         />
