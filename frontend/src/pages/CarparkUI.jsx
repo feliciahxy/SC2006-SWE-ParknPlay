@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import Header from '../components/Header'; // Import the Header component
+import Header from '../components/Header';
 
 // Import Leaflet marker icons
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
 import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
+
+// Import your custom green marker icon from the path where you saved it
+import greenMarkerIconPng from '../images/greenMarkerIconPng.png'; // Update the path accordingly
 
 // Set up a custom icon for carparks (default blue icon)
 const carparkIcon = new L.Icon({
@@ -20,7 +23,7 @@ const carparkIcon = new L.Icon({
 
 // Set up a custom icon for the selected location (green marker for better visibility)
 const locationIcon = new L.Icon({
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-green.png', // Green marker
+    iconUrl: greenMarkerIconPng, // Use the local green marker icon
     shadowUrl: markerShadowPng,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -53,7 +56,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     if (!selectedLocation) {
         return (
             <div>
-                <Header /> {/* Include the Header component */}
+                <Header />
                 <p>Please select a location first.</p>
             </div>
         );
@@ -61,9 +64,8 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
 
     return (
         <div>
-            <Header /> {/* Include the Header component */}
+            <Header />
             <h2>Nearby Carparks</h2>
-            {/* Display the list of carparks above the map */}
             {carparks.length === 0 ? (
                 <p>No carparks available.</p>
             ) : (
@@ -77,13 +79,12 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     ))}
                 </ul>
             )}
-            {/* Map is displayed below the list of carparks */}
             <MapContainer center={[selectedLocation.lat, selectedLocation.lng]} zoom={15} style={{ height: '500px', width: '100%', marginTop: '20px' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {/* Marker for the selected location with a green marker */}
+                {/* Marker for the selected location with the green marker */}
                 <Marker
                     position={[selectedLocation.lat, selectedLocation.lng]}
                     icon={locationIcon}
