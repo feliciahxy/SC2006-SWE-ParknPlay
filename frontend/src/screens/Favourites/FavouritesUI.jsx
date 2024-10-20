@@ -17,7 +17,14 @@ const FavouritesUI = () => {
     useEffect(() => {
         setLoading(true);
 
-        getFavouritesData()
+        const token = localStorage.getItem(token);
+        if (!token || token == 'undefined') {
+            alert('You must be logged in to view your favourites');
+            setLoading(false);
+            return;
+        }
+
+        getFavouritesData(token)
             .then((data) => {
                 console.log(data);
                 setFavourites(data);
