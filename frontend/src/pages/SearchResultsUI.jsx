@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Header from '../components/Sidebar';
+import { ACCESS_TOKEN } from '../constants';
 
 // Import Leaflet marker icon
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
@@ -41,7 +42,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     };
 
     const handleAddToFavourites = async (result) => {
-        const accessToken = localStorage.getItem('access_token'); // Use your defined key for the token
+        const accessToken = localStorage.getItem('access_token');
 
         if (!accessToken) {
             alert('You must be logged in to add to favourites.');
@@ -67,7 +68,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                 alert(`${result.name} has been added to your favourites!`);
             } else if (response.status === 401) {
                 alert('Session expired. Please log in again.');
-                navigate('/'); // Redirect to login page
+                navigate('/login'); // Navigate to login page
             } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.detail || 'Could not add to favourites'}`);
@@ -84,19 +85,41 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
             <h2 style={{ textAlign: 'center' }}>Search Results</h2>
             <ul style={{ listStyleType: 'none', padding: '0' }}>
                 {results.map((result, index) => (
-                    <li key={index} style={{ marginBottom: '15px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
+                    <li 
+                        key={index} 
+                        style={{ 
+                            marginBottom: '15px', 
+                            borderBottom: '1px solid #ccc', 
+                            paddingBottom: '10px' 
+                        }}
+                    >
                         <h3>{result.name}</h3>
                         <p>{result.address}</p>
                         <p>Rating: {result.rating || 'N/A'}</p>
                         <button 
                             onClick={() => handleLocationSelect(result.coordinates, result.name)} 
-                            style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                            style={{ 
+                                marginRight: '10px', 
+                                padding: '5px 10px', 
+                                backgroundColor: '#28a745', 
+                                color: 'white', 
+                                border: 'none', 
+                                borderRadius: '5px', 
+                                cursor: 'pointer' 
+                            }}
                         >
                             View Nearby Carparks
                         </button>
                         <button 
                             onClick={() => handleAddToFavourites(result)} 
-                            style={{ padding: '5px 10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                            style={{ 
+                                padding: '5px 10px', 
+                                backgroundColor: '#007bff', 
+                                color: 'white', 
+                                border: 'none', 
+                                borderRadius: '5px', 
+                                cursor: 'pointer' 
+                            }}
                         >
                             Add to Favourites
                         </button>
@@ -107,7 +130,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
             <MapContainer
                 center={defaultCenter}
                 zoom={13}
-                style={{ height: '500px', width: '100%' }} // Map container styling
+                style={{ height: '500px', width: '100%' }}
             >
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -123,6 +146,21 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                             <strong>{result.name}</strong><br />
                             {result.address}<br />
                             Rating: {result.rating || 'N/A'}
+                            <br />
+                            <button 
+                                onClick={() => handleLocationSelect(result.coordinates, result.name)} 
+                                style={{ 
+                                    marginTop: '10px', 
+                                    padding: '5px 10px', 
+                                    backgroundColor: '#28a745', 
+                                    color: 'white', 
+                                    border: 'none', 
+                                    borderRadius: '5px', 
+                                    cursor: 'pointer' 
+                                }}
+                            >
+                                View Carparks
+                            </button>
                         </Popup>
                     </Marker>
                 ))}

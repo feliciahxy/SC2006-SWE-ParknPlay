@@ -41,7 +41,8 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         if (locationData) {
             const fetchCarparks = async () => {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/find_nearest_carparks/?latitude=${locationData.lat}&longitude=${locationData.lng}`);
+                    // Update the endpoint to match your Django API URL configuration
+                    const response = await fetch(`http://127.0.0.1:8000/api/carparks/?latitude=${locationData.lat}&longitude=${locationData.lng}`);
                     if (response.ok) {
                         const data = await response.json();
                         setCarparks(data);

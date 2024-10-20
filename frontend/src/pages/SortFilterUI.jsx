@@ -26,7 +26,7 @@ const townCoordinates = {
     "Tampines": { lat: 1.3451, lng: 103.9444 },
     "Toa Payoh": { lat: 1.3347, lng: 103.8570 },
     "Woodlands": { lat: 1.4375, lng: 103.7865 },
-    "Yishun": { lat: 1.4294, lng: 103.8363 }
+    "Yishun": { lat: 1.4294, lng: 103.8363 },
 };
 
 const SortFilterUI = ({ setSearchResults }) => {
@@ -49,7 +49,7 @@ const SortFilterUI = ({ setSearchResults }) => {
         if (rating) nearbyParams.append('min_rating', rating);
 
         try {
-            const nearbyResponse = await fetch(`http://127.0.0.1:8000/nearby_search/?${nearbyParams.toString()}`);
+            const nearbyResponse = await fetch(`http://127.0.0.1:8000/api/nearby_search/?${nearbyParams.toString()}`);
             if (nearbyResponse.ok) {
                 const nearbyData = await nearbyResponse.json();
                 setSearchResults(nearbyData);

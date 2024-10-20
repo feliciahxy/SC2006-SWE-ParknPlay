@@ -50,12 +50,13 @@ const RegistrationUI = () => {
 
         try {
             // Use your custom api instance to send the registration request
-            const res = await api.post('http://localhost:8000/api/user/register/', {
+            const res = await api.post('/api/register/', {
                 username: formData.username,
                 password: formData.password
             });
             console.log('User saved successfully:', res.data);
             // Navigate only after successful registration
+            alert("Registration successful! You can now log in.");
             navigate('/');
         } catch (error) {
             if (error.response && error.response.data.detail === "Username already exists") {
@@ -70,34 +71,42 @@ const RegistrationUI = () => {
 
     return (
         <div>
-            <img className = {styles.logo} src={logo} alt="profile picture"></img>
-                < div className={styles.UIContainer}>
-                    <input 
-                        className={styles.textContainer}
-                        type= "text"
-                        value={formData.username} 
-                        onChange = {(e) => {setFormData({ ...formData, username: e.target.value});}} 
-                        placeholder='Username'
-                        /> <br/> <br/>
-                    <input 
-                        className={styles.textContainer}
-                        type = "password"
-                        value={formData.password} 
-                        onChange = {(e) => {setFormData({ ...formData, password: e.target.value});}} 
-                        placeholder='Enter your password'
-                        /> <br/> <br/>
-                    <input
-                        className={styles.textContainer}
-                        type = "password"
-                        value={formData.confirmPassword} 
-                        onChange = {(e) => {setFormData({ ...formData, confirmPassword: e.target.value});}} 
-                        placeholder='Confirm your password'
-                        /><br/><br/><br/>
-                    <button className = {styles.imageButton} onClick={handleSubmit}></button>
-                    <div className = {styles.space}></div>
-                    {error && <div>{error}</div>}
-                </div> 
-         </div>
+            <img className={styles.logo} src={logo} alt="Park N Play logo" />
+            <div className={styles.UIContainer}>
+                <input 
+                    className={styles.textContainer}
+                    type="text"
+                    value={formData.username} 
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    placeholder='Username'
+                /> 
+                <br /><br />
+                <input 
+                    className={styles.textContainer}
+                    type="password"
+                    value={formData.password} 
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    placeholder='Enter your password'
+                /> 
+                <br /><br />
+                <input
+                    className={styles.textContainer}
+                    type="password"
+                    value={formData.confirmPassword} 
+                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    placeholder='Confirm your password'
+                />
+                <br /><br />
+                <button 
+                    className={styles.imageButton} 
+                    onClick={handleSubmit} 
+                    disabled={loading}
+                >
+                </button>
+                <div className={styles.space}></div>
+                {error && <div style={{ color: 'red' }}>{error}</div>}
+            </div> 
+        </div>
     );
 };
 

@@ -12,3 +12,4 @@ geopy
 pyproj
 gunicorn
 leaflet
+requests

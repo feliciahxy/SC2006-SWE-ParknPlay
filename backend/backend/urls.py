@@ -1,15 +1,11 @@
-# backend/urls.py
+# backend/urls.py (or api/urls.py depending on your project structure)
 from django.contrib import admin
 from django.urls import path, include
-from api.views import CreateUserView, home
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/user/register/", CreateUserView.as_view(), name="register"),
-    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
-    path("api/auth/", include("rest_framework.urls")),
-    path("api/", include("api.urls")),  # Include the api URLs here
-    path("", include("mysite.urls")),
+    path("api/", include("api.urls")),  # Include your app's URLs
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]

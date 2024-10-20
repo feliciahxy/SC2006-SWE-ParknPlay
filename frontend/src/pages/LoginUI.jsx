@@ -43,14 +43,22 @@ function LoginUI() {
 
             if (response.status === 200) {
                 const { access, refresh } = response.data;
-                // Save tokens to local storage
+                
+                // Save tokens to local storage and log them for verification
+                console.log("Access Token:", access);
+                console.log("Refresh Token:", refresh);
                 localStorage.setItem(ACCESS_TOKEN, access);
                 localStorage.setItem(REFRESH_TOKEN, refresh);
+
+                // Verify if tokens are correctly saved
+                console.log("Stored Access Token:", localStorage.getItem(ACCESS_TOKEN));
+                console.log("Stored Refresh Token:", localStorage.getItem(REFRESH_TOKEN));
                 
                 // Navigate to the protected route after successful login
                 navigate("/sort-filter");
             } else {
                 setError("Invalid login credentials");
+                console.error("Unexpected response status:", response.status);
             }
         } catch (error) {
             console.error('Error logging in:', error);
@@ -97,18 +105,10 @@ function LoginUI() {
                 <button 
                     className={styles.imageButton} 
                     onClick={handleSubmit} 
-                    aria-label="Login"
-                    style={{
-                        backgroundImage: `url(${greenArrowIcon})`, // Change to use GreenArrow.png
-                        backgroundSize: '20px 20px',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'left center',
-                        paddingLeft: '30px', // Adjust padding to avoid overlap with text
-                    }}
+                    disabled={loading}
                 >
-                    {loading ? "Logging in..." : "Login"}
                 </button>
-                {error && <div>{error}</div>} {/* Display error message */}
+                {error && <div>{error}</div>}
             </div>
             <div className={styles.signUpContainer}>
                 <p>Do not have an account? <button className={styles.SignUp} onClick={handleClick}><u>Sign up</u></button> here!</p>

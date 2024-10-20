@@ -35,6 +35,7 @@ const FavouritesUI = () => {
                 if (error.response && error.response.status === 401) {
                     setError("Session expired. Please log in again."); // Handle unauthorized access
                     localStorage.clear(); // Clear local storage on unauthorized access
+                    navigate('/login');
                 } else {
                     setError("An error occurred while fetching favourites.");
                 }
@@ -42,7 +43,7 @@ const FavouritesUI = () => {
         };
 
         fetchFavourites(); // Call the function to fetch favourites when component mounts
-    }, []); // Empty dependency array means this effect runs once on mount
+    }, [navigate]); // Empty dependency array means this effect runs once on mount
 
     const handleDelete = async (id) => {
         const token = localStorage.getItem(ACCESS_TOKEN); // Retrieve the access token
@@ -69,6 +70,7 @@ const FavouritesUI = () => {
             if (error.response && error.response.status === 401) {
                 setError("Session expired. Please log in again.");
                 localStorage.clear();
+                navigate('/login');
             } else {
                 setError("An error occurred while deleting the favourite.");
             }
@@ -76,6 +78,7 @@ const FavouritesUI = () => {
     };
 
     const handleViewCarparks = (fav) => {
+        // Navigate with state, passing selectedLocation and locationName
         navigate('/carparks', { state: { selectedLocation: { lat: fav.latitude, lng: fav.longitude }, locationName: fav.name } });
     };
 
