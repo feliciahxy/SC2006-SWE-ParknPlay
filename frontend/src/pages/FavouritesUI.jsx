@@ -83,27 +83,61 @@ const FavouritesUI = () => {
         <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <Header /> {/* Include the Header component */}
             <h2 style={{ textAlign: 'center' }}>My Favourites</h2>
-            {error && <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>{error}</div>} {/* Display error message */}
+            {error && (
+                <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>
+                    {error}
+                </div>
+            )} {/* Display error message */}
             <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
-                {favourites.map(fav => (
-                    <li key={fav.id} style={{ marginBottom: '15px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        {fav.name}
-                        <div>
-                            <button 
-                                style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }} 
-                                onClick={() => handleViewCarparks(fav)}
-                            >
-                                View Nearby Carparks
-                            </button>
-                            <button 
-                                style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }} 
-                                onClick={() => handleDelete(fav.id)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </li> // Render the list of favourites
-                ))}
+                {favourites.length > 0 ? (
+                    favourites.map(fav => (
+                        <li
+                            key={fav.id}
+                            style={{
+                                marginBottom: '15px',
+                                padding: '10px',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}
+                        >
+                            {fav.name}
+                            <div>
+                                <button
+                                    style={{
+                                        marginRight: '10px',
+                                        padding: '5px 10px',
+                                        backgroundColor: '#28a745',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={() => handleViewCarparks(fav)}
+                                >
+                                    View Nearby Carparks
+                                </button>
+                                <button
+                                    style={{
+                                        padding: '5px 10px',
+                                        backgroundColor: '#dc3545',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={() => handleDelete(fav.id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </li>
+                    ))
+                ) : (
+                    <p style={{ textAlign: 'center', marginTop: '20px' }}>No favourites found.</p>
+                )}
             </ul>
         </div>
     );

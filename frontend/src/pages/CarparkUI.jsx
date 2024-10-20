@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Header from '../components/Sidebar';
 
-// Import Leaflet marker icons
+// Import custom marker icons if needed
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
 import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
 import greenMarkerIconPng from '../images/greenMarkerIconPng.png'; // Update the path accordingly
 
-// Set up a custom icon for carparks (default blue icon)
+// Set up icons
 const carparkIcon = new L.Icon({
     iconUrl: markerIconPng,
     shadowUrl: markerShadowPng,
@@ -19,9 +20,8 @@ const carparkIcon = new L.Icon({
     shadowSize: [41, 41],
 });
 
-// Set up a custom icon for the selected location (green marker for better visibility)
 const locationIcon = new L.Icon({
-    iconUrl: greenMarkerIconPng, // Use the local green marker icon
+    iconUrl: greenMarkerIconPng,
     shadowUrl: markerShadowPng,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -30,13 +30,18 @@ const locationIcon = new L.Icon({
 });
 
 const CarparkUI = ({ selectedLocation, locationName }) => {
+    const location = useLocation();
     const [carparks, setCarparks] = useState([]);
+    
+    // Use the location state if available
+    const locationData = location.state?.selectedLocation || selectedLocation;
+    const locationTitle = location.state?.locationName || locationName;
 
     useEffect(() => {
-        if (selectedLocation) {
+        if (locationData) {
             const fetchCarparks = async () => {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/find_nearest_carparks/?latitude=${selectedLocation.lat}&longitude=${selectedLocation.lng}`);
+                    const response = await fetch(`http://127.0.0.1:8000/find_nearest_carparks/?latitude=${locationData.lat}&longitude=${locationData.lng}`);
                     if (response.ok) {
                         const data = await response.json();
                         setCarparks(data);
@@ -49,9 +54,10 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
             };
             fetchCarparks();
         }
-    }, [selectedLocation]);
+    }, [locationData]);
 
-    if (!selectedLocation) {
+    // Check if location data is missing
+    if (!locationData) {
         return (
             <div>
                 <Header />
@@ -77,14 +83,19 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     ))}
                 </ul>
             )}
-            <MapContainer center={[selectedLocation.lat, selectedLocation.lng]} zoom={15} style={{ height: '500px', width: '100%' }}>
+            <MapContainer
+                center={[locationData.lat, locationData.lng]}
+                zoom={15}
+                style={{ height: '500px', width: '100%' }}
+                whenCreated={(map) => map.invalidateSize()} // Ensure the map resizes correctly
+            >
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={locationIcon}>
+                <Marker position={[locationData.lat, locationData.lng]} icon={locationIcon}>
                     <Popup>
-                        <strong>{locationName}</strong><br />
+                        <strong>{locationTitle}</strong><br />
                     </Popup>
                 </Marker>
                 {carparks.map((carpark, index) => (
