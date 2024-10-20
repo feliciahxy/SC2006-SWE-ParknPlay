@@ -4,16 +4,24 @@ const register_URL = 'http://127.0.0.1:8000/parknplay/users';
 
 export const sendNewlyCreatedUser = async (data) => {
     try {
+        console.log('Check sending user error:', data); //check error
+        
         const response = await axios.post(register_URL, data, {
             headers: {
                 'Content-Type': 'application/json',
             }
-        })
+        });
+        console.log("response: ", response);
+
+        if (response.status !== 201) {
+            throw new Error(response.data.error || 'Something went wrong')
+        }
 
         const {data: {token}} = response;
         return token;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 

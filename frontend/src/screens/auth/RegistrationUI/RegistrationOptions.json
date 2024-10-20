@@ -1,0 +1,18 @@
+[
+    {
+        "field": "username",
+        "type": "text",
+        "placeholder": "Username",
+        "id": "username"
+    },{
+        "field": "password",
+        "type": "password",
+        "placeholder": "Enter your password",
+        "id": "password"
+    },{
+        "field": "confirmPassword",
+        "type": "password",
+        "placeholder": "Confirm your password",
+        "id": "confirmPassword"
+    }
+]

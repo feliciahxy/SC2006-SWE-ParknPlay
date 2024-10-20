@@ -15,13 +15,3 @@ export const sendFilters = async (data) => {
         console.error('sendFilters Axios error:', error.response || error.message || error);
     }
 }
-
-export const getPlacesData = async () => {
-    try {
-        const response = await axios.get(places_URL);
-        console.log('Response:', response);
-        return response.data;
-    } catch (error) {
-        console.error('Error response: ', error.response);
-    }
-}

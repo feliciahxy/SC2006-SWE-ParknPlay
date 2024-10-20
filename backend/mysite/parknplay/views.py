@@ -177,18 +177,108 @@ def nearby_search(request):
     region = filters['region']
     min_rating = filters['rating']
 
-    if region == "North":
-        location = "1.445, 103.825"
-        radius = 10000
-    elif region == "South":
-        location = "1.270, 103.819"
-        radius = 8000
-    elif region == "East":
-        location = "1.335, 103.940"
-        radius = 12000
-    elif region == "West":
-        location = "1.355, 103.690"
-        radius = 15000
+    """ if region == "Ang Mo Kio":
+        location = "1.3691, 103.8454"
+    elif region == "Bedok":
+        location = "1.3243, 103.9271"
+    elif region == "Bishan":
+        location = "1.3521, 103.8491"
+    elif region == "Bukit Batok":
+        location = "1.3496, 103.7545"
+    elif region == "Bukit Merah":
+        location = "1.2773, 103.8198"
+    elif region == "Bukit Panjang":
+        location = "1.3817, 103.7625"
+    elif region == "Choa Chu Kang":
+        location = "1.3853, 103.7443"
+    elif region == "Clementi":
+        location = "1.3151, 103.7657"
+    elif region == "Geylang":
+        location = "1.3189, 103.8920"
+    elif region == "Hougang":
+        location = "1.3711, 103.8923"
+    elif region == "Jurong East":
+        location = "1.3335, 103.7414"
+    elif region == "Jurong West":
+        location = "1.3404, 103.7050"
+    elif region == "Kallang":
+        location = "1.3083, 103.8664"
+    elif region == "Marine Parade":
+        location = "1.3015, 103.8992"
+    elif region == "Pasir Ris":
+        location = "1.3732, 103.9496"
+    elif region == "Punggol":
+        location = "1.4039, 103.9090"
+    elif region == "Queenstown":
+        location = "1.2940, 103.8036"
+    elif region == "Sembawang":
+        location = "1.4492, 103.8184"
+    elif region == "Sengkang":
+        location = "1.3917, 103.8952"
+    elif region == "Serangoon":
+        location = "1.3535, 103.8692"
+    elif region == "Tampines":
+        location = "1.3451, 103.9444"
+    elif region == "Toa Payoh":
+        location = "1.3347, 103.8570"
+    elif region == "Woodlands":
+        location = "1.4375, 103.7865"
+    elif region == "Yishun":
+        location = "1.4294, 103.8363" """
+
+    match region:
+        case "Ang Mo Kio":
+            location = "1.3691, 103.8454"
+        case "Bedok":
+            location = "1.3243, 103.9271"
+        case "Bishan":
+            location = "1.3521, 103.8491"
+        case "Bukit Batok":
+            location = "1.3496, 103.7545"
+        case "Bukit Merah":
+            location = "1.2773, 103.8198"
+        case "Bukit Panjang":
+            location = "1.3817, 103.7625"
+        case "Choa Chu Kang":
+            location = "1.3853, 103.7443"
+        case "Clementi":
+            location = "1.3151, 103.7657"
+        case "Geylang":
+            location = "1.3189, 103.8920"
+        case "Hougang":
+            location = "1.3711, 103.8923"
+        case "Jurong East":
+            location = "1.3335, 103.7414"
+        case "Jurong West":
+            location = "1.3404, 103.7050"
+        case "Kallang":
+            location = "1.3083, 103.8664"
+        case "Marine Parade":
+            location = "1.3015, 103.8992"
+        case "Pasir Ris":
+            location = "1.3732, 103.9496"
+        case "Punggol":
+            location = "1.4039, 103.9090"
+        case "Queenstown":
+            location = "1.2940, 103.8036"
+        case "Sembawang":
+            location = "1.4492, 103.8184"
+        case "Sengkang":
+            location = "1.3917, 103.8952"
+        case "Serangoon":
+            location = "1.3535, 103.8692"
+        case "Tampines":
+            location = "1.3451, 103.9444"
+        case "Toa Payoh":
+            location = "1.3347, 103.8570"
+        case "Woodlands":
+            location = "1.4375, 103.7865"
+        case "Yishun":
+            location = "1.4294, 103.8363"
+        case _:
+            location = "1.3521, 103.8198"
+    
+    radius = 2000
     keyword = filters['price']
 
     endpoint = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
