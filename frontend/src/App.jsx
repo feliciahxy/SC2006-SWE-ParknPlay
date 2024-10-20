@@ -92,7 +92,7 @@ function App() {
           }
         />
         <Route
-          path="/search-results"
+          path="/search-results"x
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <SearchResultsUI
