@@ -3,15 +3,10 @@ from django.db import models
 # Create your models here.
 class Favourite(models.Model):
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    lat = models.FloatField()
-    lng = models.FloatField()
     address = models.TextField()
     rating = models.FloatField()
-    price_level = models.IntegerField()
-    opening_hours = models.JSONField()
-    photos = models.JSONField()
-    photo_reference = models.CharField(max_length=255)
+    coordinates = models.JSONField()
+    photo = models.CharField(max_length=255)
     
 class User(models.Model):
     username = models.CharField(max_length=100)

@@ -1,6 +1,3 @@
-from .managers.CarparkMgr import find_carpark_details
-from .managers.SearchMgr import search
-
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import User
@@ -10,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 import jwt
+from jwt import ExpiredSignatureError, InvalidTokenError
 from django.conf import settings
 
 # Create your views here.
@@ -26,6 +24,8 @@ def handleUsers(request):
         data = json.loads(request.body)
         username = data["username"]
         password = data["password"]
+
+        print("Username received in handleUsers: ", username) #check error
 
         #create jwt token and send token to frontend
         user = User.objects.create(username=username, password=password)
@@ -324,18 +324,14 @@ def FavouritesMgr(request):
             action = data.get("action")
 
             if action == "add":
+                print("place sent to backend successfully") #check error
                 #add to database
                 favourite_place, created = Favourite.objects.get_or_create(
                     name = place["name"],
-                    location = place["location"],
-                    lat = place["lat"],
-                    lng = place["lng"],
                     address = place["address"],
                     rating = place["rating"],
-                    price_level = place["price_level"],
-                    opening_hours = place["opening_hours"],
-                    photos = place["photos"],
-                    photo_reference = place["photo_reference"]
+                    coordinates = place["coordinates"],
+                    photo = place["photo"]
                 )
                 user.favourites.add(favourite_place)
                 return JsonResponse({
@@ -346,7 +342,7 @@ def FavouritesMgr(request):
                 try:
                     favourite = Favourite.objects.get(
                         name=place["name"], 
-                        location=place["location"]
+                        address=place["address"]
                     )
                     user.favourites.remove(favourite)
                     return JsonResponse({
@@ -360,11 +356,11 @@ def FavouritesMgr(request):
                 try:
                     favourite = user.favourites.get(
                         name = place["name"],
-                        location = place["location"]
+                        address = place["address"]
                     )
                     return JsonResponse({
                         "message": "Place found in User's favourites"
-                    }, safe=False)
+                    }, safe=False, status=200)
                 except user.favourites.DoesNotExist:
                     return JsonResponse({
                         "error": "Place not found in User's Favourites"
@@ -373,15 +369,16 @@ def FavouritesMgr(request):
                 return JsonResponse({
                     "error": "Invalid action: Please select add to favourites or remove from favourites"
                 }, status=400)
-        except jwt.ExpiredSignatureError:
+        except ExpiredSignatureError:
             return JsonResponse({'error': 'Token has expired'}, status=401)
-        except jwt.InvalidTokenError:
+        except InvalidTokenError:
             return JsonResponse({'error': 'Invalid token'}, status=401)
         except User.DoesNotExist:
             return JsonResponse({
                 "error": "User with this username not found"
             }, status=404)
         except Exception as e:
+            print('Internal Server Error:', e)
             return JsonResponse({'error': str(e)}, status=400)
     elif request.method == "GET":
         try:
@@ -400,13 +397,14 @@ def FavouritesMgr(request):
             return JsonResponse({
                 "favourites": serialized_data
             }, safe=False)
-        except jwt.ExpiredSignatureError:
+        except ExpiredSignatureError:
             return JsonResponse({'error': 'Token has expired'}, status=401)
-        except jwt.InvalidTokenError:
+        except InvalidTokenError:
             return JsonResponse({'error': 'Invalid token'}, status=401)
         except User.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
+            print('Internal Server Error:', e)
             return JsonResponse({'error': str(e)}, status=400)
     else:
         return JsonResponse({

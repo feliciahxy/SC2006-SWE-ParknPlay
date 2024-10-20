@@ -95,7 +95,7 @@ const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
           <Marker position={coordinates} icon={carparkIcon}>
             <Popup>
               carpark_number: {carpark.carpark_number} <br />
-              carpark_name: {carpark.carpark_name} <br />
+              address: {carpark.carpark_name} <br />
               distance: {carpark.distance} meters <br />
               available_lots: {carpark.available_lots}
             </Popup>

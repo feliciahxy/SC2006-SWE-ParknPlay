@@ -2,9 +2,7 @@ import axios from 'axios';
 
 const favourites_URL = 'http://127.0.0.1:8000/parknplay/favourites'
 
-export const sendPlaceToFavourites = async (place, action) => {
-    const token = localStorage.getItem('token');
-    
+export const sendPlaceToFavourites = async (place, action, token) => {    
     try {
         const response = await axios.post(favourites_URL, { place, action }, {
             headers: {
@@ -12,14 +10,19 @@ export const sendPlaceToFavourites = async (place, action) => {
                 'Authorization': `Bearer ${token}`,
             }
         },);
+
+        if (response.status !== 200) {
+            throw new Error(response.data.error || 'Something went wrong')
+        }
+
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error("Error sending place to FavouritesMgr: ", error.response || error.message || error);
+        throw error;
     }
 }
 
-export const getFavouritesData = async () => {
-    const token = localStorage.getItem('token');
+export const getFavouritesData = async (token) => {
     try {
         const response = await axios.get(favourites_URL, { 
             headers: {

@@ -16,7 +16,14 @@ const RemoveFavouritesButton = ({ place }) => {
     }, [isVisible]);
 
     const handleRemoveFavourites = () => {
-        sendPlaceToFavourites(place, "remove")
+        const token = localStorage.getItem('token');
+
+        if (!token || token == 'undefined') {
+            alert('You must be logged in to remove from favourites');
+            return;
+        }
+
+        sendPlaceToFavourites(place, "remove", token)
             .then((data) => {
                 console.log(data);
                 setIsVisible(true);

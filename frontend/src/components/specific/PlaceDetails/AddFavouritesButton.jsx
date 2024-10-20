@@ -17,7 +17,14 @@ const AddFavouritesButton = ({ place }) => {
     }, [isVisible]);
 
     const handleAddFavourites = () => {
-        sendPlaceToFavourites(place, "add")
+        const token = localStorage.getItem('token');
+        console.log("Token:", token); //check error
+        if (!token || token == 'undefined') {
+            alert('You must be logged in to add to favourites');
+            return;
+        }
+
+        sendPlaceToFavourites(place, "add", token)
             .then((data) => {
                 console.log(data);
                 //if successfully added to favourites, display the "successfully added to favourites"
