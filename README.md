@@ -1,7 +1,9 @@
 # Set up two (split) terminals with environment setup (mac)
+#delete env (may be windows version) and set up env if necessary
 source env/bin/activate
 
 # Set up two (split) terminals with environment setup (windows)
+#to set up env (if necessary)
 python -m venv venv 
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 ./env/Scripts/activate.ps1
