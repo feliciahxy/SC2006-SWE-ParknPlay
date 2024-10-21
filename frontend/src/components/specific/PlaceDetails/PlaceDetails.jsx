@@ -1,3 +1,10 @@
+import { useState, useEffect } from 'react';
+
+import AddFavouritesButton from "./AddFavouritesButton";
+import RemoveFavouritesButton from "./RemoveFavouritesButton";
+
+import { sendPlaceToFavourites } from '../../../api/FavouritesServices';
+
 const PlaceDetails = ({ place }) => {
     
     const convertToReadableTime = (timeStr) => {
@@ -31,11 +38,26 @@ const PlaceDetails = ({ place }) => {
     
     console.log(readableTimes); //check error
 
+    //search for place in favourites to determine if addFavouritesButton or removeFavouritesButton
+    const [showAddFavouritesButton, setShowAddFavouritesButton] = useState(false);
+    const [showRemoveFavouritesButton, setShowRemoveFavouritesButton] = useState(false);
+    useEffect(() => {
+        sendPlaceToFavourites(place, "find")
+            .then((data) => {
+                setShowAddFavouritesButton(false);
+                setShowRemoveFavouritesButton(true);
+            })
+            .catch((error) => {
+                setShowAddFavouritesButton(true);
+                setShowRemoveFavouritesButton(false);
+            });
+    }, [place]);
     
+    const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
     return(
         <div>
-            {place?.photo_reference? (
-                <img src={place.photo_reference} alt="image cannot be displayed"></img>
+            {place?.photo? (
+                <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photo}&key=${API_KEY}`} alt="image cannot be displayed"></img>
             ) : (
                 <div>image not available</div>
             )}
@@ -51,6 +73,8 @@ const PlaceDetails = ({ place }) => {
             )}
             <div>rating: {place.rating}</div>
             <div>price level: {place.price_level}</div>
+            {showAddFavouritesButton && <AddFavouritesButton place = {place} />}
+            {showRemoveFavouritesButton && <RemoveFavouritesButton place = {place} />}
         </div>
     );
 }

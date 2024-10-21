@@ -25,10 +25,12 @@ export default Map;
 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
-const MapComponent = ({placesList, setPlaceClicked }) => {
+import { getCarparksData } from '../../../api/CarparksServices';
+
+const MapComponent = ({placesList, placeClicked, setPlaceClicked }) => {
 
   const carparkIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -41,10 +43,20 @@ const MapComponent = ({placesList, setPlaceClicked }) => {
 
   const singaporeCenter = [1.3521, 103.8198]; // Singapore lat-lng
 
+  const [carparksList, setCarparksList] = useState([]);
+
   useEffect(() => {
     // OneMap example for adding markers or other custom functionalities
     // You can use OneMap's API here to fetch data, markers, etc.
-  }, []);
+    getCarparksData(placeClicked?.coordinates?.lat, placeClicked?.coordinates?.lng)
+      .then((data) => {
+        console.log(data);
+        setCarparksList(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching carpark data from backend: ", error);
+      });
+  }, [placeClicked]);
 
   return (
     <MapContainer center={singaporeCenter} zoom={15} style={{ height: '450px', width: '450px' }}>
@@ -52,29 +64,12 @@ const MapComponent = ({placesList, setPlaceClicked }) => {
         url="https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png"
         attribution='&copy; <img src="https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png" style="height:20px;width:20px;"/>&nbsp;<a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener noreferrer">OneMap</a>&nbsp;&copy;&nbsp;contributors&nbsp;&#124;&nbsp;<a href="https://www.sla.gov.sg/" target="_blank" rel="noopener noreferrer">Singapore Land Authority</a>'
       />
-      {/* {placesList.map((place) => (
-        <Marker
-          position={place.coordinates}
-          eventHandlers={{
-            click: (e) => {
-              console.log('marker clicked', e);
-              setPlaceClicked(place);
-              //get carpark details from backend
-              //setCarparkList([carparks]);
-            },
-          }}
-          >
-          <Popup>
-            name: {place.name} <br /> address: {place.address} <br /> rating: {place.rating} <br /> price level: {place.price_level}
-          </Popup>
-        </Marker>
-      ))} */}
-      {placesList.map((place) => {
+      {placesList?.map((place) => {
         let coordinates = [];
-        coordinates[0] = place?.lat;
-        coordinates[1] = place?.lng;
+        coordinates[0] = place?.coordinates?.lat;
+        coordinates[1] = place?.coordinates?.lng;
         return(
-        <Marker position={coordinates} icon={carparkIcon}
+        <Marker position={coordinates}
           eventHandlers={{
             click: (e) => {
               console.log('marker clicked', e);
@@ -92,6 +87,31 @@ const MapComponent = ({placesList, setPlaceClicked }) => {
           </Popup>
         </Marker>
       )})}
+      {carparksList?.map((carpark) => {
+        let coordinates = [];
+        coordinates[0] = carpark?.location?.latitude;
+        coordinates[1] = carpark?.location?.longitude;
+        return(
+          <Marker position={coordinates} icon={carparkIcon}>
+            <Popup>
+              carpark_number: {carpark.carpark_number} <br />
+              address: {carpark.carpark_name} <br />
+              distance: {carpark.distance} meters <br />
+              available_lots: {carpark.available_lots}
+            </Popup>
+          </Marker>
+        );
+      })}
+
+      {/* 
+      details = {
+                    "carpark_number": carpark_number,
+                    "address": carpark['address'],
+                    "available_lots": available_lots,
+                    "total_lots": total_lots,
+                    "coordinates": carpark['location']  
+                }
+      */}
     </MapContainer>
   );
 };

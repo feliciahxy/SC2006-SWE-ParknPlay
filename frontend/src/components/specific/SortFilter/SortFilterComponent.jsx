@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import SortFilterOptions from "./SortFilterOptions";
 
-import "../screens.css";
-
 import filterOptions from "./SortFilterOptions.json";
 
-const SortFilterUI = () => {
+import { sendFilters } from '../../../api/PlacesServices';
+
+const SortFilterUI = ({ setPlaces }) => {
     const navigate = useNavigate();
 
     const [filters, setFilters] = useState(() => {
@@ -22,18 +22,17 @@ const SortFilterUI = () => {
         //post filter data to backend
         //backend will get attractions from google places api based on filters
         //backend will post attractions to search-results ui
-        /* try {
-            const response = await axios.post('search/', filters, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+        
+        console.log(filters);   //check error
+
+        sendFilters(filters)
+            .then((data) => {
+                console.log(data);
+                setPlaces(data);
+            })
+            .catch((error) => {
+                console.error('Error posting filter data: ', error);
             });
-            console.log(response.data);
-            navigate("/search-results");
-        } catch (error) {
-            console.error('Error posting filter data: ', error);
-        } */
-       console.log(filters);
     };
     const handleSelectOption = (e, filterKey) => {
         setFilters((prevFilters) => ({

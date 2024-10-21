@@ -1,16 +1,22 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styles from './RegistrationUI/RegistrationUI.module.css'
+<<<<<<< HEAD
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import ForgetPasswordUI from "./ForgetPasswordUI";
 
+=======
+import { useNavigate } from "react-router-dom";
+
+import { sendUserLoginDetails } from '../../api/AuthServices';
+>>>>>>> 295c7c99dbf57ebfb57310d846cc04140f48dbf2
 
 function LoginUI(){
     let navigate = useNavigate();
     const [formData,setFormData] = useState({
         username: "",
         password: "",
-    })
+    });
 
     const [error, setError] = useState("");
 
@@ -32,18 +38,19 @@ function LoginUI(){
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await axios.post('http://127.0.0.1:8000/parknplay/login', {
-            username: formData.username,
-            password: formData.password,
-        })
-            .then(response => {
-                console.log('Logged in successfully:', response.data);
+        setError(""); //reset to no error
+        if (!validateForm(formData)) {
+            return;
+        }
+
+        sendUserLoginDetails(formData)
+            .then((token) => {
+                localStorage.setItem('token', token);
+                navigate("/search-results");
             })
-            .catch(error => {
-                console.error('Error logging in user:', error);
+            .catch((error) => {
+                console.error('Error logging in: ', error);
             });
-            let path = `/search-results`;
-            navigate(path);
       };
 
     const handleClick = (e) => {

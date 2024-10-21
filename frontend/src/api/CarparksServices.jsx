@@ -1,51 +1,21 @@
 import axios from 'axios';
 
-const restaurants_URL = 'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary';
+const carparks_URL = 'http://127.0.0.1:8000/parknplay/carparks';
 
-const restaurants_options = {
-  params: {
-    bl_latitude: '11.847676',
-    tr_latitude: '12.838442',
-    bl_longitude: '109.095887',
-    tr_longitude: '109.149359',
-    restaurant_tagcategory_standalone: '10591',
-    restaurant_tagcategory: '10591',
-    limit: '30',
-    currency: 'USD',
-    open_now: 'false',
-    lunit: 'km',
-    lang: 'en_US'
-  },
-  headers: {
-    'x-rapidapi-key': '47804b6dc0msh83469174cf7d62ep1ec204jsnbf5d120fa014',
-    'x-rapidapi-host': 'travel-advisor.p.rapidapi.com'
-  }
-};
+export const getCarparksData = async (lat, lng) => {
 
-export const getPlacesData = async () => {
     try {
-        const { data: { data } } = await axios.get(restaurants_URL, restaurants_options);
-        console.log(data);
-        return data;
+      const response = await axios.get(carparks_URL, {
+        params: {
+            latitude: lat,
+            longitude: lng
+        }
+      });
+      console.log(response);
+      const { data } = response;
+      return data;
     } catch (error) {
-        console.error(error);
-    }
-}
-
-
-
-const carparks_URL = 'https://api.data.gov.sg/v1/transport/carpark-availability';
-const carparks_options = {};
-
-export const getCarparksData = async () => {
-    try {
-      const response = await axios.get(carparks_URL, carparks_options);
-      const { data: { items } } = response;
-      const { carpark_data } = items[0];
-      console.log(carpark_data);
-      return carpark_data;
-    } catch (error) {
-      console.error(error);
+      console.error('Error details:', error.response || error.message || error);
     }
 }
 /* 

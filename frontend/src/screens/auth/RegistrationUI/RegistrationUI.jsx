@@ -1,30 +1,32 @@
 import { useState } from 'react';
-//import validator from 'validator';
+import { sendNewlyCreatedUser } from '../../../api/AuthServices';
 import styles from './RegistrationUI.module.css';
 import { useNavigate, Link } from "react-router-dom";
-import axios from 'axios';
+import RegistrationOptions from './RegistrationOptions.json'
 
 const RegistrationUI = () => {
     let navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        username: "",
-        password: "",
-        confirmPassword: ""
+    const [formData, setFormData] = useState(() => {
+        const initialRegistrationOptions = {};
+        RegistrationOptions.forEach(RegistrationOption => {
+            initialRegistrationOptions[RegistrationOption.field] = '';
+        });
+        return initialRegistrationOptions;
     });
 
     const [error, setError] = useState("");
 
     const validateForm = (formData) => {
-        if(!formData.username){
+        if(!formData['username']){
             setError("Username required");
             return false;
-        }else if(!formData.password){
+        }else if(!formData['password']){
             setError("Password required");
             return false;
-        }else if(!formData.confirmPassword){
+        }else if(!formData['confirmPassword']){
             setError("Confirm password required");
             return false;
-        }else if(formData.password != formData.confirmPassword){
+        }else if(formData['password'] != formData['confirmPassword']){
             setError("Passwords do not match");
             return false;
         }
@@ -38,47 +40,41 @@ const RegistrationUI = () => {
         if(!validateForm(formData)){
             return;
         }
-        
-        axios.post('http://127.0.0.1:8000/parknplay/users', {
-            username: formData.username,
-            password: formData.password
-        })
-            .then(response => {
-                console.log('User saved successfully:', response.data);
-            })
-            .catch(error => {
-                console.error('Error saving user:', error);
-            });
 
-            let path = `/search-results`;
-            navigate(path);
+        sendNewlyCreatedUser(formData)
+            .then((token) => {
+                console.log('User saved successfully');
+                console.log('Token:', token); //check error
+                localStorage.setItem('token', token);
+                navigate("/search-results");
+            })
+            .catch ((error) => {
+                console.error('Error saving user: ', error);
+            });
     };
-        
+    
+    const handleValueChange = (e, registrationField) => {
+        setFormData((prevFields) => ({
+            ...prevFields,
+            [registrationField]: e.target.value
+        }));
+    };
+
     return(
         <div>
             <img className = {styles.logo} src="/ParkNPlayLogo-removebg-preview.png" alt="profile picture"></img>
                 < div className={styles.UIContainer}>
-                    <input 
-                        className={styles.textContainer}
-                        type= "username"
-                        value={formData.username} 
-                        onChange = {(e) => {setFormData({ ...formData, username: e.target.value});}} 
-                        placeholder='Username'
-                        /> <br/> <br/>
-                    <input 
-                        className={styles.textContainer}
-                        type = "password"
-                        value={formData.password} 
-                        onChange = {(e) => {setFormData({ ...formData, password: e.target.value});}} 
-                        placeholder='Enter your password'
-                        /> <br/> <br/>
-                    <input
-                        className={styles.textContainer}
-                        type = "password"
-                        value={formData.confirmPassword} 
-                        onChange = {(e) => {setFormData({ ...formData, confirmPassword: e.target.value});}} 
-                        placeholder='Confirm your password'
-                        /><br/><br/><br/>
+                    {RegistrationOptions.map((RegistrationOption) => (
+                        <>
+                            <input 
+                                className={styles.textContainer}
+                                type= {RegistrationOption.type}
+                                value={formData[RegistrationOption.field]} 
+                                onChange = {(e) => handleValueChange(e, RegistrationOption.field)} 
+                                placeholder={RegistrationOption.placeholder}
+                                /> <br/> <br/>
+                        </>
+                    ))}
                     <button className = {styles.imageButton} onClick={handleSubmit}></button>
                     {error && <div>{error}</div>}
                 </div> 

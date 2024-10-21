@@ -9,6 +9,7 @@ const LandingUI = () => {
     return(
         <div>
             <img className = {styles.logo} src="/ParkNPlayLogo-removebg-preview.png" alt="profile picture"></img>
+            <div>Welcome to ParknPlay</div>
             <div className = {styles.LandingButtonsContent}>
             {LandingButtonsContent.map((landingButton, index) => (
                 <button 

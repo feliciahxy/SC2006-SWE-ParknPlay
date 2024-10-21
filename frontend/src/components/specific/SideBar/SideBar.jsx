@@ -20,7 +20,7 @@ const SideBar = () => {
           &times;
         <br/>
         </button>
-            <SideBarButton name="Search" path="/sort-filter" />
+            <SideBarButton name="Search" path="/search-results" />
             <SideBarButton name="Favourites" path="/favourites" />
             <SideBarButton name="Logout" path="/" />
         </div>

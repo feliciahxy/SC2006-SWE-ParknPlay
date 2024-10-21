@@ -1,19 +1,28 @@
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 
 const PlacesList = ({ places, placeClicked }) => {
+    if (!places) {
+        return(
+            <div>No places available</div>
+        );
+    }
     return(
         <div>
-            {places?.map((place) => (
-                <PlaceDetails place = {place} />
-            ))}
-
             {placeClicked ? (
                 <div>
-                <h2>Selected Place</h2>
-                <p>{placeClicked.popup}</p>
+                    <h2>Selected Place</h2>
+                    <div>
+                        <PlaceDetails place = {placeClicked} />
+                    </div>
                 </div>
             ) : (
-                <p>No place selected</p>
+                <div>
+                    {places?.map((place) => (
+                        <div>
+                            <PlaceDetails place = {place} />
+                        </div>
+                    ))}
+                </div>
             )}
         </div>
     );

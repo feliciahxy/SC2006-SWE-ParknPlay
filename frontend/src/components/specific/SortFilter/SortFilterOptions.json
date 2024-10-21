@@ -1,0 +1,58 @@
+[
+    {
+        "filter": "placetype",
+        "options": [
+            "restaurant",
+            "park",
+            "museum",
+            "shopping_mall"
+        ]        
+    },
+    {
+        "filter": "region",
+        "options": [
+            "Ang Mo Kio",
+            "Bedok",
+            "Bishan",
+            "Bukit Batok",
+            "Bukit Merah",
+            "Bukit Panjang",
+            "Choa Chu Kang",
+            "Clementi",
+            "Geylang",
+            "Hougang",
+            "Jurong East",
+            "Jurong West",
+            "Kallang",
+            "Marine Parade",
+            "Pasir Ris",
+            "Punggol",
+            "Queenstown",
+            "Sembawang",
+            "Sengkang",
+            "Serangoon",
+            "Tampines",
+            "Toa Payoh",
+            "Woodlands",
+            "Yishun"
+        ]
+    },
+    {
+        "filter": "price",
+        "options": [
+            "cheap",
+            "moderate",
+            "expensive"
+        ]
+    },
+    {
+        "filter": "rating",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+        ]
+    }
+]
