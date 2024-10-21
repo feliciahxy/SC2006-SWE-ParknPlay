@@ -4,7 +4,7 @@ source env/bin/activate
 
 # Set up two (split) terminals with environment setup (windows)
 #to set up env (if necessary)
-python -m venv venv 
+python -m venv env 
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 ./env/Scripts/activate.ps1
 
@@ -26,4 +26,3 @@ python manage.py dbshell
 # To migrate changes after changing models
 python manage.py makemigrations
 python manage.py migrate
-
