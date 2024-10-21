@@ -1,19 +1,21 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styles from './RegistrationUI/RegistrationUI.module.css'
+import { useNavigate } from "react-router-dom";
 
+import { sendUserLoginDetails } from '../../api/AuthServices';
 
 function LoginUI(){
-
+    let navigate = useNavigate();
     const [formData,setFormData] = useState({
-        email: "",
+        username: "",
         password: "",
-    })
+    });
 
     const [error, setError] = useState("");
 
     const validateForm = (formData) => {
-        if(!formData.email){
-            setError("Email required");
+        if(!formData.username){
+            setError("Username required");
             return false;
         }else if(!formData.password){
             setError("Password required");
@@ -24,16 +26,36 @@ function LoginUI(){
                 return false;
             }
             return true;
-        }
+        };
 
-    const handleSubmit = () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         setError(""); //reset to no error
-        if(!validateForm(formData)){
+        if (!validateForm(formData)) {
             return;
         }
-        console.log(formData.email);
-        console.log(formData.password);      
+
+        sendUserLoginDetails(formData)
+            .then((token) => {
+                localStorage.setItem('token', token);
+                navigate("/search-results");
+            })
+            .catch((error) => {
+                console.error('Error logging in: ', error);
+            });
+      };
+
+    const handleClick = (e) => {
+        const buttonText = e.target.textContent
+
+        if(buttonText === "Forget Password"){
+            navigate('/auth/forget-password');
         }
+        else if (buttonText === "Sign up" ){
+            navigate('/auth/register')
+        }
+    };
 
     return(
         <div>
@@ -41,10 +63,10 @@ function LoginUI(){
         <div className={styles.UIContainer}>
             <input 
                 className={styles.textContainer}
-                type = "email"
-                value={formData.email} 
-                onChange = {(e) => {setFormData({ ...formData, email: e.target.value});}}
-                placeholder='Email'
+                type = "username"
+                value={formData.username} 
+                onChange = {(e) => {setFormData({ ...formData, username: e.target.value});}}
+                placeholder='Username'
                 /> <br/><br/>
             <input 
                 className={styles.textContainer}
@@ -52,9 +74,14 @@ function LoginUI(){
                 value={formData.password} 
                 onChange = {(e) => {setFormData({ ...formData, password: e.target.value});}}
                 placeholder='Enter your password'
-                /><br/><br/><br/>
+                /><br/><br/>
+                <button className = {styles.ForgetPassword} onClick={handleClick}><u>Forget Password</u></button>
+                <br/><br/>
             <button className = {styles.imageButton} onClick={handleSubmit}></button>
             {error && <div>{error}</div>}
+            </div>
+            <div className={styles.signUpContainer}>
+            <p>Do not have an account? <button className= {styles.SignUp} onClick={handleClick}><u>Sign up</u></button> here!</p>
             </div>
         </div>
     );

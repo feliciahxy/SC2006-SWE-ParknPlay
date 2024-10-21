@@ -58,3 +58,53 @@
     opacity: 1;
     outline: none;
 }
+
+.ForgetPassword{
+    background-color: white;
+    position: absolute;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    color: rgb(20, 131, 0);
+    font-size: x-small;
+    width: 100px;
+    border: none;
+    font-weight: 500;
+}
+
+.ForgetPassword:hover, ForgetPassword:focus{
+    background-color: initial;
+    color: hsl(111, 100%, 36%);
+    border: none;
+    box-shadow: none;
+    cursor: cursor;
+    opacity: 1;
+    outline: none;
+}
+
+.signUpContainer{
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.SignUp{
+    background-color: white;
+    color: rgb(20, 131, 0);
+    font-size: inherit;
+    width: initial;
+    border: none;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+}
+
+.SignUp:hover, ForgetPassword:focus{
+    background-color: initial;
+    color: hsl(111, 100%, 36%);
+    border: none;
+    box-shadow: none;
+    cursor: cursor;
+    opacity: 1;
+    outline: none;
+}
