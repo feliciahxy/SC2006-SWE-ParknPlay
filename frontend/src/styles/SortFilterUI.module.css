@@ -1,0 +1,46 @@
+
+.searchContainer {
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    top: 25%;
+    left: 42.5%;
+}
+
+.header {
+    text-align: center;
+    color: #28a745;
+    font-weight: bold; /* 'Bold' is not a valid value, should be 'bold' */
+    border-radius: 5px;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #28a745;
+    padding: 5px;
+    margin-bottom: 15px;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    width: 250px;
+}
+
+
+.input {
+    width: 95%;
+    background-color: white;
+    margin-bottom: 2px;
+    color: black;
+}
+
+
+.logo {
+    position: fixed;
+    top: 20%;
+    left: 51.5%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: auto;
+    margin-bottom: 20px;
+}

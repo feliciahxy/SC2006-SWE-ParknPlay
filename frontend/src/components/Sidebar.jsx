@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
     const navigate = useNavigate();
-    const [isCollapsed, setIsCollapsed] = useState(false); // State to track sidebar visibility
+    const [isCollapsed, setIsCollapsed] = useState(true); // State to track sidebar visibility
 
     const handleLogout = () => {
         localStorage.clear();
@@ -28,9 +28,17 @@ const Sidebar = () => {
 
     return (
         <div style={{ display: 'flex' }}>
-            <aside style={{ ...sidebarStyle, width: isCollapsed ? '10px' : '200px' }}>
+            <aside style={{ ...sidebarStyle, width: isCollapsed ? '30px' : '200px' }}>
                 <button onClick={toggleSidebar} style={toggleButtonStyle}>
-                    {isCollapsed ? '>' : '<'}
+                {isCollapsed ? (
+                        <div style={hamburgerStyle}> {/* Hamburger icon when collapsed */}
+                            <div style={lineStyle}></div>
+                            <div style={lineStyle}></div>
+                            <div style={lineStyle}></div>
+                        </div>
+                    ) : (
+                        '<' // Close icon when expanded
+                    )}
                 </button>
                 {!isCollapsed && (
                     <>
@@ -53,7 +61,7 @@ const Sidebar = () => {
 const sidebarStyle = {
     height: '100vh', // Full height of the viewport
     backgroundColor: '#f8f9fa',
-    padding: '10px 0', // Reduced padding for collapsed state
+    padding: '10px 10', // Reduced padding for collapsed state
     position: 'fixed', // Fix to the left side
     left: 0,
     top: 0,
@@ -90,6 +98,22 @@ const toggleButtonStyle = {
     padding: '5px',
     width: '100%',
     fontSize: '18px',
+};
+
+const hamburgerStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '20px',
+    height: '20px',
+};
+
+const lineStyle = {
+    width: '15px',
+    height: '2px',
+    backgroundColor: 'white',
+    margin: '2px 0',
 };
 
 export default Sidebar;

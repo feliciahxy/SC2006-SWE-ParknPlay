@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Sidebar';
+import logo from "../images/ParkNPlayLogo.png";
+import styles from '../styles/SortFilterUI.module.css';
 
 const townCoordinates = {
     "Ang Mo Kio": { lat: 1.3691, lng: 103.8454 },
@@ -63,13 +65,15 @@ const SortFilterUI = ({ setSearchResults }) => {
     };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+        <>
+        <img className={styles.logo} src={logo} alt="Park N Play logo" />
+        <div className={styles.searchContainer}>
             <Header /> {/* Include the Header component */}
-            <h2 style={{ textAlign: 'center' }}>Search Places</h2>
+            <h2 className={styles.header}></h2>
 
-            <div style={{ marginBottom: '15px' }}>
-                <label>Town: </label>
-                <select onChange={(e) => setSelectedTown(e.target.value)} value={selectedTown}>
+            <div className={styles.filter}>
+                <label>Town</label>
+                <select className={styles.input} onChange={(e) => setSelectedTown(e.target.value)} value={selectedTown}>
                     <option value="">Select Town</option>
                     {Object.keys(townCoordinates).map((town) => (
                         <option key={town} value={town}>{town}</option>
@@ -77,9 +81,9 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
-                <label>Place Type: </label>
-                <select onChange={(e) => setPlacetype(e.target.value)} value={placeType}>
+            <div className={styles.filter}>
+                <label>Place Type</label>
+                <select className={styles.input} onChange={(e) => setPlacetype(e.target.value)} value={placeType}>
                     <option value="">Select Place Type</option>
                     <option value="restaurant">Restaurant</option>
                     <option value="park">Park</option>
@@ -88,9 +92,9 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
-                <label>Price: </label>
-                <select onChange={(e) => setPrice(e.target.value)} value={price}>
+            <div className={styles.filter}>
+                <label>Price</label>
+                <select className={styles.input} onChange={(e) => setPrice(e.target.value)} value={price}>
                     <option value="">Select Price Range</option>
                     <option value="cheap">Cheap</option>
                     <option value="moderate">Moderate</option>
@@ -98,9 +102,9 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
-                <label>Minimum Rating: </label>
-                <select onChange={(e) => setRating(e.target.value)} value={rating}>
+            <div className={styles.filter}>
+                <label>Minimum Rating</label>
+                <select className={styles.input} onChange={(e) => setRating(e.target.value)} value={rating}>
                     <option value="">Select Minimum Rating</option>
                     <option value="1">1 Star</option>
                     <option value="2">2 Stars</option>
@@ -126,6 +130,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 Search
             </button>
         </div>
+        </>
     );
 };
 
