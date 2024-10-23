@@ -69,8 +69,6 @@ const SortFilterUI = ({ setSearchResults }) => {
         <img className={styles.logo} src={logo} alt="Park N Play logo" />
         <div className={styles.searchContainer}>
             <Header /> {/* Include the Header component */}
-            <h2 className={styles.header}></h2>
-
             <div className={styles.filter}>
                 <label>Town</label>
                 <select className={styles.input} onChange={(e) => setSelectedTown(e.target.value)} value={selectedTown}>
@@ -114,19 +112,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <button 
-                onClick={onSearch}
-                style={{
-                    backgroundColor: '#28a745',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px 15px',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    width: '100%',
-                    fontSize: '16px'
-                }}
-            >
+            <button className={styles.searchButton} onClick={onSearch}>
                 Search
             </button>
         </div>

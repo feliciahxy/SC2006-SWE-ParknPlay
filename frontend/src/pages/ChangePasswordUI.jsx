@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import api from '../api';
 import { ACCESS_TOKEN } from '../constants';
 import Sidebar from '../components/Sidebar'; // Import the Sidebar
+import styles from '../styles/ChangePasswordUI.module.css';
+import logo from "../images/ParkNPlayLogo.png";
 
 const ChangePasswordUI = () => {
   const [oldPassword, setOldPassword] = useState('');
@@ -46,14 +48,15 @@ const ChangePasswordUI = () => {
   };
 
   return (
-    <div style={{ display: 'flex' }}> {/* Added flex layout to include Sidebar */}
+    <div className={styles.mainContainer}> {/* Added flex layout to include Sidebar */}
       <Sidebar /> {/* Include Sidebar */}
-      <div className="change-password" style={{ marginLeft: '220px', padding: '20px', width: '100%' }}> {/* Adjust margin for the sidebar */}
-        <h2>Change Password</h2>
+      <div className={styles.changePasswordContainer}> {/* Adjust margin for the sidebar */}
+        <img className={styles.logo} src={logo} alt="Park N Play logo" />
+        <h2 className={styles.changePasswordTitle}>Change Password</h2>
         <form onSubmit={handleChangePassword}>
-          <div>
-            <label htmlFor="oldPassword">Old Password</label>
-            <input
+          <div className={styles.oldPasswordDiv}>
+            <label className={styles.oldPasswordLabel} htmlFor="oldPassword">Old Password</label>
+            <input className={styles.oldPasswordInput}
               type="password"
               id="oldPassword"
               value={oldPassword}
@@ -61,9 +64,9 @@ const ChangePasswordUI = () => {
               required
             />
           </div>
-          <div>
-            <label htmlFor="newPassword">New Password</label>
-            <input
+          <div className={styles.newPasswordDiv}>
+            <label className={styles.newPasswordLabel} htmlFor="newPassword">New Password</label>
+            <input className={styles.newPasswordInput}
               type="password"
               id="newPassword"
               value={newPassword}
@@ -71,7 +74,7 @@ const ChangePasswordUI = () => {
               required
             />
           </div>
-          <button type="submit">Change Password</button>
+          <button className={styles.changePasswordButton} type="submit">Change Password</button>
         </form>
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}

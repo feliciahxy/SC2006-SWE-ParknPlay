@@ -8,7 +8,6 @@
 
 .header {
     text-align: center;
-    color: #28a745;
     font-weight: bold; /* 'Bold' is not a valid value, should be 'bold' */
     border-radius: 5px;
 }
@@ -17,7 +16,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #28a745;
+    background-color: #379237;
     padding: 5px;
     margin-bottom: 15px;
     color: white;
@@ -43,4 +42,15 @@
     width: 250px;
     height: auto;
     margin-bottom: 20px;
+}
+
+.searchButton {
+    background-color: #008DDA;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border: 5px;
+    cursor: pointer;
+    width: 100%;
+    font: 16px;
 }

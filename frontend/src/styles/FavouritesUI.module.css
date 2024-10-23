@@ -1,8 +1,10 @@
 .favouritesContainer {
     font-family: Arial, Helvetica, sans-serif;
     position: fixed;
-    top: 25%;
-    left: 39%;
+    top: 20%;
+    left: 33%;
+    width: 600px;   /* Fixed width */
+    height: 700px;  /* Fixed height */
 }
 
 .title {
@@ -10,43 +12,50 @@
 }
 
 .noFavouritesPara {
-    text-align: 'center';
-    top: '20px';
+    text-align: center;
+    top: 30px;
 }
 
 .viewCarparksButton {
-    right: '10px';
-    padding: '5px 10px';
-    background-color: '#28a745';
-    color: 'white';
-    border: 'none';
-    border-radius: '5px';
-    cursor: 'pointer';
+    right: 10px;
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-right: 10px;
 }
 
 .deleteButton {
-    padding: '5px 10px';
-    background-color: '#dc3545';
-    color: 'white';
-    border: 'none';
-    border-radius: '5px';
-    cursor: 'pointer';
+    padding: 5px 10px;
+    background-color: #F95454;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .unorderedList {
     list-style-type: none;
-    padding: '0';
-    margin: '0';
+    padding: 0;
+    margin: 0;
 }
 
 .listItem {
-    bottom: '15px';
-    padding: '10px';
-    border: '1px solid #ccc';
-    border-radius: '5px';
-    display: 'flex';
-    text-align: 'space-between';
-    align-items: 'center';
+    bottom: 15px;
+    padding: 10px 0 10px 0;
+    border: 1px solid #379237;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row; /* Align items vertically */
+    align-items: center;    /* Center horizontally */
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .errorContainer {
@@ -54,3 +63,31 @@
     bottom: '10px';
     text-align: 'center';
 }
+
+.eachFavouriteButtonsDiv {
+    padding: 0;
+    margin-left: 10px;
+}
+
+.eachFavouriteNameDiv {
+    width: 200px;   /* Fixed width */
+    height: 30px;  /* Fixed height */
+    text-align: center;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+    margin-right: 10px;
+}
+
+.logo{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-51%, -40%);
+    width: 250px;
+    margin-bottom: 0px;
+}
+
+h2 {
+    margin-top: 0px;
+} 

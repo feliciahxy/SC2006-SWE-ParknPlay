@@ -4,6 +4,7 @@ import { ACCESS_TOKEN } from '../constants';
 import api from '../api';
 import Header from '../components/Sidebar'; // Import the Header component
 import styles from '../styles/FavouritesUI.module.css';
+import logo from "../images/ParkNPlayLogo.png";
 
 const FavouritesUI = () => {
     const navigate = useNavigate(); // Initialize useNavigate
@@ -86,6 +87,7 @@ const FavouritesUI = () => {
     return (
         <div className={styles.favouritesContainer}>
             <Header /> {/* Include the Header component */}
+            <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <h2 className={styles.title}>My Favourites</h2>
             {error && (
                 <div className={styles.errorContainer}>
@@ -96,8 +98,8 @@ const FavouritesUI = () => {
                 {favourites.length > 0 ? (
                     favourites.map(fav => (
                         <li className={styles.listItem} key={fav.id}>
-                            {fav.name}
-                            <div>
+                            <div className={styles.eachFavouriteNameDiv}>{fav.name}</div>
+                            <div className={styles.eachFavouriteButtonsDiv}>
                                 <button className={styles.viewCarparksButton} onClick={() => handleViewCarparks(fav)}>
                                     View Nearby Carparks
                                 </button>
