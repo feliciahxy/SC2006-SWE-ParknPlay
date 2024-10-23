@@ -1,0 +1,56 @@
+.favouritesContainer {
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    top: 25%;
+    left: 39%;
+}
+
+.title {
+    text-align: center;
+}
+
+.noFavouritesPara {
+    text-align: 'center';
+    top: '20px';
+}
+
+.viewCarparksButton {
+    right: '10px';
+    padding: '5px 10px';
+    background-color: '#28a745';
+    color: 'white';
+    border: 'none';
+    border-radius: '5px';
+    cursor: 'pointer';
+}
+
+.deleteButton {
+    padding: '5px 10px';
+    background-color: '#dc3545';
+    color: 'white';
+    border: 'none';
+    border-radius: '5px';
+    cursor: 'pointer';
+}
+
+.unorderedList {
+    list-style-type: none;
+    padding: '0';
+    margin: '0';
+}
+
+.listItem {
+    bottom: '15px';
+    padding: '10px';
+    border: '1px solid #ccc';
+    border-radius: '5px';
+    display: 'flex';
+    text-align: 'space-between';
+    align-items: 'center';
+}
+
+.errorContainer {
+    color: 'red';
+    bottom: '10px';
+    text-align: 'center';
+}
