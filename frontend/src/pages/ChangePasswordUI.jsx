@@ -48,38 +48,41 @@ const ChangePasswordUI = () => {
   };
 
   return (
-    <div className={styles.mainContainer}> {/* Added flex layout to include Sidebar */}
-      <Sidebar /> {/* Include Sidebar */}
-      <div className={styles.changePasswordContainer}> {/* Adjust margin for the sidebar */}
-        <img className={styles.logo} src={logo} alt="Park N Play logo" />
-        <h2 className={styles.changePasswordTitle}>Change Password</h2>
-        <form onSubmit={handleChangePassword}>
-          <div className={styles.oldPasswordDiv}>
-            <label className={styles.oldPasswordLabel} htmlFor="oldPassword">Old Password</label>
-            <input className={styles.oldPasswordInput}
-              type="password"
-              id="oldPassword"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.newPasswordDiv}>
-            <label className={styles.newPasswordLabel} htmlFor="newPassword">New Password</label>
-            <input className={styles.newPasswordInput}
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button className={styles.changePasswordButton} type="submit">Change Password</button>
-        </form>
-        {message && <p className="success-message">{message}</p>}
-        {error && <p className="error-message">{error}</p>}
+    <div className={styles.backgroundContainer}>
+      <div className={styles.mainContainer}> {/* Added flex layout to include Sidebar */}
+        <Sidebar /> {/* Include Sidebar */}
+        <div className={styles.changePasswordContainer}> {/* Adjust margin for the sidebar */}
+          <img className={styles.logo} src={logo} alt="Park N Play logo" />
+          <h2 className={styles.changePasswordTitle}>Change Password</h2>
+          <form className={styles.changePasswordForm} onSubmit={handleChangePassword}>
+            <div className={styles.oldPasswordDiv}>
+              <label className={styles.oldPasswordLabel} htmlFor="oldPassword">Old Password</label>
+              <input className={styles.oldPasswordInput}
+                type="password"
+                id="oldPassword"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles.newPasswordDiv}>
+              <label className={styles.newPasswordLabel} htmlFor="newPassword">New Password</label>
+              <input className={styles.newPasswordInput}
+                type="password"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button className={styles.changePasswordButton} type="submit">Change Password</button>
+          </form>
+          {message && <p className="success-message">{message}</p>}
+          {error && <p className="error-message">{error}</p>}
+        </div>
       </div>
     </div>
+    
   );
 };
 
