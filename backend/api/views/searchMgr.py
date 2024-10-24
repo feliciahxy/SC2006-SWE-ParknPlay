@@ -18,6 +18,7 @@ def get_place_info(request):
         "key": API_KEY,
     }
     response = requests.get(base_url, params=params)
+    
     if response.status_code == 200:
         place_data = response.json()
         if place_data.get("status") == "OK":
@@ -42,6 +43,7 @@ def get_place_details(request):
         'key': API_KEY
     }
     response = requests.get(endpoint, params=params)
+    
     if response.status_code == 200:
         place_details = response.json()
         if place_details.get("status") == "OK":
@@ -64,6 +66,14 @@ def nearby_search(request):
     if not location or not radius:
         return JsonResponse({'error': 'Location and radius are required'}, status=400)
     
+    # Check if radius is a valid number
+    try:
+        radius = int(radius)
+        if radius <= 0:
+            return JsonResponse({'error': 'Radius must be a positive number'}, status=400)
+    except ValueError:
+        return JsonResponse({'error': 'Radius must be a valid number'}, status=400)
+
     params = {
         'location': location,
         'radius': radius,
@@ -75,9 +85,11 @@ def nearby_search(request):
     if place_type:
         params['type'] = place_type
     
-    response = requests.get(endpoint, params=params)
-    if response.status_code == 200:
+    try:
+        response = requests.get(endpoint, params=params)
+        response.raise_for_status()  # Raise an error for HTTP errors
         places = response.json()
+        
         if places.get("status") == "OK":
             formatted_results = []
             for place in places.get("results", []):
@@ -98,5 +110,9 @@ def nearby_search(request):
             return JsonResponse(formatted_results, safe=False)
         else:
             return JsonResponse({'error': f"Error: {places.get('status')}"}, status=400)
-    else:
-        return JsonResponse({'error': f"HTTP Error: {response.status_code}"}, status=response.status_code)
+    
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'error': f"Request failed: {str(e)}"}, status=500)
+
+    except ValueError as e:
+        return JsonResponse({'error': f"Value error: {str(e)}"}, status=400)
