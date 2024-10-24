@@ -5,6 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Header from '../components/Sidebar';
 import { ACCESS_TOKEN } from '../constants';
+import styles from '../styles/SearchResultsUI.module.css';
+import logo from "../images/ParkNPlayLogo.png";
 
 // Import Leaflet marker icon
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
@@ -19,6 +21,8 @@ const searchResultIcon = new L.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
 });
+
+  
 
 const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     const navigate = useNavigate();
@@ -80,92 +84,77 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-            <Header />
-            <h2 style={{ textAlign: 'center' }}>Search Results</h2>
-            <ul style={{ listStyleType: 'none', padding: '0' }}>
-                {results.map((result, index) => (
-                    <li 
-                        key={index} 
-                        style={{ 
-                            marginBottom: '15px', 
-                            borderBottom: '1px solid #ccc', 
-                            paddingBottom: '10px' 
-                        }}
-                    >
-                        <h3>{result.name}</h3>
-                        <p>{result.address}</p>
-                        <p>Rating: {result.rating || 'N/A'}</p>
-                        <button 
-                            onClick={() => handleLocationSelect(result.coordinates, result.name)} 
-                            style={{ 
-                                marginRight: '10px', 
-                                padding: '5px 10px', 
-                                backgroundColor: '#28a745', 
-                                color: 'white', 
-                                border: 'none', 
-                                borderRadius: '5px', 
-                                cursor: 'pointer' 
-                            }}
-                        >
-                            View Nearby Carparks
-                        </button>
-                        <button 
-                            onClick={() => handleAddToFavourites(result)} 
-                            style={{ 
-                                padding: '5px 10px', 
-                                backgroundColor: '#007bff', 
-                                color: 'white', 
-                                border: 'none', 
-                                borderRadius: '5px', 
-                                cursor: 'pointer' 
-                            }}
-                        >
-                            Add to Favourites
-                        </button>
-                    </li>
-                ))}
-            </ul>
+        <>
+            <img className={styles.logo} src={logo} alt="Park N Play logo" />
+                <div className={styles.container}>
+                    <div className={styles.searchResultsContainer}>
+                    <Header />
+                        <ul className={styles.listContainer}>
+                            {results.map((result, index) => (
+                                <li 
+                                    key={index} 
+                                    className={styles.listItems}
+                                >
+                                    <h3>{result.name}</h3>
+                                    <p>{result.address}</p>
+                                    <p>Rating: {result.rating || 'N/A'}</p>
+                                    <button 
+                                        onClick={() => handleLocationSelect(result.coordinates, result.name)} 
+                                        className={styles.nearbyCarparksButton}
+                                    >
+                                        View Nearby Carparks
+                                    </button>
+                                    <button
+                                        onClick={() => handleAddToFavourites(result)} 
+                                        className={styles.favouritesButton}
+                                    >
+                                        Add to Favourites
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        </div>
 
-            <MapContainer
-                center={defaultCenter}
-                zoom={13}
-                style={{ height: '500px', width: '100%' }}
-            >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                {results.map((result, index) => (
-                    <Marker
-                        key={index}
-                        position={[result.coordinates.lat, result.coordinates.lng]}
-                        icon={searchResultIcon}
-                    >
-                        <Popup>
-                            <strong>{result.name}</strong><br />
-                            {result.address}<br />
-                            Rating: {result.rating || 'N/A'}
-                            <br />
-                            <button 
-                                onClick={() => handleLocationSelect(result.coordinates, result.name)} 
-                                style={{ 
-                                    marginTop: '10px', 
-                                    padding: '5px 10px', 
-                                    backgroundColor: '#28a745', 
-                                    color: 'white', 
-                                    border: 'none', 
-                                    borderRadius: '5px', 
-                                    cursor: 'pointer' 
-                                }}
-                            >
-                                View Carparks
-                            </button>
-                        </Popup>
-                    </Marker>
-                ))}
-            </MapContainer>
-        </div>
+                        <MapContainer
+                            center={defaultCenter}
+                            zoom={13}
+                            className={styles.mapContainer}
+                        >
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            />
+                            {results.map((result, index) => (
+                                <Marker
+                                    key={index}
+                                    position={[result.coordinates.lat, result.coordinates.lng]}
+                                    icon={searchResultIcon}
+                                >
+                                    <Popup>
+                                        <strong>{result.name}</strong><br />
+                                        {result.address}<br />
+                                        Rating: {result.rating || 'N/A'}
+                                        <br />
+                                        <button 
+                                            onClick={() => handleLocationSelect(result.coordinates, result.name)} 
+                                            style={{ 
+                                                marginTop: '10px', 
+                                                padding: '5px 10px', 
+                                                backgroundColor: '#28a745', 
+                                                color: 'white', 
+                                                border: 'none', 
+                                                borderRadius: '5px', 
+                                                cursor: 'pointer' 
+                                            }}
+                                        >
+                                            View Carparks
+                                        </button>
+                                    </Popup>
+                                </Marker>
+                            ))}
+                    </MapContainer>
+                </div>
+        </>
     );
 };
 
