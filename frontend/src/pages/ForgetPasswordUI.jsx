@@ -1,39 +1,25 @@
-// import React from 'react';
-
-// const ForgetPasswordUI = () => {
-//     return (
-//         <div>
-//             {/* Your content here (currently blank) */}
-//         </div>
-//     );
-// };
-
-// export default ForgetPasswordUI;
-
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import PopUpMessage from '../components/PopUpMessage';
+import api from '../api';
 
 const ForgetPasswordUI = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [showMessage, setShowMessage] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/password_reset/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        setMessage('Password reset email sent!');
-      } else {
-        setMessage('Failed to send reset email.');
+      const response = await api.post('/api/password_reset/', {
+        email: email
+    });
+      if (response) {
+        setMessage('Please check your email!');
       }
     } catch (error) {
-      setMessage('Error occurred. Try again.');
+      console.log('Error during forget password', error);
     }
   };
 
