@@ -177,7 +177,6 @@ const SortFilterUI = ({ setSearchResults }) => {
                 <label>Place Type: </label>
                 <select onChange={(e) => setPlaceType(e.target.value)} value={placeType}>
                     <option value="">Select Place Type: Any</option>
-                    <option value="accounting">Accounting</option>
                     <option value="airport">Airport</option>
                     <option value="amusement_park">Amusement Park</option>
                     <option value="aquarium">Aquarium</option>
