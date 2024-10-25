@@ -1,9 +1,0 @@
-.screen-flex-container {
-    display: flex;
-}
-.screen-flex-child {
-    flex: 1;
-}  
-.screen-flex-child:first-child {
-    margin-right: 20px;
-} 

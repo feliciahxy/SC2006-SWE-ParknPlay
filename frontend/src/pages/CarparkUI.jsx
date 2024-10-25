@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import Header from '../components/Sidebar';
 
-import "../styles/ListMapUI.module.css";
+import styles from "../styles/SearchResultsUI.module.css";
 
 const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
@@ -59,8 +59,8 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <Header />
             <h2 style={{ textAlign: 'center' }}>Nearby Carparks</h2>
-            <div className="screen-flex-container">
-                <div className="screen-flex-child">
+            <div className={styles.screenFlexContainer}>
+                <div className={styles.screenFlexChild}>
                     {carparks.length === 0 ? (
                         <p>No carparks available.</p>
                     ) : (
@@ -75,7 +75,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                         </ul>
                     )}
                 </div>
-                <div className="screen-flex-child">
+                <div className={styles.mapContainer}>
                     <APIProvider apiKey = {API_KEY} >
                         <div style={{height: "100vh", width : "100%"}}>
                             <Map zoom = {14} center = {locationData} mapId = '55d3df35a2143bdc'>

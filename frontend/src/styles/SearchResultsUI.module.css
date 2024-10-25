@@ -70,3 +70,11 @@
     padding: 50px; /* Add padding */
     width: 500px;
 }
+
+
+.screenFlexContainer {
+    display: flex;
+}
+.screenFlexChild {
+    flex: 1;
+}

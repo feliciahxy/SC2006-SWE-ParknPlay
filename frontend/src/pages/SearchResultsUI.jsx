@@ -6,8 +6,6 @@ import { ACCESS_TOKEN } from '../constants';
 import styles from '../styles/SearchResultsUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
 
-import "../styles/ListMapUI.module.css";
-
 const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
   
@@ -88,8 +86,8 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
             <div className={styles.container}>
                 <div className={styles.searchResultsContainer}>
                     <Header />
-                    <div className="screen-flex-container">
-                        <div className="screen-flex-child">
+                    <div className={styles.screenFlexContainer}>
+                        <div className={styles.screenFlexChild}>
                             <h2 style={{ textAlign: 'center' }}>Search Results</h2>
                             <ul className={styles.listContainer}>
                                 {results.map((result, index) => (
@@ -137,7 +135,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                             </ul>
                         </div>
 
-                        <div className="screen-flex-child">
+                        <div className={styles.mapContainer}>
                             <APIProvider apiKey = {API_KEY}>
                                 <div style = {{height: "100vh", width : "100%"}}>
                                     <Map
