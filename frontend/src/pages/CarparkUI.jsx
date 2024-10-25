@@ -1,41 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+"use client";
+import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import Header from '../components/Sidebar';
 
-// Import custom marker icons if needed
-import markerIconPng from 'leaflet/dist/images/marker-icon.png';
-import markerShadowPng from 'leaflet/dist/images/marker-shadow.png';
-import greenMarkerIconPng from '../images/greenMarkerIconPng.png'; // Update the path accordingly
+import "../styles/ListMapUI.module.css";
 
-// Set up icons
-const carparkIcon = new L.Icon({
-    iconUrl: markerIconPng,
-    shadowUrl: markerShadowPng,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-});
-
-const locationIcon = new L.Icon({
-    iconUrl: greenMarkerIconPng,
-    shadowUrl: markerShadowPng,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-});
+const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
 const CarparkUI = ({ selectedLocation, locationName }) => {
     const location = useLocation();
     const [carparks, setCarparks] = useState([]);
     
+    const [openStates, setOpenStates] = useState([]);
+
     // Use the location state if available
     const locationData = location.state?.selectedLocation || selectedLocation;
     const locationTitle = location.state?.locationName || locationName;
+
+    const handleMarkerClick = (index) => { //when the marker on the google maps is clicked
+        const newOpenStates = [...openStates];
+        newOpenStates[index] = !newOpenStates[index];
+        setOpenStates(newOpenStates);
+    };
 
     useEffect(() => {
         if (locationData) {
@@ -46,6 +33,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     if (response.ok) {
                         const data = await response.json();
                         setCarparks(data);
+                        setOpenStates(carparks.map(() => false));
                     } else {
                         console.error('Error fetching carparks:', await response.json());
                     }
@@ -71,48 +59,92 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <Header />
             <h2 style={{ textAlign: 'center' }}>Nearby Carparks</h2>
-            {carparks.length === 0 ? (
-                <p>No carparks available.</p>
-            ) : (
-                <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
-                    {carparks.map((carpark, index) => (
-                        <li key={index} style={{ marginBottom: '15px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-                            <h4>{carpark.carpark_name}</h4>
-                            <p>Distance: {carpark.distance.toFixed(2)} meters</p>
-                            <p>Available Lots: {carpark.available_lots}</p>
-                        </li>
-                    ))}
-                </ul>
-            )}
-            <MapContainer
-                center={[locationData.lat, locationData.lng]}
-                zoom={15}
-                style={{ height: '500px', width: '100%' }}
-                whenCreated={(map) => map.invalidateSize()} // Ensure the map resizes correctly
+            <div className="screen-flex-container">
+                <div className="screen-flex-child">
+                    {carparks.length === 0 ? (
+                        <p>No carparks available.</p>
+                    ) : (
+                        <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
+                            {carparks.map((carpark, index) => (
+                                <li key={index} style={{ marginBottom: '15px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+                                    <h4>{carpark.carpark_name}</h4>
+                                    <p>Distance: {carpark.distance.toFixed(2)} meters</p>
+                                    <p>Available Lots: {carpark.available_lots}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+                <div className="screen-flex-child">
+                    <APIProvider apiKey = {API_KEY} >
+                        <div style={{height: "100vh", width : "100%"}}>
+                            <Map zoom = {14} center = {locationData} mapId = '55d3df35a2143bdc'>
+                                <AdvancedMarker position={locationData}>
+                                    <Pin />
+                                    <InfoWindow position={locationData}>
+                                        <div>
+                                            <strong>{locationTitle}</strong><br />
+                                        </div>
+                                    </InfoWindow>
+                                </AdvancedMarker>
+
+                                {carparks.map((carpark, index) => (
+                                        <AdvancedMarker
+                                            key={index}
+                                            position={{ lat: carpark.location.latitude, lng: carpark.location.longitude}}
+                                            onClick = {() => handleMarkerClick(index)}
+                                        >
+                                            <Pin background={"blue"} glyphColor={"darkblue"} />
+                                            {openStates[index] &&
+                                            (<InfoWindow position={{ lat: carpark.location.latitude, lng: carpark.location.longitude}}>
+                                                <div>
+                                                    <strong>{carpark.carpark_name}</strong><br />
+                                                    Distance: {carpark.distance.toFixed(2)} meters<br />
+                                                    Available Lots: {carpark.available_lots}
+                                                </div>
+                                            </InfoWindow>)}
+                                        </AdvancedMarker>
+                                ))}
+                            </Map>
+                        </div>
+                    </APIProvider>
+                </div>
+            </div>
+            {/* <GoogleMapReact
+                bootstrapURLKeys = {{
+                    key: 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM'
+                }}    
+                defaultCenter = {locationData}
+                center = {locationData}
+                defaultZoom = {15}
+                margin = {[50, 50, 50, 50]}
             >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={[locationData.lat, locationData.lng]} icon={locationIcon}>
-                    <Popup>
-                        <strong>{locationTitle}</strong><br />
-                    </Popup>
-                </Marker>
+                <AdvancedMarker position={locationData}>
+                    <InfoWindow position={locationData}>
+                        <div>
+                            <strong>{locationTitle}</strong><br />
+                        </div>
+                    </InfoWindow>
+                </AdvancedMarker>
+
                 {carparks.map((carpark, index) => (
-                    <Marker
-                        key={index}
-                        position={[carpark.location.latitude, carpark.location.longitude]}
-                        icon={carparkIcon}
-                    >
-                        <Popup>
-                            <strong>{carpark.carpark_name}</strong><br />
-                            Distance: {carpark.distance.toFixed(2)} meters<br />
-                            Available Lots: {carpark.available_lots}
-                        </Popup>
-                    </Marker>
+                        <AdvancedMarker
+                            key={index}
+                            position={carpark.location}
+                            onClick = {handleMarkerClick}
+                        >
+                            <Pin />
+                            {open[index] &&
+                            <InfoWindow position={carpark.location}>
+                                <div>
+                                    <strong>{carpark.carpark_name}</strong><br />
+                                    Distance: {carpark.distance.toFixed(2)} meters<br />
+                                    Available Lots: {carpark.available_lots}
+                                </div>
+                            </InfoWindow>}
+                        </AdvancedMarker>
                 ))}
-            </MapContainer>
+            </GoogleMapReact> */}
         </div>
     );
 };
