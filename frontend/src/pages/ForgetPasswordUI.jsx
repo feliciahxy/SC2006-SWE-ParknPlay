@@ -1,13 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import PopUpMessage from '../components/PopUpMessage';
 import api from '../api';
 
 const ForgetPasswordUI = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [showMessage, setShowMessage] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

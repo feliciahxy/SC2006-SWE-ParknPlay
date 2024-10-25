@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import PopUpMessage from '../components/PopUpMessage';
 import api from '../api';
 
 const PasswordResetUI = () => {
