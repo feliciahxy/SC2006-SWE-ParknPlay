@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Sidebar';
-import logo from "../images/ParkNPlayLogo.png";
-import styles from '../styles/SortFilterUI.module.css';
 
 const townCoordinates = {
     "Ang Mo Kio": { lat: 1.3691, lng: 103.8454 },
@@ -31,21 +29,52 @@ const townCoordinates = {
     "Yishun": { lat: 1.4294, lng: 103.8363 },
 };
 
+// Define search radius for each town (in meters)
+const townRadius = {
+    "Ang Mo Kio": 1500,
+    "Bedok": 2000,
+    "Bishan": 1800,
+    "Bukit Batok": 1200,
+    "Bukit Merah": 2000,
+    "Bukit Panjang": 1500,
+    "Choa Chu Kang": 2000,
+    "Clementi": 1200,
+    "Geylang": 2000,
+    "Hougang": 1800,
+    "Jurong East": 2000,
+    "Jurong West": 2000,
+    "Kallang": 1600,
+    "Marine Parade": 2000,
+    "Pasir Ris": 1800,
+    "Punggol": 1500,
+    "Queenstown": 1600,
+    "Sembawang": 1800,
+    "Sengkang": 2000,
+    "Serangoon": 1600,
+    "Tampines": 2000,
+    "Toa Payoh": 1400,
+    "Woodlands": 2000,
+    "Yishun": 1500,
+};
+
 const SortFilterUI = ({ setSearchResults }) => {
     const [selectedTown, setSelectedTown] = useState('');
-    const [placeType, setPlacetype] = useState('');
+    const [placeType, setPlaceType] = useState('');
     const [price, setPrice] = useState('');
     const [rating, setRating] = useState('');
+    const [userLocation, setUserLocation] = useState(null);  // Track user's location
+    const [isUsingLocation, setIsUsingLocation] = useState(false);  // State to manage location usage
     const navigate = useNavigate();
 
     const onSearch = async () => {
-        const coordinates = townCoordinates[selectedTown];
+        const coordinates = isUsingLocation ? userLocation : townCoordinates[selectedTown];
+        const radius = isUsingLocation ? 2000 : townRadius[selectedTown] || 2000; // Default to 2000 if town is not selected
         const nearbyParams = new URLSearchParams();
         
         if (coordinates) {
             nearbyParams.append('location', `${coordinates.lat},${coordinates.lng}`);
         }
-        nearbyParams.append('radius', '2000');
+        nearbyParams.append('radius', `${radius}`);
         if (placeType) nearbyParams.append('type', placeType);
         if (price) nearbyParams.append('keyword', price);
         if (rating) nearbyParams.append('min_rating', rating);
@@ -64,59 +93,167 @@ const SortFilterUI = ({ setSearchResults }) => {
         }
     };
 
+    const getUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ lat: latitude, lng: longitude });
+                    setIsUsingLocation(true);
+                },
+                (error) => {
+                    console.error("Error fetching location: ", error);
+                    alert("Failed to get location. Please try again.");
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    };
+
+    const cancelLocationUsage = () => {
+        setIsUsingLocation(false);
+        setUserLocation(null);
+        setSelectedTown('');  // Reset the town selection
+    };
+
     return (
-        <>
-        <img className={styles.logo} src={logo} alt="Park N Play logo" />
-        <div className={styles.searchContainer}>
+        <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <Header /> {/* Include the Header component */}
-            <div className={styles.filter}>
-                <label>Town</label>
-                <select className={styles.input} onChange={(e) => setSelectedTown(e.target.value)} value={selectedTown}>
-                    <option value="">Select Town</option>
-                    {Object.keys(townCoordinates).map((town) => (
-                        <option key={town} value={town}>{town}</option>
-                    ))}
-                </select>
+            <h2 style={{ textAlign: 'center' }}>Search Places</h2>
+
+            <div style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
+                <div style={{ flex: 1 }}>
+                    <label>Town: </label>
+                    <select 
+                        onChange={(e) => setSelectedTown(e.target.value)} 
+                        value={selectedTown} 
+                        disabled={isUsingLocation}  // Disable when using user location
+                    >
+                        <option value="">Select Town</option>
+                        {Object.keys(townCoordinates).map((town) => (
+                            <option key={town} value={town}>{town}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {!isUsingLocation ? (
+                    <button
+                        onClick={getUserLocation}
+                        style={{
+                            marginLeft: '10px',
+                            backgroundColor: '#007bff',
+                            color: 'white',
+                            border: 'none',
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                        }}
+                    >
+                        Use My Location
+                    </button>
+                ) : (
+                    <button
+                        onClick={cancelLocationUsage}
+                        style={{
+                            marginLeft: '10px',
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            padding: '10px 15px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                        }}
+                    >
+                        Cancel My Location
+                    </button>
+                )}
             </div>
 
-            <div className={styles.filter}>
-                <label>Place Type</label>
-                <select className={styles.input} onChange={(e) => setPlacetype(e.target.value)} value={placeType}>
-                    <option value="">Select Place Type</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="park">Park</option>
+            {/* Other search filters */}
+            <div style={{ marginBottom: '15px' }}>
+                <label>Place Type: </label>
+                <select onChange={(e) => setPlaceType(e.target.value)} value={placeType}>
+                    <option value="">Select Place Type: Any</option>
+                    <option value="accounting">Accounting</option>
+                    <option value="airport">Airport</option>
+                    <option value="amusement_park">Amusement Park</option>
+                    <option value="aquarium">Aquarium</option>
+                    <option value="art_gallery">Art Gallery</option>
+                    <option value="bakery">Bakery</option>
+                    <option value="bar">Bar</option>
+                    <option value="book_store">Book Store</option>
+                    <option value="bowling_alley">Bowling Alley</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="campground">Campground</option>
+                    <option value="casino">Casino</option>
+                    <option value="cemetery">Cemetery</option>
+                    <option value="church">Church</option>
+                    <option value="city_hall">City Hall</option>
+                    <option value="clothing_store">Clothing Store</option>
+                    <option value="convenience_store">Convenience Store</option>
+                    <option value="department_store">Department Store</option>
+                    <option value="embassy">Embassy</option>
+                    <option value="hindu_temple">Hindu Temple</option>
+                    <option value="library">Library</option>
+                    <option value="mosque">Mosque</option>
+                    <option value="movie_theater">Movie Theater</option>
                     <option value="museum">Museum</option>
+                    <option value="night_club">Night Club</option>
+                    <option value="park">Park</option>
+                    <option value="restaurant">Restaurant</option>
                     <option value="shopping_mall">Shopping Mall</option>
+                    <option value="spa">Spa</option>
+                    <option value="stadium">Stadium</option>
+                    <option value="store">Store</option>
+                    <option value="supermarket">Supermarket</option>
+                    <option value="synagogue">Synagogue</option>
+                    <option value="tourist_attraction">Tourist Attraction</option>
+                    <option value="university">University</option>
+                    <option value="veterinary_care">Veterinary Care</option>
+                    <option value="zoo">Zoo</option>
                 </select>
             </div>
 
-            <div className={styles.filter}>
-                <label>Price</label>
-                <select className={styles.input} onChange={(e) => setPrice(e.target.value)} value={price}>
-                    <option value="">Select Price Range</option>
+            <div style={{ marginBottom: '15px' }}>
+                <label>Price: </label>
+                <select onChange={(e) => setPrice(e.target.value)} value={price}>
+                    <option value="">Select Price Range: Any</option>
                     <option value="cheap">Cheap</option>
                     <option value="moderate">Moderate</option>
                     <option value="expensive">Expensive</option>
                 </select>
             </div>
 
-            <div className={styles.filter}>
-                <label>Minimum Rating</label>
-                <select className={styles.input} onChange={(e) => setRating(e.target.value)} value={rating}>
-                    <option value="">Select Minimum Rating</option>
+            <div style={{ marginBottom: '15px' }}>
+                <label>Minimum Rating: </label>
+                <select onChange={(e) => setRating(e.target.value)} value={rating}>
+                    <option value="">Select Minimum Rating: Any</option>
                     <option value="1">1 Star</option>
                     <option value="2">2 Stars</option>
                     <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option value="5">5 Stars</option>
+                    <option value="4">Above 4 Stars</option>
                 </select>
             </div>
 
-            <button className={styles.searchButton} onClick={onSearch}>
+            <button 
+                onClick={onSearch}
+                style={{
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 15px',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    width: '100%',
+                    fontSize: '16px'
+                }}
+            >
                 Search
             </button>
         </div>
-        </>
     );
 };
 

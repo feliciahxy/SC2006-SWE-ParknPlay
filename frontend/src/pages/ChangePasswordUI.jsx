@@ -55,7 +55,7 @@ const ChangePasswordUI = () => {
         <h2 className={styles.changePasswordTitle}>Change Password</h2>
         <form onSubmit={handleChangePassword}>
           <div className={styles.oldPasswordDiv}>
-            <label className={styles.oldPasswordLabel} htmlFor="oldPassword">Old Password</label>
+            <label className={styles.oldPasswordLabel} htmlFor="oldPassword">Old Password:</label>
             <input className={styles.oldPasswordInput}
               type="password"
               id="oldPassword"
@@ -65,7 +65,7 @@ const ChangePasswordUI = () => {
             />
           </div>
           <div className={styles.newPasswordDiv}>
-            <label className={styles.newPasswordLabel} htmlFor="newPassword">New Password</label>
+            <label className={styles.newPasswordLabel} htmlFor="newPassword">New Password:</label>
             <input className={styles.newPasswordInput}
               type="password"
               id="newPassword"
