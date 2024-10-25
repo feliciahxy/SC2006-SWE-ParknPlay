@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Header from '../components/Sidebar';
 import { ACCESS_TOKEN } from '../constants';
-import styles from '../styles/SearchResultsUI.module.css';
+// import styles from '../styles/SearchResultsUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
 
 // Import Leaflet marker icon
