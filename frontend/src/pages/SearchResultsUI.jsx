@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import Header from '../components/Sidebar';
 import { ACCESS_TOKEN } from '../constants';
-import styles from '../styles/SearchResultsUI.module.css';
+// import styles from '../styles/SearchResultsUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
 
 const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';

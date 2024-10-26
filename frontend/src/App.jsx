@@ -11,6 +11,7 @@ import SearchResultsUI from "./pages/SearchResultsUI";
 import ChangePasswordUI from "./pages/ChangePasswordUI"; // Import the ChangePasswordUI component
 import api from './api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
+import PasswordResetUI from './pages/PasswordResetUI';
 
 
 function Logout() {
@@ -85,6 +86,7 @@ function App() {
         <Route path="/" element={<LoginUI />} />
         <Route path="/auth/register" element={<RegistrationUI />} />
         <Route path="/auth/forget-password" element={<ForgetPasswordUI />} />
+        <Route path="/password-reset/:token" element={<PasswordResetUI/>}/>
         <Route path="/change-password" 
                element={
                  <ProtectedRoute isAuthenticated={isAuthenticated}>
