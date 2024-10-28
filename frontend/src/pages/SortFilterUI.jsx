@@ -68,9 +68,9 @@ const SortFilterUI = ({ setSearchResults }) => {
 
     const onSearch = async () => {
         const coordinates = isUsingLocation ? userLocation : townCoordinates[selectedTown];
-        const radius = isUsingLocation ? 2000 : townRadius[selectedTown] || 2000; // Default to 2000 if town is not selected
+        const radius = isUsingLocation ? 2000 : townRadius[selectedTown] || 2000;
         const nearbyParams = new URLSearchParams();
-        
+    
         if (coordinates) {
             nearbyParams.append('location', `${coordinates.lat},${coordinates.lng}`);
         }
@@ -78,20 +78,29 @@ const SortFilterUI = ({ setSearchResults }) => {
         if (placeType) nearbyParams.append('type', placeType);
         if (price) nearbyParams.append('keyword', price);
         if (rating) nearbyParams.append('min_rating', rating);
-
+    
         try {
             const nearbyResponse = await fetch(`http://127.0.0.1:8000/api/nearby_search/?${nearbyParams.toString()}`);
             if (nearbyResponse.ok) {
                 const nearbyData = await nearbyResponse.json();
-                setSearchResults(nearbyData);
+                if (nearbyData.length === 0) {  // Check if no results were returned
+                    setSearchResults([{ message: "No results found" }]);
+                } else {
+                    setSearchResults(nearbyData);
+                }
                 navigate('/search-results');
             } else {
                 console.error('Error fetching nearby places:', await nearbyResponse.json());
+                setSearchResults([{ message: "No results found" }]);  // Handle error by showing "No results found"
+                navigate('/search-results');
             }
         } catch (error) {
             console.error('Error:', error);
+            setSearchResults([{ message: "No results found" }]);  // Show "No results found" on network error
+            navigate('/search-results');
         }
     };
+    
 
     const getUserLocation = () => {
         if (navigator.geolocation) {
