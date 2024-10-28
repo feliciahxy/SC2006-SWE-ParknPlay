@@ -1,0 +1,80 @@
+.container{
+    display: flex; /* Use flexbox to arrange children side by side */
+    height: 100%; /* Full height of the viewport */
+    gap: 10px; /* Add space between the containers */
+    flex-direction: row;
+}
+
+.searchResultsContainer{
+    flex: 1; /* Equal space for search results */
+    padding: 50px; /* Add padding */
+    font-family: Arial, Helvetica, sans-serif;
+    max-height: 100%; /* Ensure it doesn’t exceed the container height */
+    overflow-y: auto; /* Allow scrolling if necessary */
+}
+
+.header{
+    text-align: center;
+}
+
+.listContainer{
+    list-style-type: none;
+    padding: 50px;
+    max-height: 400px;
+    overflow-y: auto; 
+    border: 1px solid #28a745;
+    border-radius: 5px;
+    margin-top: 165px;
+}
+
+.listItems{
+    margin-bottom: 15px; 
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.nearbyCarparksButton{
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.favouritesButton{
+	padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logo {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.mapContainer{
+    flex: 1; /* Equal space for the map */
+    max-height: 400px;
+    margin-top: 255px;
+    padding: 50px; /* Add padding */
+    width: 500px;
+}
+
+
+.screenFlexContainer {
+    display: flex;
+}
+.screenFlexChild {
+    flex: 1;
+}

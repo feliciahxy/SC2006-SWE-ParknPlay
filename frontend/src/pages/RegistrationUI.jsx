@@ -14,6 +14,7 @@ const RegistrationUI = () => {
 
     const [formData, setFormData] = useState({
         username: "",
+        email: "",
         password: "",
         confirmPassword: ""
     });
@@ -24,6 +25,9 @@ const RegistrationUI = () => {
     const validateForm = (formData) => {
         if (!formData.username) {
             setError("Username required");
+            return false;
+        } else if (!formData.email) {
+            setError("Email required");
             return false;
         } else if (!formData.password) {
             setError("Password required");
@@ -52,7 +56,8 @@ const RegistrationUI = () => {
             // Use your custom api instance to send the registration request
             const res = await api.post('/api/register/', {
                 username: formData.username,
-                password: formData.password
+                password: formData.password,
+                email: formData.email
             });
             console.log('User saved successfully:', res.data);
             // Navigate only after successful registration
@@ -79,6 +84,14 @@ const RegistrationUI = () => {
                     value={formData.username} 
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     placeholder='Username'
+                /> 
+                <br /><br />
+                <input 
+                    className={styles.textContainer}
+                    type="text"
+                    value={formData.email} 
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder='Email'
                 /> 
                 <br /><br />
                 <input 
