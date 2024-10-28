@@ -4,14 +4,15 @@ import api from '../api';
 
 const PasswordResetUI = () => {
   const [newPassword, setNewPassword] = useState('');
+  const [newConfirmPassword, setNewConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const {token} = useParams()
   const navigate = useNavigate();
 
+  const isPasswordMatch = newPassword === newConfirmPassword;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(newPassword);
-    console.log(token);
     try {
       const response = await api.post('/api/password_reset/confirm/', {
         password: newPassword,
@@ -39,7 +40,15 @@ const PasswordResetUI = () => {
           onChange={(e) => setNewPassword(e.target.value)}
         />
         <br/>
-        <button type="submit">Submit</button>
+        <input
+          type="newConfirmPassword"
+          placeholder="Enter your new password again"
+          value={newConfirmPassword}
+          onChange={(e) => setNewConfirmPassword(e.target.value)}
+        />
+        <br/>
+        <button disabled={!isPasswordMatch}>Submit</button>
+        {!isPasswordMatch && <p>Passwords do not match</p>}
       </form>
       <p>{message}</p>
     </div>
