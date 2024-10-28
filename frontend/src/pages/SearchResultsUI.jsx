@@ -11,7 +11,7 @@ const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     const navigate = useNavigate();
     console.log("Results prop:", results); // Add this line to check the data
-    if (!results || results.length === 1) {
+    if (results.length === 1 && results[0].message === "No results found") {
         return (
             <div style={{ textAlign: 'center', padding: '50px', fontSize: '18px' }}>
                 No results found
