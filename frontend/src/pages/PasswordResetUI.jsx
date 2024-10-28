@@ -4,14 +4,16 @@ import api from '../api';
 
 const PasswordResetUI = () => {
   const [newPassword, setNewPassword] = useState('');
+  const [newConfirmPassword, setNewConfirmPassword] = useState('');
+  const [errors, setErrors] = useState([]);
   const [message, setMessage] = useState('');
   const {token} = useParams()
   const navigate = useNavigate();
 
+  const isPasswordMatch = newPassword === newConfirmPassword;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(newPassword);
-    console.log(token);
     try {
       const response = await api.post('/api/password_reset/confirm/', {
         password: newPassword,
@@ -23,8 +25,14 @@ const PasswordResetUI = () => {
       }
 
     } catch (error) {
-      console.log('Error during forget password', error);
-    }
+      if (error.response && error.response.status === 400) {
+        // Extract password errors, if present
+        setErrors(error.response.data.password || []);
+      } else {
+          setMessage('An unexpected error occurred.');
+      }
+      console.log('Error during password reset', error);
+      }
   };
 
   return (
@@ -39,12 +47,20 @@ const PasswordResetUI = () => {
           onChange={(e) => setNewPassword(e.target.value)}
         />
         <br/>
-        <button type="submit">Submit</button>
+        <input
+          type="newConfirmPassword"
+          placeholder="Enter your new password again"
+          value={newConfirmPassword}
+          onChange={(e) => setNewConfirmPassword(e.target.value)}
+        />
+        <br/>
+        <button disabled={!isPasswordMatch}>Submit</button>
+        {!isPasswordMatch && <p>Passwords do not match</p>}
       </form>
       <p>{message}</p>
+      <p>{errors}</p>
     </div>
   );
 };
 
 export default PasswordResetUI;
-
