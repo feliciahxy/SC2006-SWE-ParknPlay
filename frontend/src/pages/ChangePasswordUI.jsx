@@ -1,20 +1,24 @@
-// src/pages/ChangePasswordUI.jsx
-
 import React, { useState } from 'react';
 import api from '../api';
 import { ACCESS_TOKEN } from '../constants';
-import Sidebar from '../components/Sidebar'; // Import the Sidebar
+import Sidebar from '../components/Sidebar';
 import styles from '../styles/ChangePasswordUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
 
 const ChangePasswordUI = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      setError('New password and confirmation do not match.');
+      return;
+    }
 
     const token = localStorage.getItem(ACCESS_TOKEN);
 
@@ -24,6 +28,7 @@ const ChangePasswordUI = () => {
         {
           old_password: oldPassword,
           new_password: newPassword,
+          confirm_password: confirmPassword, // Include confirm_password here
         },
         {
           headers: {
@@ -36,6 +41,7 @@ const ChangePasswordUI = () => {
       setMessage('Password changed successfully!');
       setOldPassword('');
       setNewPassword('');
+      setConfirmPassword('');
       setError('');
     } catch (err) {
       if (err.response) {
@@ -48,9 +54,9 @@ const ChangePasswordUI = () => {
   };
 
   return (
-    <div className={styles.mainContainer}> {/* Added flex layout to include Sidebar */}
-      <Sidebar /> {/* Include Sidebar */}
-      <div className={styles.changePasswordContainer}> {/* Adjust margin for the sidebar */}
+    <div className={styles.mainContainer}>
+      <Sidebar />
+      <div className={styles.changePasswordContainer}>
         <img className={styles.logo} src={logo} alt="Park N Play logo" />
         <h2 className={styles.changePasswordTitle}>Change Password</h2>
         <form onSubmit={handleChangePassword}>
@@ -71,6 +77,16 @@ const ChangePasswordUI = () => {
               id="newPassword"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.confirmPasswordDiv}>
+            <label className={styles.confirmPasswordLabel} htmlFor="confirmPassword">Confirm New Password:</label>
+            <input className={styles.confirmPasswordInput}
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>
