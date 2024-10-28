@@ -28,7 +28,7 @@ const ChangePasswordUI = () => {
         {
           old_password: oldPassword,
           new_password: newPassword,
-          confirm_password: confirmPassword, // Include confirm_password here
+          confirm_password: confirmPassword,
         },
         {
           headers: {
@@ -44,8 +44,17 @@ const ChangePasswordUI = () => {
       setConfirmPassword('');
       setError('');
     } catch (err) {
-      if (err.response) {
-        setError(err.response.data.detail || 'An error occurred');
+      if (err.response && err.response.data) {
+        const errorData = err.response.data;
+        
+        // Check for specific field errors and set error message accordingly
+        if (errorData.old_password) {
+          setError(errorData.old_password);
+        } else if (errorData.confirm_password) {
+          setError(errorData.confirm_password);
+        } else {
+          setError(errorData.detail || 'An error occurred');
+        }
       } else {
         setError('Network error. Please try again.');
       }
