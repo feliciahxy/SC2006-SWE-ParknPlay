@@ -7,6 +7,7 @@ const PasswordResetUI = () => {
   const [newConfirmPassword, setNewConfirmPassword] = useState('');
   const [errors, setErrors] = useState([]);
   const [message, setMessage] = useState('');
+  const [isPasswordConfirming, setIsPasswordConfirming] = useState(false);
   const {token} = useParams()
   const navigate = useNavigate();
 
@@ -49,13 +50,16 @@ const PasswordResetUI = () => {
         <br/>
         <input
           type="newConfirmPassword"
-          placeholder="Enter your new password again"
+          placeholder="Confirm your new password again"
           value={newConfirmPassword}
-          onChange={(e) => setNewConfirmPassword(e.target.value)}
+          onChange={(e) => {
+            setNewConfirmPassword(e.target.value);
+            setIsPasswordConfirming(true);
+          }}
         />
         <br/>
         <button disabled={!isPasswordMatch}>Submit</button>
-        {!isPasswordMatch && <p>Passwords do not match</p>}
+        {isPasswordConfirming && !isPasswordMatch && <p>Passwords do not match</p>}
       </form>
       <p>{message}</p>
       <p>{errors}</p>

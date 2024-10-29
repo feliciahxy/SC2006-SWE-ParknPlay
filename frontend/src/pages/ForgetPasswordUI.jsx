@@ -4,6 +4,7 @@ import api from '../api';
 const ForgetPasswordUI = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,8 +16,14 @@ const ForgetPasswordUI = () => {
         setMessage('Please check your email!');
       }
     } catch (error) {
-      console.log('Error during forget password', error);
-    }
+      if (error.response && error.response.status === 400) {
+        // Extract password errors, if present
+        setErrors(error.response.data.email || []);
+      } else {
+          setMessage('An unexpected error occurred.');
+      }
+      console.log('Error during password reset', error);
+      }
   };
 
   return (
@@ -33,6 +40,7 @@ const ForgetPasswordUI = () => {
         <button type="submit">Send Reset Link</button>
       </form>
       <p>{message}</p>
+      <p>{errors}</p>
     </div>
   );
 };
