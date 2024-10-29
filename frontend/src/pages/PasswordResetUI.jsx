@@ -57,7 +57,6 @@ const PasswordResetUI = () => {
           value={newConfirmPassword}
           onChange={(e) => {
             setNewConfirmPassword(e.target.value);
-            setIsPasswordConfirming(true);
           }}
         />
         <br/>
