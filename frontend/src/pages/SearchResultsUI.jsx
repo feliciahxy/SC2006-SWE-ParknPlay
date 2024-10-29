@@ -8,33 +8,26 @@ import logo from "../images/ParkNPlayLogo.png";
 
 const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
-  
-
 const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     const navigate = useNavigate();
-
-    if (!results || results.length === 0) {
+    console.log("Results prop:", results); // Add this line to check the data
+    if (results.length === 1 && results[0].message === "No results found") {
         return (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-                <Header />
-                <p>No results available.</p>
+            <div style={{ textAlign: 'center', padding: '50px', fontSize: '18px' }}>
+                No results found
             </div>
         );
     }
 
     const [openStates, setOpenStates] = useState(results.map(() => false));
 
-    const handleMarkerClick = (index) => { //when the marker on the google maps is clicked
+    const handleMarkerClick = (index) => {
         const newOpenStates = [...openStates];
         newOpenStates[index] = !newOpenStates[index];
         setOpenStates(newOpenStates);
-    }
-
-    // Set a default center for the map based on the first result
-    const defaultCenter = {
-        lat: results[0].coordinates.lat, 
-        lng: results[0].coordinates.lng
     };
+
+    const defaultCenter = results[0]?.coordinates || { lat: 0, lng: 0 };
 
     const handleLocationSelect = (location, name) => {
         setSelectedLocation(location);
@@ -69,7 +62,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                 alert(`${result.name} has been added to your favourites!`);
             } else if (response.status === 401) {
                 alert('Session expired. Please log in again.');
-                navigate('/login'); // Navigate to login page
+                navigate('/login');
             } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.detail || 'Could not add to favourites'}`);
@@ -95,10 +88,10 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                                         key={index} 
                                         className={styles.listItems}
                                     >
-                                        {result?.photo? (
+                                        {result?.photo ? (
                                             <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photo}&key=${API_KEY}`} alt="image cannot be displayed"></img>
                                         ) : (
-                                            <div>image not available</div>
+                                            <div>Image not available</div>
                                         )}
                                         <h3>{result.name}</h3>
                                         <p>{result.address}</p>
@@ -136,12 +129,12 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                         </div>
 
                         <div className={styles.mapContainer}>
-                            <APIProvider apiKey = {API_KEY}>
-                                <div style = {{height: "100vh", width : "100%"}}>
+                            <APIProvider apiKey={API_KEY}>
+                                <div style={{ height: "100vh", width: "100%" }}>
                                     <Map
-                                        zoom = {13}
-                                        center = {defaultCenter}
-                                        mapId = '55d3df35a2143bdc'
+                                        zoom={13}
+                                        center={defaultCenter}
+                                        mapId='55d3df35a2143bdc'
                                     >
                                         {results.map((result, index) => (
                                             <AdvancedMarker

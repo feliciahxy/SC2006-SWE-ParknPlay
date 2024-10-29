@@ -66,7 +66,7 @@ def nearby_search(request):
     if not location or not radius:
         return JsonResponse({'error': 'Location and radius are required'}, status=400)
     
-    # Check if radius is a valid number
+    # Ensure radius is a valid positive number
     try:
         radius = int(radius)
         if radius <= 0:
@@ -74,6 +74,7 @@ def nearby_search(request):
     except ValueError:
         return JsonResponse({'error': 'Radius must be a valid number'}, status=400)
 
+    # Set parameters for the Google Places API request
     params = {
         'location': location,
         'radius': radius,
@@ -87,8 +88,9 @@ def nearby_search(request):
     
     try:
         response = requests.get(endpoint, params=params)
-        response.raise_for_status()  # Raise an error for HTTP errors
+        response.raise_for_status()  
         places = response.json()
+        print(places)
         
         if places.get("status") == "OK":
             formatted_results = []
@@ -107,10 +109,12 @@ def nearby_search(request):
                     },
                     'photo': place.get('photos', [{}])[0].get('photo_reference', None)
                 })
+            
             return JsonResponse(formatted_results, safe=False)
-        else:
-            return JsonResponse({'error': f"Error: {places.get('status')}"}, status=400)
-    
+        
+        # Return an empty array if the status isn't "OK"
+        return JsonResponse([], safe=False)
+
     except requests.exceptions.RequestException as e:
         return JsonResponse({'error': f"Request failed: {str(e)}"}, status=500)
 
