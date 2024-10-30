@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 "use client";
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useMapsLibrary, useMap } from '@vis.gl/react-google-maps';
 import Header from '../components/Sidebar';
 
 import styles from "../styles/SearchResultsUI.module.css";
@@ -13,6 +13,10 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const [carparks, setCarparks] = useState([]);
     
     const [openStates, setOpenStates] = useState([]);
+
+    const [userLocation, setUserLocation] = useState(null);
+    const [isUsingLocation, setIsUsingLocation] = useState(false);
+    const [selectedCarpark, setSelectedCarpark] = useState(null);
 
     // Use the location state if available
     const locationData = location.state?.selectedLocation || selectedLocation;
@@ -55,6 +59,24 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         );
     }
 
+    const getUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ lat: latitude, lng: longitude });
+                    setIsUsingLocation(true);
+                },
+                (error) => {
+                    console.error("Error fetching location: ", error);
+                    alert("Failed to get location. Please try again.");
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    };
+
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <Header />
@@ -92,7 +114,10 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                         <AdvancedMarker
                                             key={index}
                                             position={{ lat: carpark.location.latitude, lng: carpark.location.longitude}}
-                                            onClick = {() => handleMarkerClick(index)}
+                                            onClick = {() => {
+                                                handleMarkerClick(index);
+                                                setSelectedCarpark({ lat: carpark.location.latitude, lng: carpark.location.longitude}); // Set selected carpark for directions
+                                            }}
                                         >
                                             <Pin background={"blue"} glyphColor={"darkblue"} />
                                             {openStates[index] &&
@@ -101,52 +126,120 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                                     <strong>{carpark.carpark_name}</strong><br />
                                                     Distance: {carpark.distance.toFixed(2)} meters<br />
                                                     Available Lots: {carpark.available_lots}
+                                                    <button onClick={getUserLocation}>Show directions</button>
                                                 </div>
                                             </InfoWindow>)}
                                         </AdvancedMarker>
                                 ))}
+                                {isUsingLocation && selectedCarpark && (
+                                    <Directions
+                                        origin={userLocation} // Pass user location as origin
+                                        destination={selectedCarpark} // Pass selected carpark as destination
+                                    />
+                                )}
                             </Map>
                         </div>
                     </APIProvider>
                 </div>
             </div>
-            {/* <GoogleMapReact
-                bootstrapURLKeys = {{
-                    key: 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM'
-                }}    
-                defaultCenter = {locationData}
-                center = {locationData}
-                defaultZoom = {15}
-                margin = {[50, 50, 50, 50]}
-            >
-                <AdvancedMarker position={locationData}>
-                    <InfoWindow position={locationData}>
-                        <div>
-                            <strong>{locationTitle}</strong><br />
-                        </div>
-                    </InfoWindow>
-                </AdvancedMarker>
-
-                {carparks.map((carpark, index) => (
-                        <AdvancedMarker
-                            key={index}
-                            position={carpark.location}
-                            onClick = {handleMarkerClick}
-                        >
-                            <Pin />
-                            {open[index] &&
-                            <InfoWindow position={carpark.location}>
-                                <div>
-                                    <strong>{carpark.carpark_name}</strong><br />
-                                    Distance: {carpark.distance.toFixed(2)} meters<br />
-                                    Available Lots: {carpark.available_lots}
-                                </div>
-                            </InfoWindow>}
-                        </AdvancedMarker>
-                ))}
-            </GoogleMapReact> */}
         </div>
     );
 };
 
 export default CarparkUI;
+
+const Directions = ({ origin, destination }) => {
+    const map = useMap();
+    const routesLibrary = useMapsLibrary("routes");
+    const [directionsService, setDirectionsService] = useState(null);
+    const [directionsRenderer, setDirectionsRenderer] = useState(null);
+    const [routes, setRoutes] = useState([]);
+    const [routeIndex, setRouteIndex] = useState(0);
+    const selected = routes[routeIndex];
+    const leg = selected?.legs[0];
+
+    useEffect(() => {
+        if (routesLibrary && map) {
+            const renderer = new routesLibrary.DirectionsRenderer({
+                map: map,
+            })
+            setDirectionsService(new routesLibrary.DirectionsService());
+            setDirectionsRenderer(renderer);
+        }
+    }, [routesLibrary, map]);
+/* 
+    useEffect(() => {
+        if (directionsService && directionsRenderer && origin && destination) {
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING,
+                provideRouteAlternatives: true,
+            })
+            .then(response => {
+                directionsRenderer.setDirections(response);
+                setRoutes(response.routes);
+            });
+        }
+    }, [directionsService, directionsRenderer, origin, destination]);
+ */
+    useEffect(() => {
+        const fetchDirections = async (attempt = 0) => {
+            if (directionsService && directionsRenderer && origin && destination) {
+                console.log("Origin:", origin);
+                console.log("Destination:", destination);
+    
+                directionsService.route(
+                    {
+                        origin: origin,
+                        destination: destination,
+                        travelMode: google.maps.TravelMode.DRIVING,
+                        provideRouteAlternatives: true,
+                    },
+                    (result, status) => {
+                        if (status === google.maps.DirectionsStatus.OK) {
+                            directionsRenderer.setDirections(result);
+                            setRoutes(result.routes);
+                            console.log("Directions fetched successfully:", result.routes);
+                        } else if (status === google.maps.DirectionsStatus.UNKNOWN_ERROR && attempt < 3) {
+                            console.warn(`Retry attempt ${attempt + 1} due to UNKNOWN_ERROR`);
+                            setTimeout(() => fetchDirections(attempt + 1), 1000);
+                        } else {
+                            console.error("Error fetching directions:", status);
+                        }
+                    }
+                );
+            }
+        };
+    
+        fetchDirections();
+    }, [directionsService, directionsRenderer, origin, destination]);
+    
+    useEffect(() => {
+        if (directionsRenderer) {
+            directionsRenderer.setRouteIndex(routeIndex);
+        }
+    }, [routeIndex, directionsRenderer]);
+
+    if (!leg) return null;
+
+    return (
+        <div>
+            <h2>{selected.summary}</h2>
+            <p>{leg.start_address.split(",")[0]} to {leg.end_address.split(",")[0]}</p>
+            <p>Distance: {leg.distance?.text}</p>
+            <p>Duration: {leg.duration?.text}</p>
+
+            <h2>All possible Routes</h2>
+            <ul>
+                {routes.map((route, index) => (
+                    <li key={route.summary}>
+                        <button onClick={() => setRouteIndex(index)}>
+                            {route.summary}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
