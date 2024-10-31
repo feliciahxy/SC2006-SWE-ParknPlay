@@ -12,8 +12,30 @@ const ChangePasswordUI = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
+  const passwordCriteria = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  const validateNewPassword = (password) => {
+    if (!passwordCriteria.test(password)) {
+      setError("Password must be at least 8 characters long, include uppercase and lowercase letters, a number, and a special character.");
+      return false;
+    }
+    return true;
+  };
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
+    setError("");
+    setMessage("");
+
+    if (!validateNewPassword(newPassword)) {
+      return;
+    }
+
+    // Ensure old password is not the same as new password
+    if (oldPassword === newPassword) {
+      setError('New password cannot be the same as the old password.');
+      return;
+    }
 
     if (newPassword !== confirmPassword) {
       setError('New password and confirmation do not match.');
@@ -46,7 +68,7 @@ const ChangePasswordUI = () => {
     } catch (err) {
       if (err.response && err.response.data) {
         const errorData = err.response.data;
-        
+
         // Check for specific field errors and set error message accordingly
         if (errorData.old_password) {
           setError(errorData.old_password);
