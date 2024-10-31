@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import api from '../api';
+import Sidebar from '../components/Sidebar';
 
 const ForgetPasswordUI = () => {
   const [email, setEmail] = useState('');
@@ -28,6 +29,7 @@ const ForgetPasswordUI = () => {
 
   return (
     <div>
+      <Sidebar />
       <h2>Reset Password</h2>
       <form onSubmit={handleSubmit}>
         <input
