@@ -100,7 +100,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                 <div className={styles.mapContainer}>
                     <APIProvider apiKey = {API_KEY} >
                         <div style={{height: "100vh", width : "100%"}}>
-                            <Map zoom = {14} center = {locationData} mapId = '55d3df35a2143bdc'>
+                            <Map defaultZoom = {14} defaultCenter = {locationData} mapId = '55d3df35a2143bdc'>
                                 <AdvancedMarker position={locationData}>
                                     <Pin />
                                     <InfoWindow position={locationData}>

@@ -132,8 +132,8 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                             <APIProvider apiKey={API_KEY}>
                                 <div style={{ height: "100vh", width: "100%" }}>
                                     <Map
-                                        zoom={13}
-                                        center={defaultCenter}
+                                        defaultZoom={13}
+                                        defaultCenter={defaultCenter}
                                         mapId='55d3df35a2143bdc'
                                     >
                                         {results.map((result, index) => (
