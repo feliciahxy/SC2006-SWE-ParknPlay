@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 "use client";
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useMapsLibrary, useMap } from '@vis.gl/react-google-maps';
 import Header from '../components/Sidebar';
-
-import styles from "../styles/SearchResultsUI.module.css";
+import styles from "../styles/CarparkUI.module.css";
+import logo from "../images/ParkNPlayLogo.png";
 
 const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
@@ -78,17 +78,19 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+        <>
+            <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <Header />
-            <h2 style={{ textAlign: 'center' }}>Nearby Carparks</h2>
-            <div className={styles.screenFlexContainer}>
-                <div className={styles.screenFlexChild}>
+            <div className={styles.container}>
+                <div className={styles.searchResultsContainer}>
+                    <div className={styles.screenFlexContainer}>
+                        <div className={styles.screenFlexChild}>
                     {carparks.length === 0 ? (
                         <p>No carparks available.</p>
                     ) : (
-                        <ul style={{ listStyleType: 'none', padding: '0', margin: '0' }}>
+                        <ul className={styles.listContainer}>
                             {carparks.map((carpark, index) => (
-                                <li key={index} style={{ marginBottom: '15px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+                                <li key={index} className={styles.listItems}>
                                     <h4>{carpark.carpark_name}</h4>
                                     <p>Distance: {carpark.distance.toFixed(2)} meters</p>
                                     <p>Available Lots: {carpark.available_lots}</p>
@@ -140,9 +142,11 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                             </Map>
                         </div>
                     </APIProvider>
+                    </div>
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

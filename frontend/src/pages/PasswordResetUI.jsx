@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import api from '../api';
+import styles from '../styles/PasswordResetUI.module.css';
+import logo from "../images/ParkNPlayLogo.png";
 
 const PasswordResetUI = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -40,30 +42,41 @@ const PasswordResetUI = () => {
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <h3>Password must be at least 8 characters long, and cannot be too common.</h3>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="newPassword"
-          placeholder="Enter your new password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <br/>
-        <input
-          type="newConfirmPassword"
-          placeholder="Confirm your new password again"
-          value={newConfirmPassword}
-          onChange={(e) => {
-            setNewConfirmPassword(e.target.value);
-          }}
-        />
-        <br/>
-        <button>Submit</button>
-      </form>
-      <p>{message}</p>
-      <p>{errors}</p>
+    <div className={styles.mainContainer}>
+      <div className={styles.resetPasswordContainer}>
+      <img className={styles.logo} src={logo} alt="Park N Play logo" />
+        <h2 className={styles.resetPasswordTitle}>Reset Password</h2>
+        <h3 className={styles.criteriaContainer}>Password must be at least 8 characters long, and cannot be too common.</h3>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.newPasswordDiv}>
+            <label className={styles.newPasswordLabel} htmlFor='newPassword'>New Password:</label>
+          <input
+            className={styles.newPasswordInput}
+            type="Password"
+            placeholder="Enter your new password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          
+          />
+          </div>
+          <div className={styles.confirmPasswordDiv}>
+          <label className={styles.confirmPasswordLabel} htmlFor='confirmPassword'>Confirm New Password:</label>
+          <input
+            className={styles.confirmPasswordInput}
+            type="Password"
+            placeholder="Confirm your new password again"
+            value={newConfirmPassword}
+            onChange={(e) => {
+              setNewConfirmPassword(e.target.value);
+            }}
+          />
+          </div>
+          <br/>
+          <button className={styles.resetPasswordButton}>Submit</button>
+        </form>
+        <p className={styles.criteriaContainer}>{message}</p>
+        <p className={styles.criteriaContainer}>{errors}</p>
+      </div>
     </div>
   );
 };

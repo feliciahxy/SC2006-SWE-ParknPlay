@@ -19,6 +19,8 @@
 
 .header{
     text-align: center;
+    font-size: small;
+    font-weight: lighter;
 }
 
 .listContainer{
@@ -29,7 +31,7 @@
     border: 1px solid #28a745;
     border-radius: 5px;
     margin-top: 165px;
-    background-color: hsl(134, 61%, 61%);
+    background-color: hsl(211, 100%, 80%);
 }
 
 .listItems{
@@ -38,29 +40,9 @@
     padding-bottom: 10px;
 }
 
-.nearbyCarparksButton{
-    margin-right: 10px;
-    padding: 5px 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-
-.favouritesButton{
-	padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
 .logo {
     position: absolute;
-    
     top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -71,7 +53,7 @@
 
 .mapContainer{
     flex: 1; /* Equal space for the map */
-    max-height: 100%;
+    max-height: 400px;
     margin-top: 100px;
     padding: 50px; /* Add padding */
     width: 500px;

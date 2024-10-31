@@ -2,8 +2,8 @@
 .searchContainer {
     font-family: Arial, Helvetica, sans-serif;
     position: fixed;
-    top: 25%;
-    left: 43.75%;
+    top: 20%;
+    left: 41.5%;
 }
 
 .header {
@@ -25,19 +25,50 @@
     width: 250px;
 }
 
+.filter > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+
+.locationButton{
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.cancelLocation{
+    margin-left: 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
 
 .input {
     width: 95%;
     background-color: white;
     margin-bottom: 2px;
     color: black;
+    border-radius: 5px;
 }
 
 
 .logo {
     position: fixed;
     top: 20%;
-    left: 51.5%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 250px;
     height: auto;
@@ -53,4 +84,8 @@
     cursor: pointer;
     width: 100%;
     font: 16px;
+}
+
+.label{
+    align-items: center;
 }

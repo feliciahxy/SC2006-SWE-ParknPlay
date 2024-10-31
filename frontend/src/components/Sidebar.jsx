@@ -67,6 +67,7 @@ const sidebarStyle = {
     top: 0,
     borderRight: '1px solid #ddd',
     transition: 'width 0.3s', // Smooth transition for width change
+    zIndex: 1000,
 };
 
 // Main content styles

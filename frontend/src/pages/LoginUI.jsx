@@ -86,6 +86,7 @@ function LoginUI() {
         <div>
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <div className={styles.UIContainer}>
+                <form onSubmit ={handleSubmit}>
                 <input
                     className={styles.textContainer}
                     type="text"
@@ -100,15 +101,17 @@ function LoginUI() {
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     placeholder='Enter your password'
                 /><br /><br />
-                <button className={styles.ForgetPassword} onClick={handleClick}><u>Forget Password</u></button>
+                <button type = "button" className={styles.ForgetPassword} onClick={handleClick}><u>Forget Password</u></button>
                 <br /><br />
                 <button 
                     className={styles.imageButton} 
                     onClick={handleSubmit} 
+                    type = "submit"
                     disabled={loading}
                 >
                 </button>
-                {error && <div>{error}</div>}
+                {error && <div className={styles.errorMessage} >{error}</div>}
+                </form>
             </div>
             <div className={styles.signUpContainer}>
                 <p>Do not have an account? <button className={styles.SignUp} onClick={handleClick}><u>Sign up</u></button> here!</p>

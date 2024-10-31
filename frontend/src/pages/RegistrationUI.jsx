@@ -88,6 +88,7 @@ const RegistrationUI = () => {
         <div>
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <div className={styles.UIContainer}>
+                <form onSubmit={handleSubmit}>
                 <input 
                     className={styles.textContainer}
                     type="text"
@@ -127,7 +128,8 @@ const RegistrationUI = () => {
                 >
                 </button>
                 <div className={styles.space}></div>
-                {error && <div style={{ color: 'red' }}>{error}</div>}
+                {error && <div className={styles.errorMessage2}>{error}</div>}
+                </form>
             </div> 
         </div>
     );

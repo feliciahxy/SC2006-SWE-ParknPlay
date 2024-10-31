@@ -81,7 +81,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                     <Header />
                     <div className={styles.screenFlexContainer}>
                         <div className={styles.screenFlexChild}>
-                            <h2 style={{ textAlign: 'center' }}>Search Results</h2>
+                            <h2></h2>
                             <ul className={styles.listContainer}>
                                 {results.map((result, index) => (
                                     <li 
@@ -98,28 +98,13 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                                         <p>Rating: {result.rating || 'N/A'}</p>
                                         <button 
                                             onClick={() => handleLocationSelect(result.coordinates, result.name)} 
-                                            style={{ 
-                                                marginRight: '10px', 
-                                                padding: '5px 10px', 
-                                                backgroundColor: '#28a745', 
-                                                color: 'white', 
-                                                border: 'none', 
-                                                borderRadius: '5px', 
-                                                cursor: 'pointer' 
-                                            }}
+                                            className={styles.nearbyCarparksButton}
                                         >
                                             View Nearby Carparks
                                         </button>
                                         <button 
                                             onClick={() => handleAddToFavourites(result)} 
-                                            style={{ 
-                                                padding: '5px 10px', 
-                                                backgroundColor: '#007bff', 
-                                                color: 'white', 
-                                                border: 'none', 
-                                                borderRadius: '5px', 
-                                                cursor: 'pointer' 
-                                            }}
+                                            className={styles.favouritesButton}
                                         >
                                             Add to Favourites
                                         </button>

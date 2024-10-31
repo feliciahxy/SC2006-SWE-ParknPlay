@@ -19,7 +19,8 @@
     border-inline: none;
     border-top: none;
     width: 250px;
-    color: black
+    color: hsl(0, 0%, 0%);
+    border-color: #28a745;
 }
 
 .logo{
@@ -37,15 +38,15 @@
     left: 80%;
     transform: translate(-50%, -50%);
     background-image: url("../images/GreenArrow.png");
-    background-size: cover; /* Adjusts the background image to cover the button */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    width: 50px; /* Set the desired width */
-    height: 50px; /* Set the desired height */
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    width: 45px;
+    height: 45px;
     background-color: white;
     border-radius: 50%;
-    border: none; /* Remove border */
-    cursor: pointer; /* Change cursor to pointer */
-    outline: none; /* Remove outline */
+    border: none;
+    cursor: pointer;
+    outline: none;
 
 }
 
@@ -111,4 +112,14 @@
 
 .space {
     height: 30px
+}
+
+.errorMessage{
+    color: red;
+    margin-top: 15px;
+}
+
+.errorMessage2{
+    color: red;
+    margin-top: 10px;
 }

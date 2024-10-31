@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Sidebar';
+import styles from '../styles/SortFilterUI.module.css';
+import logo from "../images/ParkNPlayLogo.png";
 
 const townCoordinates = {
     "Ang Mo Kio": { lat: 1.3691, lng: 103.8454 },
@@ -127,17 +129,18 @@ const SortFilterUI = ({ setSearchResults }) => {
     };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-            <Header /> {/* Include the Header component */}
-            <h2 style={{ textAlign: 'center' }}>Search Places</h2>
-
-            <div style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
-                <div style={{ flex: 1 }}>
+        <div className={styles.searchContainer}>
+            <Header />
+            <h2/>
+            <img className={styles.logo} src={logo} alt="Park N Play logo" />
+            <div className={styles.filter}>
+                <div>
                     <label>Town: </label>
                     <select 
                         onChange={(e) => setSelectedTown(e.target.value)} 
                         value={selectedTown} 
                         disabled={isUsingLocation}  // Disable when using user location
+                        className={styles.input}
                     >
                         <option value="">Select Town</option>
                         {Object.keys(townCoordinates).map((town) => (
@@ -149,32 +152,14 @@ const SortFilterUI = ({ setSearchResults }) => {
                 {!isUsingLocation ? (
                     <button
                         onClick={getUserLocation}
-                        style={{
-                            marginLeft: '10px',
-                            backgroundColor: '#007bff',
-                            color: 'white',
-                            border: 'none',
-                            padding: '10px 15px',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                        }}
+                        className={styles.locationButton}
                     >
                         Use My Location
                     </button>
                 ) : (
                     <button
                         onClick={cancelLocationUsage}
-                        style={{
-                            marginLeft: '10px',
-                            backgroundColor: '#dc3545',
-                            color: 'white',
-                            border: 'none',
-                            padding: '10px 15px',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                        }}
+                        className={styles.cancelLocation}
                     >
                         Cancel My Location
                     </button>
@@ -182,9 +167,9 @@ const SortFilterUI = ({ setSearchResults }) => {
             </div>
 
             {/* Other search filters */}
-            <div style={{ marginBottom: '15px' }}>
+            <div className={styles.filter}>
                 <label>Place Type: </label>
-                <select onChange={(e) => setPlaceType(e.target.value)} value={placeType}>
+                <select className={styles.input} onChange={(e) => setPlaceType(e.target.value)} value={placeType}>
                     <option value="">Select Place Type: Any</option>
                     <option value="airport">Airport</option>
                     <option value="amusement_park">Amusement Park</option>
@@ -225,9 +210,9 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
+            <div className={styles.filter}>
                 <label>Price: </label>
-                <select onChange={(e) => setPrice(e.target.value)} value={price}>
+                <select className={styles.input} onChange={(e) => setPrice(e.target.value)} value={price}>
                     <option value="">Select Price Range: Any</option>
                     <option value="cheap">Cheap</option>
                     <option value="moderate">Moderate</option>
@@ -235,9 +220,9 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
+            <div className={styles.filter}>
                 <label>Minimum Rating: </label>
-                <select onChange={(e) => setRating(e.target.value)} value={rating}>
+                <select className={styles.input} onChange={(e) => setRating(e.target.value)} value={rating}>
                     <option value="">Select Minimum Rating: Any</option>
                     <option value="1">1 Star</option>
                     <option value="2">2 Stars</option>
@@ -248,16 +233,7 @@ const SortFilterUI = ({ setSearchResults }) => {
 
             <button 
                 onClick={onSearch}
-                style={{
-                    backgroundColor: '#28a745',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px 15px',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    width: '100%',
-                    fontSize: '16px'
-                }}
+                className={styles.searchButton}
             >
                 Search
             </button>
