@@ -19,12 +19,10 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
         );
     }
 
-    const [openStates, setOpenStates] = useState(results.map(() => false));
-
+    const [openIndex, setOpenIndex] = useState(null);
+    
     const handleMarkerClick = (index) => {
-        const newOpenStates = [...openStates];
-        newOpenStates[index] = !newOpenStates[index];
-        setOpenStates(newOpenStates);
+        setOpenIndex(openIndex === index ? null : index);
     };
 
     const defaultCenter = results[0]?.coordinates || { lat: 0, lng: 0 };
@@ -128,7 +126,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                                                 onClick={() => handleMarkerClick(index)}
                                             >
                                                 <Pin />
-                                                {openStates[index] &&
+                                                {openIndex === index &&
                                                 (<InfoWindow position={result.coordinates}>
                                                     <div>
                                                         <strong>{result.name}</strong><br />
