@@ -23,14 +23,23 @@ const RegistrationUI = () => {
     const [error, setError] = useState("");
 
     const validateForm = (formData) => {
+        const passwordCriteria = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const emailCriteria = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
         if (!formData.username) {
             setError("Username required");
             return false;
         } else if (!formData.email) {
             setError("Email required");
             return false;
+        } else if (!emailCriteria.test(formData.email)) {
+            setError("Invalid email format");
+            return false;
         } else if (!formData.password) {
             setError("Password required");
+            return false;
+        } else if (!passwordCriteria.test(formData.password)) {
+            setError("Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.");
             return false;
         } else if (!formData.confirmPassword) {
             setError("Confirm password required");
@@ -41,6 +50,7 @@ const RegistrationUI = () => {
         }
         return true;
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();

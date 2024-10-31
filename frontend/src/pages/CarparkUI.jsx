@@ -12,8 +12,8 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const location = useLocation();
     const [carparks, setCarparks] = useState([]);
     
-    const [openStates, setOpenStates] = useState([]);
-
+    const [openIndex, setOpenIndex] = useState(null);
+    
     const [userLocation, setUserLocation] = useState(null);
     const [isUsingLocation, setIsUsingLocation] = useState(false);
     const [selectedCarpark, setSelectedCarpark] = useState(null);
@@ -23,9 +23,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const locationTitle = location.state?.locationName || locationName;
 
     const handleMarkerClick = (index) => { //when the marker on the google maps is clicked
-        const newOpenStates = [...openStates];
-        newOpenStates[index] = !newOpenStates[index];
-        setOpenStates(newOpenStates);
+        setOpenIndex(index === openIndex ? null : index);
     };
 
     useEffect(() => {
@@ -37,7 +35,6 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     if (response.ok) {
                         const data = await response.json();
                         setCarparks(data);
-                        setOpenStates(carparks.map(() => false));
                     } else {
                         console.error('Error fetching carparks:', await response.json());
                     }
@@ -120,7 +117,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                             }}
                                         >
                                             <Pin background={"blue"} glyphColor={"darkblue"} />
-                                            {openStates[index] &&
+                                            {openIndex === index &&
                                             (<InfoWindow position={{ lat: carpark.location.latitude, lng: carpark.location.longitude}}>
                                                 <div>
                                                     <strong>{carpark.carpark_name}</strong><br />
