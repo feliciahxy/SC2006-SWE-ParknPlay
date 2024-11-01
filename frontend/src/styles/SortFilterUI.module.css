@@ -44,6 +44,10 @@
     margin-top: 5px;
 }
 
+.locationButton:hover {
+    background-color: #08C2FF;
+}
+
 .cancelLocation{
     margin-left: 10px;
     background-color: #dc3545;
@@ -84,6 +88,10 @@
     cursor: pointer;
     width: 100%;
     font: 16px;
+}
+
+.searchButton:hover {
+    background-color: #08C2FF;
 }
 
 .label{
