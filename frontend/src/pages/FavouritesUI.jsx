@@ -85,7 +85,8 @@ const FavouritesUI = () => {
     };
 
     return (
-        <div className={styles.favouritesContainer}>
+        <div className={styles.backgroundContainer}>
+            <div className={styles.favouritesContainer}>
             <Header /> {/* Include the Header component */}
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <h2 className={styles.title}>My Favourites</h2>
@@ -113,6 +114,7 @@ const FavouritesUI = () => {
                     <p className={styles.noFavouritesPara}>No favourites found.</p>
                 )}
             </ul>
+            </div>
         </div>
     );
 };
