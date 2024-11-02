@@ -129,13 +129,14 @@ const SortFilterUI = ({ setSearchResults }) => {
     };
 
     return (
-        <div className={styles.searchContainer}>
+        <div className={styles.backgroundContainer}>
             <Header />
             <h2/>
+            <div className={styles.searchContainer}>
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
-            <div className={styles.filter}>
-                <div>
-                    <label>Town: </label>
+            <div className={styles.filterOne}>
+                <div className={styles.townDiv}>
+                    <label>Town:</label>
                     <select 
                         onChange={(e) => setSelectedTown(e.target.value)} 
                         value={selectedTown} 
@@ -167,7 +168,7 @@ const SortFilterUI = ({ setSearchResults }) => {
             </div>
 
             {/* Other search filters */}
-            <div className={styles.filter}>
+            <div className={styles.filterTwo}>
                 <label>Place Type: </label>
                 <select className={styles.input} onChange={(e) => setPlaceType(e.target.value)} value={placeType}>
                     <option value="">Select Place Type: Any</option>
@@ -210,7 +211,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div className={styles.filter}>
+            <div className={styles.filterThree}>
                 <label>Price: </label>
                 <select className={styles.input} onChange={(e) => setPrice(e.target.value)} value={price}>
                     <option value="">Select Price Range: Any</option>
@@ -220,7 +221,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                 </select>
             </div>
 
-            <div className={styles.filter}>
+            <div className={styles.filterFour}>
                 <label>Minimum Rating: </label>
                 <select className={styles.input} onChange={(e) => setRating(e.target.value)} value={rating}>
                     <option value="">Select Minimum Rating: Any</option>
@@ -237,6 +238,7 @@ const SortFilterUI = ({ setSearchResults }) => {
             >
                 Search
             </button>
+            </div>
         </div>
     );
 };

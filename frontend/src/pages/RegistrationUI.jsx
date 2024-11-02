@@ -85,10 +85,10 @@ const RegistrationUI = () => {
     };
 
     return (
-        <div>
-            <img className={styles.logo} src={logo} alt="Park N Play logo" />
+        <div className={styles.backgroundContainer}>
             <div className={styles.UIContainer}>
-                <form onSubmit={handleSubmit}>
+                <img className={styles.logo} src={logo} alt="Park N Play logo" />
+                <form className={styles.form} onSubmit={handleSubmit}>
                 <input 
                     className={styles.textContainer}
                     type="text"

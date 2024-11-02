@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api'; // Your Axios instance or fetch wrapper
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; // Token constants
-import styles from '../styles/RegistrationUI.module.css';
+import styles from '../styles/LoginUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
 import greenArrowIcon from '../images/GreenArrow.png'; // Update the import to GreenArrow.png
 
@@ -83,7 +83,8 @@ function LoginUI() {
     };
 
     return (
-        <div>
+        <div className={styles.backgroundContainer}>
+            <div className={styles.loginContainer}>
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <div className={styles.UIContainer}>
                 <form onSubmit ={handleSubmit}>
@@ -115,6 +116,7 @@ function LoginUI() {
             </div>
             <div className={styles.signUpContainer}>
                 <p>Do not have an account? <button className={styles.SignUp} onClick={handleClick}><u>Sign up</u></button> here!</p>
+            </div>
             </div>
         </div>
     );

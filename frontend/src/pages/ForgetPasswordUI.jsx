@@ -30,25 +30,22 @@ const ForgetPasswordUI = () => {
 
   return (
     <div className={styles.bigContainer}>
-      <img className={styles.logo} src={logo} alt="Park N Play logo" />
-        <div className={styles.container}>
-          <h3 className={styles.header}>Enter your email and we will send you a link to reset it!</h3>
-            <div className={styles.changeContainer}>
-              <form 
-                onSubmit={handleSubmit}>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={styles.inputContainer}
-                />
-                <br/>
-                <button className={styles.resetButton} type="submit">Send Email</button>
-              </form>
-              </div>
-          <p className={styles.header}>{message}</p>
-        </div>
+      <div className={styles.container}>
+        <img className={styles.logo} src={logo} alt="Park N Play logo" />
+        <h3 className={styles.header}>Enter your email and we will send you a link to reset it!</h3>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+          />
+          <br/>
+          <button className={styles.resetButton} type="submit">Send Email</button>
+        </form>
+        <p className={styles.header}>{message}</p>
+      </div>
     </div>
   );
 };
