@@ -1,8 +1,8 @@
 .container{
     position: fixed;
-    top: 10%;
+    top: 0%;
     display: flex; /* Use flexbox to arrange children side by side */
-    height: 100%; /* Full height of the viewport */
+    height: 700px; /* Full height of the viewport */
     gap: 10px; /* Add space between the containers */
     flex-direction: row;
     left: 8%;
@@ -11,10 +11,11 @@
 
 .searchResultsContainer{
     flex: 1; /* Equal space for search results */
-    padding: 50px; /* Add padding */
+    padding: 20px; /* Add padding */
     font-family: Arial, Helvetica, sans-serif;
     max-height: 100%; /* Ensure it doesn’t exceed the container height */
     overflow-y: auto; /* Allow scrolling if necessary */
+    overflow: hidden;
 }
 
 .header{
@@ -59,8 +60,7 @@
 }
 
 .logo {
-    position: absolute;
-    
+    position: fixed;
     top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);

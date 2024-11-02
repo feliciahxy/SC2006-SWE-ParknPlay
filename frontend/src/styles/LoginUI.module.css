@@ -122,3 +122,8 @@
     opacity: 1;
     outline: none;
 }
+
+.errorMessage{
+    color: red;
+    margin-top: 15px;
+}
