@@ -124,7 +124,7 @@ const ChangePasswordUI = () => {
           <button className={styles.changePasswordButton} type="submit">Change Password</button>
         </form>
         {message && <p className="success-message">{message}</p>}
-        {error && <p className="error-message">{error}</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
       </div>
     </div>
   );
