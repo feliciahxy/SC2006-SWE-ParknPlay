@@ -9,23 +9,27 @@
 
 
 .container{
-    position: fixed;
+    position: absolute;
     top: 0%;
     display: flex; /* Use flexbox to arrange children side by side */
-    height: 800px; /* Full height of the viewport */
+    height: 100%; /* Full height of the viewport */
     gap: 10px; /* Add space between the containers */
     flex-direction: row;
     left: 8%;
-    width: 87%;
+    width: 90%;
 }
 
 .searchResultsContainer{
     flex: 1; /* Equal space for search results */
-    padding: 20px; /* Add padding */
+    padding: 0px; /* Add padding */
     font-family: Arial, Helvetica, sans-serif;
-    max-height: 100%; /* Ensure it doesn’t exceed the container height */
+    max-height: 95%; /* Ensure it doesn’t exceed the container height */
     overflow-y: auto; /* Allow scrolling if necessary */
-    overflow: hidden;
+    width: 100%;
+}
+
+.searchResultsContainer::-webkit-scrollbar{
+    display: none;
 }
 
 .header{
@@ -41,6 +45,10 @@
     border-radius: 5px;
     margin-top: 165px;
     background-color: hsl(134, 61%, 61%);
+}
+
+.listContainer::-webkit-scrollbar{
+    display: none;
 }
 
 .listItems{
@@ -69,15 +77,6 @@
     cursor: pointer;
 }
 
-.logo {
-    position: fixed;
-    top: 15%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 250px;
-    height: auto;
-    margin-bottom: 20px;
-}
 
 .mapContainer{
     flex: 1; /* Equal space for the map */

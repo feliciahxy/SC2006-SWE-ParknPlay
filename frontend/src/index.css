@@ -28,7 +28,6 @@ html, body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  overflow: hidden;
 }
 
 
@@ -39,14 +38,15 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #646cff;
   cursor: pointer;
   transition: border-color 0.25s;
   cursor: pointer;
+  margin-top: 5px;
 }
 button:hover {
-  border-color: #646cff;
-  background-color: hsl(0, 0%, 30%);
+  background-color: hsl(237, 100%, 80%);
+  border-color: hsl(0, 0%, 30%);
 }
 button:focus,
 button:focus-visible {

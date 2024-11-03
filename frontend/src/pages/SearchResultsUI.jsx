@@ -73,10 +73,9 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
 
     return (
         <div className={styles.backgroundContainer}>
-            <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <div className={styles.container}>
+                <Header />
                 <div className={styles.searchResultsContainer}>
-                    <Header />
                     <div className={styles.screenFlexContainer}>
                         <div className={styles.screenFlexChild}>
                             <h2></h2>

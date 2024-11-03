@@ -76,9 +76,8 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
 
     return (
         <div className={styles.backgroundContainer}>
-            <img className={styles.logo} src={logo} alt="Park N Play logo" />
-            <Header />
             <div className={styles.container}>
+            <Header />
                 <div className={styles.searchResultsContainer}>
                     <div className={styles.screenFlexContainer}>
                         <div className={styles.screenFlexChild}>
@@ -98,7 +97,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                 </div>
                 <div className={styles.mapContainer}>
                     <APIProvider apiKey = {API_KEY} >
-                        <div style={{height: "100vh", width : "100%"}}>
+                        <div style={{height: "95vh", width : "100%"}}>
                             <Map defaultZoom = {14} defaultCenter = {locationData} mapId = '55d3df35a2143bdc'>
                                 <AdvancedMarker position={locationData}>
                                     <Pin />
@@ -130,12 +129,14 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                             </InfoWindow>)}
                                         </AdvancedMarker>
                                 ))}
+                                <div className={styles.alternativeContainer}>
                                 {isUsingLocation && selectedCarpark && (
                                     <Directions
                                         origin={userLocation} // Pass user location as origin
                                         destination={selectedCarpark} // Pass selected carpark as destination
                                     />
                                 )}
+                                </div>
                             </Map>
                         </div>
                     </APIProvider>
@@ -168,7 +169,7 @@ const Directions = ({ origin, destination }) => {
             setDirectionsRenderer(renderer);
         }
     }, [routesLibrary, map]);
-/* 
+/*
     useEffect(() => {
         if (directionsService && directionsRenderer && origin && destination) {
             directionsService.route({
@@ -183,7 +184,7 @@ const Directions = ({ origin, destination }) => {
             });
         }
     }, [directionsService, directionsRenderer, origin, destination]);
- */
+*/
     useEffect(() => {
         const fetchDirections = async (attempt = 0) => {
             if (directionsService && directionsRenderer && origin && destination) {
