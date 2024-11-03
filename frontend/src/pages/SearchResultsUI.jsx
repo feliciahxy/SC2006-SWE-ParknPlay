@@ -72,7 +72,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     };
 
     return (
-        <>
+        <div className={styles.backgroundContainer}>
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <div className={styles.container}>
                 <div className={styles.searchResultsContainer}>
@@ -158,7 +158,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

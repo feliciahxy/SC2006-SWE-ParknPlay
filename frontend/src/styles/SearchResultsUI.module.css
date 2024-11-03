@@ -1,8 +1,18 @@
+.backgroundContainer {
+    height: 100vh;
+    width: 100vw;
+    background-image: url('../images/Background.jpg');
+    background-size: cover; /* Adjusts image to cover the div fully */
+    background-position: center; /* Centers the image within the div */
+    background-repeat: no-repeat; /* Prevents image from repeating */
+}
+
+
 .container{
     position: fixed;
     top: 0%;
     display: flex; /* Use flexbox to arrange children side by side */
-    height: 700px; /* Full height of the viewport */
+    height: 800px; /* Full height of the viewport */
     gap: 10px; /* Add space between the containers */
     flex-direction: row;
     left: 8%;

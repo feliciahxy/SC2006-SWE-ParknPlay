@@ -75,7 +75,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     };
 
     return (
-        <>
+        <div className={styles.backgroundContainer}>
             <img className={styles.logo} src={logo} alt="Park N Play logo" />
             <Header />
             <div className={styles.container}>
@@ -143,7 +143,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                 </div>
             </div>
         </div>
-        </>
+        </div>
     );
 };
 
