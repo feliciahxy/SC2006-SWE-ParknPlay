@@ -76,6 +76,9 @@ const RegistrationUI = () => {
         } catch (error) {
             if (error.response && error.response.data.detail === "Username already exists") {
                 setError("This username is already taken. Please choose another one.");
+            } 
+            else if (error.response.data.detail === "Email already registered") {
+                setError("This email is already registered. Please use another email."); 
             } else {
                 setError("An error occurred. Please try again.");
             }
