@@ -63,9 +63,9 @@ function LoginUI() {
         } catch (error) {
             console.error('Error logging in:', error);
             if (error.response && error.response.status === 401) {
-                setError("Invalid login credentials. Please try again.");
+                setError("Invalid login credentials.");
             } else {
-                setError("An error occurred. Please try again later.");
+                setError("An error occurred.");
             }
         } finally {
             setLoading(false);
