@@ -11,14 +11,20 @@ const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     const navigate = useNavigate();
     console.log("Results prop:", results); // Add this line to check the data
+
+    // Check if no results were found
     if (results.length === 1 && results[0].message === "No results found") {
         return (
-            <div style={{ textAlign: 'center', padding: '50px', fontSize: '18px' }}>
-                No results found
+            <div className={styles.backgroundContainer}>
+                <Header /> {/* Sidebar included here */}
+                <div style={{ textAlign: 'center', padding: '50px', fontSize: '32px', color: 'red', fontWeight: 'bold' }}>
+                    No results found
+                </div>
             </div>
         );
     }
 
+    // Rest of the code remains the same
     const [openIndex, setOpenIndex] = useState(null);
     
     const handleMarkerClick = (index) => {
