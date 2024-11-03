@@ -43,8 +43,8 @@ const ForgetPasswordUI = () => {
           />
           <br/>
           <button className={styles.resetButton} type="submit">Send Email</button>
+          {message && <p className={styles.successMessage}>{message}</p>}
         </form>
-        <p className={styles.header}>{message}</p>
       </div>
     </div>
   );
