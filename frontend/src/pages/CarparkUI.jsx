@@ -162,6 +162,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                                     destination={selectedCarpark}
                                                 />
                                             )}
+                                            <p className={styles.placeHolder}>Click on 'Show Directions' for Navigation</p>
                                         </div>
                                     </Map>
                                 </div>

@@ -26,7 +26,6 @@ const Sidebar = () => {
         setIsCollapsed(!isCollapsed); // Toggle the collapsed state
     };
 
-
     return (
         <div style={{ display: 'flex' }}>
             <aside style={{ ...sidebarStyle, width: isCollapsed ? '30px' : '200px' }}>

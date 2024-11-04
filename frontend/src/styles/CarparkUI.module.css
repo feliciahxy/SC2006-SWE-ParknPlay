@@ -14,7 +14,7 @@
     height: 100%; /* Full height of the viewport */
     gap: 20px; /* Add space between the containers */
     flex-direction: row;
-    left: 8%;
+    left: 5%;
     width: 87%;
     overflow-y: auto;
 }
@@ -80,7 +80,7 @@
     overflow: scroll;
     border: 1px solid #379237;
     border-radius: 10px;
-    background-color: #FEFAE0;
+    background-color: #F1F3F4;
     margin-top: 10px;
     text-align: center;
     height: 390px;
@@ -133,4 +133,10 @@
 
 .summaryTitle {
     margin-top: 50px;
+}
+
+.placeHolder {
+    margin-top: 27.5%;
+    font-size: 24px;
+    font-weight: bold;
 }
