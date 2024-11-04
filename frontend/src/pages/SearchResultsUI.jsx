@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 import Header from '../components/Sidebar';
@@ -10,13 +10,12 @@ const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
 const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
     const navigate = useNavigate();
-    console.log("Results prop:", results); // Add this line to check the data
+    console.log("Results prop:", results);
 
-    // Check if no results were found
     if (results.length === 1 && results[0].message === "No results found") {
         return (
             <div className={styles.backgroundContainer}>
-                <Header /> {/* Sidebar included here */}
+                <Header />
                 <div style={{ textAlign: 'center', padding: '50px', fontSize: '32px', color: 'red', fontWeight: 'bold' }}>
                     No results found
                 </div>
@@ -24,11 +23,12 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
         );
     }
 
-    // Rest of the code remains the same
     const [openIndex, setOpenIndex] = useState(null);
-    
+    const itemRefs = useRef([]);
+
     const handleMarkerClick = (index) => {
         setOpenIndex(openIndex === index ? null : index);
+        itemRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
     const defaultCenter = results[0]?.coordinates || { lat: 0, lng: 0 };
@@ -84,19 +84,24 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                 <div className={styles.searchResultsContainer}>
                     <div className={styles.screenFlexContainer}>
                         <div className={styles.screenFlexChild}>
-                            <h2></h2>
                             <ul className={styles.listContainer}>
                                 {results.map((result, index) => (
                                     <li 
                                         key={index} 
-                                        className={styles.listItems}
+                                        className={styles.listItems} 
+                                        ref={el => itemRefs.current[index] = el}
                                     >
                                         {result?.photo ? (
                                             <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photo}&key=${API_KEY}`} alt="image cannot be displayed"></img>
                                         ) : (
                                             <div>Image not available</div>
                                         )}
-                                        <h3>{result.name}</h3>
+                                        <h3
+                                            onClick={() => handleMarkerClick(index)}
+                                            style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                                        >
+                                            {result.name}
+                                        </h3>
                                         <p>{result.address}</p>
                                         <p>Rating: {result.rating || 'N/A'}</p>
                                         <button 

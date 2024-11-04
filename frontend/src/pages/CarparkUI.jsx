@@ -12,25 +12,25 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const location = useLocation();
     const [carparks, setCarparks] = useState([]);
     const [openIndex, setOpenIndex] = useState(null);
+    const [highlightedIndex, setHighlightedIndex] = useState(null);
     const [isDirectionClicked, setIsDirectionClicked] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
     const [isUsingLocation, setIsUsingLocation] = useState(false);
     const [selectedCarpark, setSelectedCarpark] = useState(null);
 
-    // Use the location state if available
     const locationData = location.state?.selectedLocation || selectedLocation;
     const locationTitle = location.state?.locationName || locationName;
 
     const handleMarkerClick = (index) => {
         if (!isDirectionClicked) {
-            // Toggle the info window for the clicked marker
             setOpenIndex(index === openIndex ? null : index);
+            setHighlightedIndex(index);
         }
     };
 
     const handleLocationMarkerClick = () => {
-        // Toggle the info window for the main location marker
         setOpenIndex(openIndex === 'main' ? null : 'main');
+        setHighlightedIndex(null);
     };
 
     useEffect(() => {
@@ -100,7 +100,16 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                 <ul className={styles.listContainer}>
                                     {carparks.map((carpark, index) => (
                                         <li key={index} className={styles.listItems}>
-                                            <h4>{carpark.carpark_name}</h4>
+                                            <h4
+                                                onClick={() => handleMarkerClick(index)}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    color: highlightedIndex === index ? 'red' : 'blue',
+                                                    textDecoration: highlightedIndex === index ? 'none' : 'underline'
+                                                }}
+                                            >
+                                                {carpark.carpark_name}
+                                            </h4>
                                             <p>Distance: {carpark.distance.toFixed(2)} meters</p>
                                             <p>Available Lots: {carpark.available_lots}</p>
                                         </li>
