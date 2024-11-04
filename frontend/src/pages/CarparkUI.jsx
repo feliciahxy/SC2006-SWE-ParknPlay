@@ -17,6 +17,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const [userLocation, setUserLocation] = useState(null);
     const [isUsingLocation, setIsUsingLocation] = useState(false);
     const [selectedCarpark, setSelectedCarpark] = useState(null);
+    const [showRoute, setShowRoute] = useState(false);
 
     const locationData = location.state?.selectedLocation || selectedLocation;
     const locationTitle = location.state?.locationName || locationName;
@@ -24,7 +25,12 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const handleMarkerClick = (index) => {
         if (!isDirectionClicked) {
             setOpenIndex(index === openIndex ? null : index);
-            setHighlightedIndex(index);
+            setHighlightedIndex(index); // Highlight the selected carpark
+            setSelectedCarpark({
+                lat: carparks[index].location.latitude,
+                lng: carparks[index].location.longitude
+            });
+            setShowRoute(false); // Reset route rendering on new selection
         }
     };
 
@@ -52,15 +58,6 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         }
     }, [locationData]);
 
-    if (!locationData) {
-        return (
-            <div>
-                <Header />
-                <p>Please select a location first.</p>
-            </div>
-        );
-    }
-
     const getUserLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -69,6 +66,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     setUserLocation({ lat: latitude, lng: longitude });
                     setIsUsingLocation(true);
                     setIsDirectionClicked(true);
+                    setShowRoute(true); // Enable route rendering
                 },
                 (error) => {
                     console.error("Error fetching location: ", error);
@@ -87,6 +85,15 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         }
     }, [isDirectionClicked]);
 
+    if (!locationData) {
+        return (
+            <div>
+                <Header />
+                <p>Please select a location first.</p>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.backgroundContainer}>
             <div className={styles.container}>
@@ -100,12 +107,10 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                 <ul className={styles.listContainer}>
                                     {carparks.map((carpark, index) => (
                                         <li key={index} className={styles.listItems}>
-                                            <h4 className={styles.carparkName}
-                                                onClick={() => handleMarkerClick(index)}
+                                            <h4
+                                                className={styles.carparkName}
                                                 style={{
-                                                    cursor: 'pointer',
-                                                    color: highlightedIndex === index ? 'red' : 'blue',
-                                                    textDecoration: highlightedIndex === index ? 'none' : 'underline'
+                                                    color: highlightedIndex === index ? 'red' : 'black',
                                                 }}
                                             >
                                                 {carpark.carpark_name}
@@ -139,7 +144,6 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                                 position={{ lat: carpark.location.latitude, lng: carpark.location.longitude }}
                                                 onClick={() => {
                                                     handleMarkerClick(index);
-                                                    setSelectedCarpark({ lat: carpark.location.latitude, lng: carpark.location.longitude });
                                                 }}
                                             >
                                                 <Pin background={"blue"} glyphColor={"darkblue"} />
@@ -156,13 +160,14 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                             </AdvancedMarker>
                                         ))}
                                         <div className={styles.alternativeContainer}>
-                                            {isUsingLocation && selectedCarpark && (
+                                            {isUsingLocation && selectedCarpark && showRoute ? (
                                                 <Directions
                                                     origin={userLocation}
                                                     destination={selectedCarpark}
                                                 />
+                                            ) : (
+                                                <p className={styles.placeHolder}>Click on 'Show Directions' for Navigation</p>
                                             )}
-                                            <p className={styles.placeHolder}>Click on 'Show Directions' for Navigation</p>
                                         </div>
                                     </Map>
                                 </div>
@@ -194,15 +199,16 @@ const Directions = ({ origin, destination }) => {
             });
             setDirectionsService(new routesLibrary.DirectionsService());
             setDirectionsRenderer(renderer);
+
+            return () => {
+                renderer.setMap(null); // Clean up on component unmount
+            };
         }
     }, [routesLibrary, map]);
 
     useEffect(() => {
         const fetchDirections = async (attempt = 0) => {
             if (directionsService && directionsRenderer && origin && destination) {
-                console.log("Origin:", origin);
-                console.log("Destination:", destination);
-
                 directionsService.route(
                     {
                         origin: origin,
@@ -214,9 +220,7 @@ const Directions = ({ origin, destination }) => {
                         if (status === google.maps.DirectionsStatus.OK) {
                             directionsRenderer.setDirections(result);
                             setRoutes(result.routes);
-                            console.log("Directions fetched successfully:", result.routes);
                         } else if (status === google.maps.DirectionsStatus.UNKNOWN_ERROR && attempt < 3) {
-                            console.warn(`Retry attempt ${attempt + 1} due to UNKNOWN_ERROR`);
                             setTimeout(() => fetchDirections(attempt + 1), 1000);
                         } else {
                             console.error("Error fetching directions:", status);
@@ -226,11 +230,13 @@ const Directions = ({ origin, destination }) => {
             }
         };
 
-        fetchDirections();
+        if (origin && destination) {
+            fetchDirections();
+        }
     }, [directionsService, directionsRenderer, origin, destination]);
 
     useEffect(() => {
-        if (directionsRenderer) {
+        if (directionsRenderer && routes.length > 0) {
             directionsRenderer.setRouteIndex(routeIndex);
         }
     }, [routeIndex, directionsRenderer]);
