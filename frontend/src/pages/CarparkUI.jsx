@@ -100,7 +100,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                 <ul className={styles.listContainer}>
                                     {carparks.map((carpark, index) => (
                                         <li key={index} className={styles.listItems}>
-                                            <h4
+                                            <h4 className={styles.carparkName}
                                                 onClick={() => handleMarkerClick(index)}
                                                 style={{
                                                     cursor: 'pointer',
@@ -119,7 +119,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                         </div>
                         <div className={styles.mapContainer}>
                             <APIProvider apiKey={API_KEY}>
-                                <div style={{ height: "95vh", width: "100%" }}>
+                                <div className={styles.mapDisplay}>
                                     <Map defaultZoom={14} defaultCenter={locationData} mapId='55d3df35a2143bdc'>
                                         {/* Main location marker */}
                                         <AdvancedMarker position={locationData} onClick={handleLocationMarkerClick}>
@@ -149,7 +149,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                                                             <strong>{carpark.carpark_name}</strong><br />
                                                             Distance: {carpark.distance.toFixed(2)} meters<br />
                                                             Available Lots: {carpark.available_lots}
-                                                            <button onClick={getUserLocation}>Show directions</button>
+                                                            <button className={styles.showDirectionButton} onClick={getUserLocation}>Show directions</button>
                                                         </div>
                                                     </InfoWindow>
                                                 )}
@@ -238,16 +238,15 @@ const Directions = ({ origin, destination }) => {
 
     return (
         <div>
-            <h2>{selected.summary}</h2>
+            <h2 className={styles.summaryTitle}>{selected.summary}</h2>
             <p>{leg.start_address.split(",")[0]} to {leg.end_address.split(",")[0]}</p>
             <p>Distance: {leg.distance?.text}</p>
             <p>Duration: {leg.duration?.text}</p>
-
-            <h2>All possible Routes</h2>
-            <ul>
+            <h2 className={styles.routesTitle}>All Possible Routes</h2>
+            <ul className={styles.routeList}>
                 {routes.map((route, index) => (
                     <li key={route.summary}>
-                        <button onClick={() => setRouteIndex(index)}>
+                        <button className={styles.routeButton} onClick={() => setRouteIndex(index)}>
                             {route.summary}
                         </button>
                     </li>

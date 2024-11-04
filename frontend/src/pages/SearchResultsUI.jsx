@@ -79,92 +79,92 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
 
     return (
         <div className={styles.backgroundContainer}>
-            <div className={styles.container}>
-                <Header />
-                <div className={styles.searchResultsContainer}>
-                    <div className={styles.screenFlexContainer}>
-                        <div className={styles.screenFlexChild}>
-                            <ul className={styles.listContainer}>
-                                {results.map((result, index) => (
-                                    <li 
-                                        key={index} 
-                                        className={styles.listItems} 
-                                        ref={el => itemRefs.current[index] = el}
+            <Header />
+            <div className={styles.searchResultsContainer}>
+                <div className={styles.screenFlexContainer}>
+                    <div className={styles.screenFlexChild}>
+                        <ul className={styles.listContainer}>
+                            {results.map((result, index) => (
+                                <li 
+                                    key={index} 
+                                    className={styles.listItems} 
+                                    ref={el => itemRefs.current[index] = el}
+                                >
+                                    {result?.photo ? (
+                                        <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photo}&key=${API_KEY}`} alt="image cannot be displayed"></img>
+                                    ) : (
+                                        <div>Image not available</div>
+                                    )}
+                                    <h3
+                                        onClick={() => handleMarkerClick(index)}
+                                        style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                                        className={styles.carparkName}
                                     >
-                                        {result?.photo ? (
-                                            <img src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photo}&key=${API_KEY}`} alt="image cannot be displayed"></img>
-                                        ) : (
-                                            <div>Image not available</div>
-                                        )}
-                                        <h3
-                                            onClick={() => handleMarkerClick(index)}
-                                            style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
-                                        >
-                                            {result.name}
-                                        </h3>
-                                        <p>{result.address}</p>
-                                        <p>Rating: {result.rating || 'N/A'}</p>
-                                        <button 
-                                            onClick={() => handleLocationSelect(result.coordinates, result.name)} 
-                                            className={styles.nearbyCarparksButton}
-                                        >
-                                            View Nearby Carparks
-                                        </button>
-                                        <button 
-                                            onClick={() => handleAddToFavourites(result)} 
-                                            className={styles.favouritesButton}
-                                        >
-                                            Add to Favourites
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                                        {result.name}
+                                    </h3>
+                                    <p>{result.address}</p>
+                                    <p>Rating: {result.rating || 'N/A'}</p>
+                                    <button 
+                                        onClick={() => handleLocationSelect(result.coordinates, result.name)} 
+                                        className={styles.nearbyCarparksButton}
+                                    >
+                                        View Nearby Carparks
+                                    </button>
+                                    <button 
+                                        onClick={() => handleAddToFavourites(result)} 
+                                        className={styles.favouritesButton}
+                                    >
+                                        Add to Favourites
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                        <div className={styles.mapContainer}>
-                            <APIProvider apiKey={API_KEY}>
-                                <div style={{ height: "100vh", width: "100%" }}>
-                                    <Map
-                                        defaultZoom={13}
-                                        defaultCenter={defaultCenter}
-                                        mapId='55d3df35a2143bdc'
-                                    >
-                                        {results.map((result, index) => (
-                                            <AdvancedMarker
-                                                key={index}
-                                                position={result.coordinates}
-                                                onClick={() => handleMarkerClick(index)}
-                                            >
-                                                <Pin />
-                                                {openIndex === index &&
-                                                (<InfoWindow position={result.coordinates}>
-                                                    <div>
-                                                        <strong>{result.name}</strong><br />
-                                                        {result.address}<br />
-                                                        Rating: {result.rating || 'N/A'}
-                                                        <br />
-                                                        <button 
-                                                            onClick={() => handleLocationSelect(result.coordinates, result.name)} 
-                                                            style={{ 
-                                                                marginTop: '10px', 
-                                                                padding: '5px 10px', 
-                                                                backgroundColor: '#28a745', 
-                                                                color: 'white', 
-                                                                border: 'none', 
-                                                                borderRadius: '5px', 
-                                                                cursor: 'pointer' 
-                                                            }}
-                                                        >
-                                                            View Carparks
-                                                        </button>
-                                                    </div>
-                                                </InfoWindow>)}
-                                            </AdvancedMarker>
-                                        ))}
-                                    </Map>
-                                </div>
-                            </APIProvider>
-                        </div>
+                    <div className={styles.mapContainer}>
+                        <APIProvider apiKey={API_KEY}>
+                            <div className={styles.mapDisplay}>
+                                <Map
+                                    defaultZoom={13}
+                                    defaultCenter={defaultCenter}
+                                    mapId='55d3df35a2143bdc'
+                                >
+                                    {results.map((result, index) => (
+                                        <AdvancedMarker
+                                            key={index}
+                                            position={result.coordinates}
+                                            onClick={() => handleMarkerClick(index)}
+                                        >
+                                            <Pin />
+                                            {openIndex === index &&
+                                            (<InfoWindow position={result.coordinates}>
+                                                <div>
+                                                    <strong>{result.name}</strong><br />
+                                                    {result.address}<br />
+                                                    Rating: {result.rating || 'N/A'}
+                                                    <br />
+                                                    <button 
+                                                        className={styles.viewCarparksButton}
+                                                        onClick={() => handleLocationSelect(result.coordinates, result.name)} 
+                                                        style={{ 
+                                                            marginTop: '10px', 
+                                                            padding: '5px 10px', 
+                                                            backgroundColor: '#28a745', 
+                                                            color: 'white', 
+                                                            border: 'none', 
+                                                            borderRadius: '5px', 
+                                                            cursor: 'pointer' 
+                                                        }}
+                                                    >
+                                                        View Carparks
+                                                    </button>
+                                                </div>
+                                            </InfoWindow>)}
+                                        </AdvancedMarker>
+                                    ))}
+                                </Map>
+                            </div>
+                        </APIProvider>
                     </div>
                 </div>
             </div>

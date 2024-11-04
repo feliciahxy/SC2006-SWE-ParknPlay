@@ -13,7 +13,7 @@
     position: fixed;
     top: 15%;
     left: 30%;
-    width: 600px;   /* Fixed width */
+    width: 700px;   /* Fixed width */
     height: auto;  /* Fixed height */
     padding-bottom: 30px;
     border: 1px solid #379237;
@@ -43,6 +43,10 @@
     margin-right: 10px;
 }
 
+.viewCarparksButton:hover {
+    background-color: hsl(134, 61%, 51%);
+}
+
 .deleteButton {
     padding: 5px 10px;
     background-color: #F95454;
@@ -52,6 +56,11 @@
     cursor: pointer;
     margin-left: 10px;
     margin-right: 10px;
+    width: 100px;
+}
+
+.deleteButton:hover {
+    background-color: #FE0000;
 }
 
 .unorderedList {
@@ -69,8 +78,10 @@
     flex-direction: row; /* Align items vertically */
     align-items: center;    /* Center horizontally */
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 50px;
     margin-bottom: 10px;
+    width: 600px;
+    margin-left: 50px;
 }
 
 .errorContainer {
