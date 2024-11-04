@@ -11,9 +11,8 @@ const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 const CarparkUI = ({ selectedLocation, locationName }) => {
     const location = useLocation();
     const [carparks, setCarparks] = useState([]);
-    
     const [openIndex, setOpenIndex] = useState(null);
-    
+    const [isDirectionClicked, setIsDirectionClicked] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
     const [isUsingLocation, setIsUsingLocation] = useState(false);
     const [selectedCarpark, setSelectedCarpark] = useState(null);
@@ -22,15 +21,22 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const locationData = location.state?.selectedLocation || selectedLocation;
     const locationTitle = location.state?.locationName || locationName;
 
-    const handleMarkerClick = (index) => { //when the marker on the google maps is clicked
-        setOpenIndex(index === openIndex ? null : index);
+    const handleMarkerClick = (index) => {
+        if (!isDirectionClicked) {
+            // Toggle the info window for the clicked marker
+            setOpenIndex(index === openIndex ? null : index);
+        }
+    };
+
+    const handleLocationMarkerClick = () => {
+        // Toggle the info window for the main location marker
+        setOpenIndex(openIndex === 'main' ? null : 'main');
     };
 
     useEffect(() => {
         if (locationData) {
             const fetchCarparks = async () => {
                 try {
-                    // Update the endpoint to match your Django API URL configuration
                     const response = await fetch(`http://127.0.0.1:8000/api/carparks/?latitude=${locationData.lat}&longitude=${locationData.lng}`);
                     if (response.ok) {
                         const data = await response.json();
@@ -46,7 +52,6 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         }
     }, [locationData]);
 
-    // Check if location data is missing
     if (!locationData) {
         return (
             <div>
@@ -63,6 +68,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     const { latitude, longitude } = position.coords;
                     setUserLocation({ lat: latitude, lng: longitude });
                     setIsUsingLocation(true);
+                    setIsDirectionClicked(true);
                 },
                 (error) => {
                     console.error("Error fetching location: ", error);
@@ -74,76 +80,87 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
         }
     };
 
+    useEffect(() => {
+        if (isDirectionClicked) {
+            const timer = setTimeout(() => setIsDirectionClicked(false), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [isDirectionClicked]);
+
     return (
         <div className={styles.backgroundContainer}>
             <div className={styles.container}>
-            <Header />
+                <Header />
                 <div className={styles.searchResultsContainer}>
                     <div className={styles.screenFlexContainer}>
                         <div className={styles.screenFlexChild}>
-                    {carparks.length === 0 ? (
-                        <p>No carparks available.</p>
-                    ) : (
-                        <ul className={styles.listContainer}>
-                            {carparks.map((carpark, index) => (
-                                <li key={index} className={styles.listItems}>
-                                    <h4>{carpark.carpark_name}</h4>
-                                    <p>Distance: {carpark.distance.toFixed(2)} meters</p>
-                                    <p>Available Lots: {carpark.available_lots}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-                <div className={styles.mapContainer}>
-                    <APIProvider apiKey = {API_KEY} >
-                        <div style={{height: "95vh", width : "100%"}}>
-                            <Map defaultZoom = {14} defaultCenter = {locationData} mapId = '55d3df35a2143bdc'>
-                                <AdvancedMarker position={locationData}>
-                                    <Pin />
-                                    <InfoWindow position={locationData}>
-                                        <div>
-                                            <strong>{locationTitle}</strong><br />
-                                        </div>
-                                    </InfoWindow>
-                                </AdvancedMarker>
-
-                                {carparks.map((carpark, index) => (
-                                        <AdvancedMarker
-                                            key={index}
-                                            position={{ lat: carpark.location.latitude, lng: carpark.location.longitude}}
-                                            onClick = {() => {
-                                                handleMarkerClick(index);
-                                                setSelectedCarpark({ lat: carpark.location.latitude, lng: carpark.location.longitude}); // Set selected carpark for directions
-                                            }}
-                                        >
-                                            <Pin background={"blue"} glyphColor={"darkblue"} />
-                                            {openIndex === index &&
-                                            (<InfoWindow position={{ lat: carpark.location.latitude, lng: carpark.location.longitude}}>
-                                                <div>
-                                                    <strong>{carpark.carpark_name}</strong><br />
-                                                    Distance: {carpark.distance.toFixed(2)} meters<br />
-                                                    Available Lots: {carpark.available_lots}
-                                                    <button onClick={getUserLocation}>Show directions</button>
-                                                </div>
-                                            </InfoWindow>)}
-                                        </AdvancedMarker>
-                                ))}
-                                <div className={styles.alternativeContainer}>
-                                {isUsingLocation && selectedCarpark && (
-                                    <Directions
-                                        origin={userLocation} // Pass user location as origin
-                                        destination={selectedCarpark} // Pass selected carpark as destination
-                                    />
-                                )}
-                                </div>
-                            </Map>
+                            {carparks.length === 0 ? (
+                                <p>No carparks available.</p>
+                            ) : (
+                                <ul className={styles.listContainer}>
+                                    {carparks.map((carpark, index) => (
+                                        <li key={index} className={styles.listItems}>
+                                            <h4>{carpark.carpark_name}</h4>
+                                            <p>Distance: {carpark.distance.toFixed(2)} meters</p>
+                                            <p>Available Lots: {carpark.available_lots}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
-                    </APIProvider>
+                        <div className={styles.mapContainer}>
+                            <APIProvider apiKey={API_KEY}>
+                                <div style={{ height: "95vh", width: "100%" }}>
+                                    <Map defaultZoom={14} defaultCenter={locationData} mapId='55d3df35a2143bdc'>
+                                        {/* Main location marker */}
+                                        <AdvancedMarker position={locationData} onClick={handleLocationMarkerClick}>
+                                            <Pin />
+                                            {openIndex === 'main' && (
+                                                <InfoWindow position={locationData}>
+                                                    <div>
+                                                        <strong>{locationTitle}</strong><br />
+                                                    </div>
+                                                </InfoWindow>
+                                            )}
+                                        </AdvancedMarker>
+
+                                        {carparks.map((carpark, index) => (
+                                            <AdvancedMarker
+                                                key={index}
+                                                position={{ lat: carpark.location.latitude, lng: carpark.location.longitude }}
+                                                onClick={() => {
+                                                    handleMarkerClick(index);
+                                                    setSelectedCarpark({ lat: carpark.location.latitude, lng: carpark.location.longitude });
+                                                }}
+                                            >
+                                                <Pin background={"blue"} glyphColor={"darkblue"} />
+                                                {openIndex === index && (
+                                                    <InfoWindow position={{ lat: carpark.location.latitude, lng: carpark.location.longitude }}>
+                                                        <div>
+                                                            <strong>{carpark.carpark_name}</strong><br />
+                                                            Distance: {carpark.distance.toFixed(2)} meters<br />
+                                                            Available Lots: {carpark.available_lots}
+                                                            <button onClick={getUserLocation}>Show directions</button>
+                                                        </div>
+                                                    </InfoWindow>
+                                                )}
+                                            </AdvancedMarker>
+                                        ))}
+                                        <div className={styles.alternativeContainer}>
+                                            {isUsingLocation && selectedCarpark && (
+                                                <Directions
+                                                    origin={userLocation}
+                                                    destination={selectedCarpark}
+                                                />
+                                            )}
+                                        </div>
+                                    </Map>
+                                </div>
+                            </APIProvider>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     );
 };
@@ -164,33 +181,18 @@ const Directions = ({ origin, destination }) => {
         if (routesLibrary && map) {
             const renderer = new routesLibrary.DirectionsRenderer({
                 map: map,
-            })
+            });
             setDirectionsService(new routesLibrary.DirectionsService());
             setDirectionsRenderer(renderer);
         }
     }, [routesLibrary, map]);
-/*
-    useEffect(() => {
-        if (directionsService && directionsRenderer && origin && destination) {
-            directionsService.route({
-                origin: origin,
-                destination: destination,
-                travelMode: google.maps.TravelMode.DRIVING,
-                provideRouteAlternatives: true,
-            })
-            .then(response => {
-                directionsRenderer.setDirections(response);
-                setRoutes(response.routes);
-            });
-        }
-    }, [directionsService, directionsRenderer, origin, destination]);
-*/
+
     useEffect(() => {
         const fetchDirections = async (attempt = 0) => {
             if (directionsService && directionsRenderer && origin && destination) {
                 console.log("Origin:", origin);
                 console.log("Destination:", destination);
-    
+
                 directionsService.route(
                     {
                         origin: origin,
@@ -213,10 +215,10 @@ const Directions = ({ origin, destination }) => {
                 );
             }
         };
-    
+
         fetchDirections();
     }, [directionsService, directionsRenderer, origin, destination]);
-    
+
     useEffect(() => {
         if (directionsRenderer) {
             directionsRenderer.setRouteIndex(routeIndex);
