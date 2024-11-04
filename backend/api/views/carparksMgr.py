@@ -1,11 +1,10 @@
-# api/views/carparksMgr.py
 from django.http import JsonResponse
 from geopy.distance import geodesic
 from pyproj import Transformer
 import requests
 
-MAX_DISTANCE_METERS = 5000  # Maximum distance to find nearby carparks
-TOPXCARPARKS = 5  # Number of top carparks to return
+MAX_DISTANCE_METERS = 5000  # Maximum distance form choosen location to carpark
+TOPXCARPARKS = 5  # Display a maximum of 5 carparks
 transformer = Transformer.from_crs("EPSG:3414", "EPSG:4326", always_xy=True)
 
 def svy21_to_wgs84(easting, northing):
@@ -61,6 +60,7 @@ def find_nearest_carparks(request):
     
     return JsonResponse(sorted_carparks[:TOPXCARPARKS], safe=False)
 
+# get_carpark_availability pulls live carpark availability data from api
 def get_carpark_availability():
     api_url = "https://api.data.gov.sg/v1/transport/carpark-availability"
     response = requests.get(api_url)
@@ -68,6 +68,7 @@ def get_carpark_availability():
         return response.json().get("items", [])[0].get("carpark_data", [])
     return []
 
+# get_carpark_information is used to obtain carpark data from api
 def get_carpark_information():
     carpark_info_url = "https://data.gov.sg/api/action/datastore_search?resource_id=d_23f946fa557947f93a8043bbef41dd09&limit=500"
     response = requests.get(carpark_info_url)

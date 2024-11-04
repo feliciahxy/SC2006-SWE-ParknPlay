@@ -22,7 +22,7 @@ class FavouriteSerializer(serializers.ModelSerializer):
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
-    confirm_password = serializers.CharField(required=True)  # Add confirm password field
+    confirm_password = serializers.CharField(required=True)  
 
 
     def validate_old_password(self, value):
@@ -32,7 +32,6 @@ class ChangePasswordSerializer(serializers.Serializer):
         return value
 
     def validate_new_password(self, value):
-        # Add any password validation logic (e.g., length, complexity)
         if len(value) < 1:
             raise serializers.ValidationError("New password must be at least 1 character long")
         return value
