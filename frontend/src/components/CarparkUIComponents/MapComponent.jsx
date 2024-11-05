@@ -5,7 +5,7 @@ import styles from "../../styles/CarparkUI.module.css";
 
 const API_KEY = 'AIzaSyAw5vUAgT4udrj3MgbQYECpH-TWgUBFmyM';
 
-const MapComponent = ({ locationData, handleLocationMarkerClick, openIndex, locationTitle, carparks, handleMarkerClick, getUserLocation, isUsingLocation, selectedCarpark, showRoute, userLocation, selectedCarpark }) => {
+const MapComponent = ({ locationData, handleLocationMarkerClick, openIndex, locationTitle, carparks, handleMarkerClick, getUserLocation, isUsingLocation, selectedCarpark, showRoute, userLocation }) => {
     return(
         <>
             <APIProvider apiKey={API_KEY}>
