@@ -103,7 +103,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                             <List carparks={carparks} highlightedIndex={highlightedIndex} />
                         </div>
                         <div className={styles.mapContainer}>
-                            <MapComponent locationData={locationData} handleLocationMarkerClick={handleLocationMarkerClick} openIndex={openIndex} locationTitle={locationTitle} carparks={carparks} handleMarkerClick={handleMarkerClick} getUserLocation={getUserLocation} isUsingLocation={isUsingLocation} selectedCarpark={selectedCarpark} showRoute={showRoute} userLocation={userLocation} selectedCarpark={selectedCarpark} />
+                            <MapComponent locationData={locationData} handleLocationMarkerClick={handleLocationMarkerClick} openIndex={openIndex} locationTitle={locationTitle} carparks={carparks} handleMarkerClick={handleMarkerClick} getUserLocation={getUserLocation} isUsingLocation={isUsingLocation} selectedCarpark={selectedCarpark} showRoute={showRoute} userLocation={userLocation} />
                         </div>
                     </div>
                 </div>
