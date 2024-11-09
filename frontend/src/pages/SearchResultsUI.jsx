@@ -66,7 +66,7 @@ const SearchResultsUI = ({ results, setSelectedLocation, setLocationName }) => {
                 alert(`${result.name} has been added to your favourites!`);
             } else if (response.status === 401) {
                 alert('Session expired. Please log in again.');
-                navigate('/login');
+                navigate('/');
             } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.detail || 'Could not add to favourites'}`);

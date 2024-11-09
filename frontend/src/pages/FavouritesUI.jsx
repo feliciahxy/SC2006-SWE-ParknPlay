@@ -37,7 +37,7 @@ const FavouritesUI = () => {
                 if (error.response && error.response.status === 401) {
                     setError("Session expired. Please log in again."); 
                     localStorage.clear(); 
-                    navigate('/login');
+                    navigate('/');
                 } else {
                     setError("An error occurred while fetching favourites.");
                 }
