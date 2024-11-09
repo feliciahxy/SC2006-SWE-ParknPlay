@@ -3,9 +3,9 @@
     width: 100vw;
     background-color: red;
     background-image: url('../images/Background.jpg');
-    background-size: cover; /* Adjusts image to cover the div fully */
-    background-position: center; /* Centers the image within the div */
-    background-repeat: no-repeat; /* Prevents image from repeating */
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
 }
 
 .favouritesContainer {
@@ -13,8 +13,8 @@
     position: fixed;
     top: 15%;
     left: 30%;
-    width: 700px;   /* Fixed width */
-    height: auto;  /* Fixed height */
+    width: 700px;   
+    height: auto; 
     padding-bottom: 30px;
     border: 1px solid #379237;
     border-radius: 10px;
@@ -24,6 +24,7 @@
 .title {
     text-align: center;
     margin-top: 30%;
+    margin-bottom: 40px;
 }
 
 .noFavouritesPara {
@@ -75,10 +76,10 @@
     border: 1px solid #379237;
     border-radius: 5px;
     display: flex;
-    flex-direction: row; /* Align items vertically */
-    align-items: center;    /* Center horizontally */
+    flex-direction: row; 
+    align-items: center;    
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 10px;
     width: 600px;
     margin-left: 50px;
@@ -96,11 +97,11 @@
 }
 
 .eachFavouriteNameDiv {
-    width: 200px;   /* Fixed width */
-    height: 30px;  /* Fixed height */
+    width: 200px;   
+    height: 30px;  
     text-align: center;
     display: flex;
-    justify-content: center; /* Center horizontally */
+    justify-content: center; 
     align-items: center;
     margin-right: 10px;
 }

@@ -31,7 +31,6 @@ const ChangePasswordUI = () => {
       return;
     }
 
-    // Ensure old password is not the same as new password
     if (oldPassword === newPassword) {
       setError('New password cannot be the same as the old password.');
       return;
@@ -69,7 +68,6 @@ const ChangePasswordUI = () => {
       if (err.response && err.response.data) {
         const errorData = err.response.data;
 
-        // Check for specific field errors and set error message accordingly
         if (errorData.old_password) {
           setError(errorData.old_password);
         } else if (errorData.confirm_password) {

@@ -2,7 +2,7 @@ from django.urls import path
 from .views.favouritesMgr import FavouriteListCreateView, FavouriteDeleteView
 from .views.carparksMgr import find_nearest_carparks
 from .views.userMgr import CreateUserView, home, GetUsersView
-from .views.searchMgr import nearby_search  # Import the nearby_search view correctly
+from .views.searchMgr import nearby_search 
 from .views.passwordMgr import ChangePasswordView
 
 urlpatterns = [
@@ -12,6 +12,6 @@ urlpatterns = [
     path('register/', CreateUserView.as_view(), name='register'),
     path('home/', home, name='home'),
     path('users/', GetUsersView.as_view(), name='get_users'),
-    path('nearby_search/', nearby_search, name='nearby_search'),  # Add this line for the nearby_search endpoint
+    path('nearby_search/', nearby_search, name='nearby_search'),  
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
 ]

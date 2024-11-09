@@ -1,42 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import { ACCESS_TOKEN } from '../constants';
 import api from '../api';
-import Header from '../components/Sidebar'; // Import the Header component
+import Header from '../components/Sidebar'; 
 import styles from '../styles/FavouritesUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
 
 const FavouritesUI = () => {
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); 
     const [favourites, setFavourites] = useState([]);
     const [error, setError] = useState("");
 
     useEffect(() => {
         const fetchFavourites = async () => {
-            const token = localStorage.getItem(ACCESS_TOKEN); // Retrieve the access token
+            const token = localStorage.getItem(ACCESS_TOKEN); 
 
             if (!token) {
-                setError("You must be logged in to view favourites."); // Handle case when token is not available
+                setError("You must be logged in to view favourites."); 
                 return;
             }
 
             try {
                 const response = await api.get('/api/favourites/', {
                     headers: {
-                        'Authorization': `Bearer ${token}`, // Correctly format the Authorization header
+                        'Authorization': `Bearer ${token}`, 
                     },
                 });
 
                 if (response.status === 200) {
-                    setFavourites(response.data); // Store favourites in state
+                    setFavourites(response.data); 
                 } else {
                     setError("Failed to fetch favourites.");
                 }
             } catch (error) {
                 console.error('Error fetching favourites:', error);
                 if (error.response && error.response.status === 401) {
-                    setError("Session expired. Please log in again."); // Handle unauthorized access
-                    localStorage.clear(); // Clear local storage on unauthorized access
+                    setError("Session expired. Please log in again."); 
+                    localStorage.clear(); 
                     navigate('/login');
                 } else {
                     setError("An error occurred while fetching favourites.");
@@ -44,11 +44,11 @@ const FavouritesUI = () => {
             }
         };
 
-        fetchFavourites(); // Call the function to fetch favourites when component mounts
-    }, [navigate]); // Empty dependency array means this effect runs once on mount
+        fetchFavourites(); 
+    }, [navigate]); 
 
     const handleDelete = async (id) => {
-        const token = localStorage.getItem(ACCESS_TOKEN); // Retrieve the access token
+        const token = localStorage.getItem(ACCESS_TOKEN); 
         if (!token) {
             setError("You must be logged in to delete favourites.");
             return;
@@ -57,13 +57,13 @@ const FavouritesUI = () => {
         try {
             const response = await api.delete(`/api/favourites/${id}/`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Include the access token
+                    'Authorization': `Bearer ${token}`, 
                 },
             });
 
             if (response.status === 204) {
-                setFavourites(favourites.filter(fav => fav.id !== id)); // Remove the deleted favourite from state
-                setError(""); // Clear any previous errors
+                setFavourites(favourites.filter(fav => fav.id !== id)); 
+                setError("");
             } else {
                 setError("Failed to delete favourite.");
             }
@@ -80,7 +80,7 @@ const FavouritesUI = () => {
     };
 
     const handleViewCarparks = (fav) => {
-        // Navigate with state, passing selectedLocation and locationName
+
         navigate('/carparks', { state: { selectedLocation: { lat: fav.latitude, lng: fav.longitude }, locationName: fav.name } });
     };
 

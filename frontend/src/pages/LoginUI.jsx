@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api'; // Your Axios instance or fetch wrapper
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; // Token constants
+import api from '../api'; 
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; 
 import styles from '../styles/LoginUI.module.css';
 import logo from "../images/ParkNPlayLogo.png";
-import greenArrowIcon from '../images/GreenArrow.png'; // Update the import to GreenArrow.png
+import greenArrowIcon from '../images/GreenArrow.png'; 
 
 function LoginUI() {
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ function LoginUI() {
         return true;
     };
 
-    // Handle form submission
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -44,17 +44,17 @@ function LoginUI() {
             if (response.status === 200) {
                 const { access, refresh } = response.data;
                 
-                // Save tokens to local storage and log them for verification
+
                 console.log("Access Token:", access);
                 console.log("Refresh Token:", refresh);
                 localStorage.setItem(ACCESS_TOKEN, access);
                 localStorage.setItem(REFRESH_TOKEN, refresh);
 
-                // Verify if tokens are correctly saved
+
                 console.log("Stored Access Token:", localStorage.getItem(ACCESS_TOKEN));
                 console.log("Stored Refresh Token:", localStorage.getItem(REFRESH_TOKEN));
                 
-                // Navigate to the protected route after successful login
+
                 navigate("/sort-filter");
             } else {
                 setError("Invalid login credentials");
@@ -72,7 +72,7 @@ function LoginUI() {
         }
     };
 
-    // Handle button clicks for navigation
+
     const handleClick = (e) => {
         const buttonText = e.target.textContent;
         if (buttonText === "Forget Password") {

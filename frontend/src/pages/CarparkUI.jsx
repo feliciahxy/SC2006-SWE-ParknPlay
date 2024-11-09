@@ -25,12 +25,12 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
     const handleMarkerClick = (index) => {
         if (!isDirectionClicked) {
             setOpenIndex(index === openIndex ? null : index);
-            setHighlightedIndex(index); // Highlight the selected carpark
+            setHighlightedIndex(index); 
             setSelectedCarpark({
                 lat: carparks[index].location.latitude,
                 lng: carparks[index].location.longitude
             });
-            setShowRoute(false); // Reset route rendering on new selection
+            setShowRoute(false); 
         }
     };
 
@@ -66,7 +66,7 @@ const CarparkUI = ({ selectedLocation, locationName }) => {
                     setUserLocation({ lat: latitude, lng: longitude });
                     setIsUsingLocation(true);
                     setIsDirectionClicked(true);
-                    setShowRoute(true); // Enable route rendering
+                    setShowRoute(true); 
                 },
                 (error) => {
                     console.error("Error fetching location: ", error);
@@ -201,7 +201,7 @@ const Directions = ({ origin, destination }) => {
             setDirectionsRenderer(renderer);
 
             return () => {
-                renderer.setMap(null); // Clean up on component unmount
+                renderer.setMap(null); 
             };
         }
     }, [routesLibrary, map]);

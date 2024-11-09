@@ -8,7 +8,7 @@ import CarparkUI from "./pages/CarparkUI";
 import FavouritesUI from "./pages/FavouritesUI";
 import ForgetPasswordUI from "./pages/ForgetPasswordUI";
 import SearchResultsUI from "./pages/SearchResultsUI";
-import ChangePasswordUI from "./pages/ChangePasswordUI"; // Import the ChangePasswordUI component
+import ChangePasswordUI from "./pages/ChangePasswordUI"; 
 import api from './api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
 import PasswordResetUI from './pages/PasswordResetUI';

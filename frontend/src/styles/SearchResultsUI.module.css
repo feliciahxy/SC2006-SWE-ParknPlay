@@ -28,7 +28,7 @@
 .listContainer{
     list-style-type: none;
     padding: 50px;
-    max-height: 700px;
+    max-height: 650px;
     overflow-y: auto; 
     border: 1px solid #28a745;
     border-radius: 5px;
@@ -76,7 +76,7 @@
 }
 
 .mapContainer{
-    flex: 1; /* Equal space for the map */
+    flex: 1;
     max-height: 100%;
     width: 600px;
     margin-top: 50px;

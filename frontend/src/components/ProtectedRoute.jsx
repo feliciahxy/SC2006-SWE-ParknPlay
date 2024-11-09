@@ -9,7 +9,7 @@ function ProtectedRoute({ children }) {
     const [loadingMessage, setLoadingMessage] = useState("Loading...");
 
     useEffect(() => {
-        let isMounted = true; // Track if the component is mounted
+        let isMounted = true; 
         const checkAuth = async () => {
             try {
                 await auth();
@@ -25,7 +25,7 @@ function ProtectedRoute({ children }) {
         checkAuth();
 
         return () => {
-            isMounted = false; // Clean up
+            isMounted = false; 
         };
     }, []);
 
@@ -43,7 +43,7 @@ function ProtectedRoute({ children }) {
             if (res.status === 200) {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 console.log("Token refreshed successfully.");
-                await auth(); // Recheck authorization after refresh
+                await auth(); 
             } else {
                 console.log("Failed to refresh token.");
                 setIsAuthorized(false);

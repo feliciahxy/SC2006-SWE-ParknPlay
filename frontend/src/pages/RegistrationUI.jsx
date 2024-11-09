@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import api from '../api'; // Import your custom api instance
+import api from '../api'; 
 import styles from '../styles/RegistrationUI.module.css';
 import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; // Import tokens
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"; 
 import logo from "../images/ParkNPlayLogo.png";
 
 const RegistrationUI = () => {
@@ -55,7 +55,7 @@ const RegistrationUI = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError(""); // Reset to no error
+        setError(""); 
 
         if (!validateForm(formData)) {
             setLoading(false);
@@ -63,14 +63,14 @@ const RegistrationUI = () => {
         }
 
         try {
-            // Use your custom api instance to send the registration request
+
             const res = await api.post('/api/register/', {
                 username: formData.username,
                 password: formData.password,
                 email: formData.email
             });
             console.log('User saved successfully:', res.data);
-            // Navigate only after successful registration
+
             alert("Registration successful! You can now log in.");
             navigate('/');
         } catch (error) {

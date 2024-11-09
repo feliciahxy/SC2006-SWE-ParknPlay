@@ -126,6 +126,5 @@
 .errorMessage{
     color: red;
     margin-top: 15px;
-    position: absolute;
-    left: 0%;
+    text-align: center;
 }

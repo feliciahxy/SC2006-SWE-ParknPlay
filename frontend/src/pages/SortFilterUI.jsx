@@ -31,7 +31,7 @@ const townCoordinates = {
     "Yishun": { lat: 1.4294, lng: 103.8363 },
 };
 
-// Define search radius for each town (in meters)
+
 const townRadius = {
     "Ang Mo Kio": 1500,
     "Bedok": 2000,
@@ -64,8 +64,8 @@ const SortFilterUI = ({ setSearchResults }) => {
     const [placeType, setPlaceType] = useState('');
     const [price, setPrice] = useState('');
     const [rating, setRating] = useState('');
-    const [userLocation, setUserLocation] = useState(null);  // Track user's location
-    const [isUsingLocation, setIsUsingLocation] = useState(false);  // State to manage location usage
+    const [userLocation, setUserLocation] = useState(null);  
+    const [isUsingLocation, setIsUsingLocation] = useState(false);  
     const navigate = useNavigate();
 
     const onSearch = async () => {
@@ -85,7 +85,7 @@ const SortFilterUI = ({ setSearchResults }) => {
             const nearbyResponse = await fetch(`http://127.0.0.1:8000/api/nearby_search/?${nearbyParams.toString()}`);
             if (nearbyResponse.ok) {
                 const nearbyData = await nearbyResponse.json();
-                if (nearbyData.length === 0) {  // Check if no results were returned
+                if (nearbyData.length === 0) { 
                     setSearchResults([{ message: "No results found" }]);
                 } else {
                     setSearchResults(nearbyData);
@@ -93,12 +93,12 @@ const SortFilterUI = ({ setSearchResults }) => {
                 navigate('/search-results');
             } else {
                 console.error('Error fetching nearby places:', await nearbyResponse.json());
-                setSearchResults([{ message: "No results found" }]);  // Handle error by showing "No results found"
+                setSearchResults([{ message: "No results found" }]);  
                 navigate('/search-results');
             }
         } catch (error) {
             console.error('Error:', error);
-            setSearchResults([{ message: "No results found" }]);  // Show "No results found" on network error
+            setSearchResults([{ message: "No results found" }]);  
             navigate('/search-results');
         }
     };
@@ -125,7 +125,7 @@ const SortFilterUI = ({ setSearchResults }) => {
     const cancelLocationUsage = () => {
         setIsUsingLocation(false);
         setUserLocation(null);
-        setSelectedTown('');  // Reset the town selection
+        setSelectedTown('');  
     };
 
     return (
@@ -140,7 +140,7 @@ const SortFilterUI = ({ setSearchResults }) => {
                     <select 
                         onChange={(e) => setSelectedTown(e.target.value)} 
                         value={selectedTown} 
-                        disabled={isUsingLocation}  // Disable when using user location
+                        disabled={isUsingLocation}  
                         className={styles.input}
                     >
                         <option value="">Select Town</option>

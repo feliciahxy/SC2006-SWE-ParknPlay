@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
     const navigate = useNavigate();
-    const [isCollapsed, setIsCollapsed] = useState(true); // State to track sidebar visibility
+    const [isCollapsed, setIsCollapsed] = useState(true); 
 
     const handleLogout = () => {
         localStorage.clear();
@@ -19,11 +19,11 @@ const Sidebar = () => {
     };
 
     const handleChangePassword = () => {
-        navigate('/change-password'); // Navigate to Change Password page
+        navigate('/change-password'); 
     };
 
     const toggleSidebar = () => {
-        setIsCollapsed(!isCollapsed); // Toggle the collapsed state
+        setIsCollapsed(!isCollapsed); 
     };
 
     return (
@@ -37,7 +37,7 @@ const Sidebar = () => {
                             <div style={lineStyle}></div>
                         </div>
                     ) : (
-                        '<' // Close icon when expanded
+                        '<' 
                     )}
                 </button>
                 {!isCollapsed && (
@@ -57,26 +57,26 @@ const Sidebar = () => {
     );
 };
 
-// Sidebar styles
+
 const sidebarStyle = {
-    height: '100vh', // Full height of the viewport
+    height: '100vh', 
     backgroundColor: '#f8f9fa',
-    padding: '10px 10', // Reduced padding for collapsed state
-    position: 'fixed', // Fix to the left side
+    padding: '10px 10', 
+    position: 'fixed', 
     left: 0,
     top: 0,
     borderRight: '1px solid #ddd',
-    transition: 'width 0.3s', // Smooth transition for width change
+    transition: 'width 0.3s', 
     zIndex: 1000,
 };
 
-// Main content styles
+
 const mainStyle = {
-    padding: '20px', // Add some padding for main content
-    transition: 'margin-left 0.3s', // Transition for smooth effect
+    padding: '20px',
+    transition: 'margin-left 0.3s', 
 };
 
-// Button styles
+
 const buttonStyle = {
     width: '100%',
     padding: '10px',
@@ -86,10 +86,10 @@ const buttonStyle = {
     backgroundColor: '#007bff',
     color: 'white',
     cursor: 'pointer',
-    fontSize: '14px', // Adjusted font size for smaller buttons
+    fontSize: '14px', 
 };
 
-// Toggle button style
+
 const toggleButtonStyle = {
     backgroundColor: '#007bff',
     color: 'white',
